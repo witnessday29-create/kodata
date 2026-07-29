@@ -191,26 +191,6 @@ export const panes: Record<string, PaneDef> = {
                 "verify.py",
                 "Re-runs both pipelines and refuses to publish anything that drifted.",
               ],
-              [
-                "data-json",
-                "01 · data.json",
-                `The committed contract for the AI-exposure piece — ${num(w.source.occupations)} occupations.`,
-              ],
-              [
-                "build-py",
-                "01 · build.py",
-                "Every calculation behind piece 01, including its own robustness audit.",
-              ],
-              [
-                "data-json-02",
-                "02 · data.json",
-                `The committed contract for the screen-time piece — all ${t.grid.cutoffs.length * t.grid.thresholds.length} precomputed grid cells.`,
-              ],
-              [
-                "build-py-02",
-                "02 · build.py",
-                "Every calculation behind piece 02, and the loop the sliders read from.",
-              ],
               ["contact", "Contact", "Email, github, colophon."],
               // `label` rather than `t`, which is the screen-time dataset above
             ].map(([id, label, sub]) => (
@@ -1814,15 +1794,9 @@ export const panes: Record<string, PaneDef> = {
               <b>Source.</b> <i>{t.source.name}</i>, Kaggle — <code>{t.source.kaggle}</code>.
               Retrieved {t.source.retrieved}. {num(t.source.subjects)} teenagers (
               {num(t.source.boys)} boys, {num(t.source.girls)} girls), {t.source.items}{" "}
-              questionnaire items. Pipeline:{" "}
-              <button className="lnk" type="button" data-pane="build-py-02">
-                analysis/pipelines/02_screen_time/build.py
-              </button>
-              , committed data:{" "}
-              <button className="lnk" type="button" data-pane="data-json-02">
-                data.json
-              </button>
-              .
+              questionnaire items. Pipeline and committed data:{" "}
+              <code>analysis/pipelines/02_screen_time/build.py</code> and{" "}
+              <code>web/content/02-screen-time/data.json</code>, both in the repository.
             </p>
             <p>
               <b>Limits.</b> This is cross-sectional: nothing here can tell you which way any arrow
@@ -2271,84 +2245,6 @@ PASS  every committed data.json reproduces exactly.`}</pre>
       ),
     },
 
-    "data-json-02": {
-      title: "data.json — 02-screen-time",
-      node: (
-        <>
-          <p className="txt dim">
-            One committed file, again the only contract between the analysis and this site. It
-            carries the whole precomputed grid, which is why the sliders on the piece can be
-            interactive without the page ever calculating anything.
-          </p>
-          <dl className="kv">
-            {[
-              ["source.subjects", num(t.source.subjects)],
-              ["source.items", String(t.source.items)],
-              ["headline.screen_r", sign(th.screen_r, 4)],
-              ["headline.sleepq_r", sign(th.sleepq_r, 4)],
-              ["headline.variance_ratio", `${t.headline.variance_ratio}×`],
-              ["grid.cutoffs[]", `${t.grid.cutoffs.length} values`],
-              ["grid.thresholds[]", `${t.grid.thresholds.length} values`],
-              [
-                "grid.cells",
-                `${t.grid.cutoffs.length * t.grid.thresholds.length} precomputed results`,
-              ],
-              ["grid.rr_min / rr_max", `${t.grid.rr_min} / ${t.grid.rr_max}`],
-              ["items[]", `${t.items.length} per-item correlations`],
-              ["drop_series[]", `${t.drop_series.length} robustness steps`],
-              ["bdi_hist[]", `${t.bdi_hist.length} bins`],
-            ].map(([k, v]) => (
-              <div key={k}>
-                <dt>{k}</dt>
-                <dd>{v}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="path">web/content/02-screen-time/data.json</p>
-        </>
-      ),
-    },
-
-    "build-py-02": {
-      title: "build.py — 02-screen-time",
-      kind: "wide",
-      node: (
-        <>
-          <p className="txt dim">
-            The interactive parts of piece 02 are shaped by the same rule as everything else here:
-            the web layer computes nothing. This is the loop that precomputes every position both
-            sliders can take.
-          </p>
-          <pre className="code">{`# the grid: every headline this dataset can honestly produce
-cells = []
-for k in THRESHOLDS:
-    heavy = [r for r in rows if r["screen_time_index"] >= k]
-    light = [r for r in rows if r["screen_time_index"] <  k]
-    row = []
-    for cut in CUTOFFS:
-        ph = sum(1 for r in heavy if r["bdi_total"] >= cut) / len(heavy)
-        pl = sum(1 for r in light if r["bdi_total"] >= cut) / len(light)
-        row.append({
-            "rr": round(ph / pl, 3) if pl > 0 else None,
-            "ph": round(100 * ph, 2),
-            "pl": round(100 * pl, 2),
-            "nh_flagged": sum(1 for r in heavy if r["bdi_total"] >= cut),
-            "nl_flagged": sum(1 for r in light if r["bdi_total"] >= cut),
-        })
-    cells.append({"threshold": k, "n_heavy": len(heavy),
-                  "n_light": len(light), "row": row})`}</pre>
-          <p className="path">analysis/pipelines/02_screen_time/build.py</p>
-          <p className="txt dim">
-            {t.grid.thresholds.length} thresholds × {t.grid.cutoffs.length} cutoffs ={" "}
-            {t.grid.cutoffs.length * t.grid.thresholds.length} cells, each carrying its ratio, both
-            percentages, and both flagged counts. stdlib Python, with no dependency besides{" "}
-            <code>kagglehub</code>.
-          </p>
-        </>
-      ),
-    },
-
-    /* ── files ────────────────────────────────────────────────────────── */
     method: {
       title: "method",
       node: (
@@ -2393,63 +2289,6 @@ for k in THRESHOLDS:
             Everywhere on this site, <code>a figure set in mono</code> is traceable to a source
             file. Text set in serif was written. There are no exceptions, including inside the
             fiction — so a sentence can be read at once as literature and as a checkable claim.
-          </p>
-        </>
-      ),
-    },
-
-    "data-json": {
-      title: "data.json",
-      node: (
-        <>
-          <p className="txt dim">
-            One committed file is the only contract between the analysis and this site. The web
-            layer computes nothing of its own.
-          </p>
-          <dl className="kv">
-            {[
-              ["source.name", w.source.name],
-              ["source.kaggle", w.source.kaggle],
-              ["source.retrieved", w.source.retrieved],
-              ["source.occupations", num(w.source.occupations)],
-              ["source.employment_covered", num(w.source.employment_covered)],
-              ["abilities[]", `${w.abilities.length} abilities`],
-              ["subject_profile[]", `${w.subject_profile.length} rows`],
-              ["slope.pairs[]", `${w.slope.pairs.length} rank pairs`],
-              ["opening.cloud[]", `${w.opening.cloud.length} occupations`],
-              ["findings.layers_disagree", sign(f.layers_disagree)],
-              ["findings.layers_r2", num(f.layers_r2, 3)],
-              ["findings.exposure_wage_pearson", sign(f.exposure_wage_pearson)],
-              ["findings.originality_exposure", sign(f.originality_exposure)],
-              ["findings.most_exposed_ability", f.most_exposed_ability],
-            ].map(([k, v]) => (
-              <div key={k}>
-                <dt>{k}</dt>
-                <dd>{v}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="path">web/content/01-ai-exposure/data.json</p>
-        </>
-      ),
-    },
-
-    "build-py": {
-      title: "build.py",
-      kind: "wide",
-      node: (
-        <>
-          <p className="txt dim">
-            Every calculation on this site comes from one file that can be re-run from zero. This is
-            a real excerpt of it.
-          </p>
-          <pre className="code">{PIPELINE}</pre>
-          <p className="path">analysis/pipelines/01_ai_exposure/build.py</p>
-          <p className="txt dim">
-            Each occupation&rsquo;s predicted exposure is a weighted mean of the{" "}
-            {w.abilities.length} ability-exposure scores, weighted by how much that occupation
-            demands each ability, then rescaled onto the rating scale before residuals are taken.
-            stdlib Python, with no dependency besides <code>kagglehub</code>.
           </p>
         </>
       ),
@@ -2500,8 +2339,6 @@ export const PANE_LINKS: Record<string, string[]> = {
     "evidence-cutoff",
     "evidence-intervals",
     "evidence-flatness",
-    "data-json-02",
-    "build-py-02",
   ],
   notebook: ["verify"],
 };
