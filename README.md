@@ -72,9 +72,12 @@ numpy, so where the two agree the number is not an artefact of either
 implementation. **33 of 33 claims check out**, including the two places the site
 admits a weakness.
 
-GitHub renders `.ipynb`, so it is readable in the browser without running
-anything. The outputs committed to it are real — `make_audit.py` executes each
-cell and embeds what it actually printed.
+The outputs committed to it are real — `make_audit.py` executes each cell and
+embeds what it actually printed. GitHub renders `.ipynb`, and the generator also
+emits the cells into `web/content/audit.json` so **the site renders the whole
+notebook inside the `audit.ipynb` pane**: a static export cannot serve an
+`.ipynb`, and a GitHub link only resolves while the repo is public, so the audit
+lives inside the thing it audits rather than being pointed at.
 
 ```bash
 python analysis/notebooks/make_audit.py   # regenerates the notebook and audit.json

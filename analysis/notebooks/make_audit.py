@@ -377,20 +377,39 @@ def run():
     print(f"\nwrote {OUT}  ({OUT.stat().st_size / 1024:.1f} KB)")
 
     checks = ns.get("CHECKS", [])
+
+    # The notebook lives in analysis/, which a static site cannot serve, and
+    # linking to GitHub would only work while the repo is public. So the cells
+    # are emitted here in render-ready form and the site displays them itself.
+    # The audit is then readable inside the thing it audits, with no external
+    # dependency and no second copy of the file.
+    render = []
+    for c in cells:
+        src = "".join(c["source"])
+        if c["cell_type"] == "markdown":
+            render.append({"kind": "md", "text": src})
+        else:
+            render.append({
+                "kind": "code",
+                "text": src,
+                "out": "".join("".join(o.get("text", [])) for o in c["outputs"]),
+            })
+
     SUMMARY.write_text(json.dumps({
         "notebook": "analysis/notebooks/audit.ipynb",
         "generator": "analysis/notebooks/make_audit.py",
         "checks": len(checks),
         "passed": sum(1 for c in checks if c[3]),
         "failed": [c[0] for c in checks if not c[3]],
-        "cells": len(cells),
+        "cell_count": len(cells),
         "stack": "pandas + numpy only, no scipy",
         # the pipelines are stdlib; agreement across two implementations is the
         # whole reason this artefact exists
         "independent_of_pipeline": True,
+        "cells": render,
     }, indent=1), encoding="utf-8")
     print(f"wrote {SUMMARY}  ({len(checks)} checks, "
-          f"{sum(1 for c in checks if c[3])} passed)")
+          f"{sum(1 for c in checks if c[3])} passed, {len(render)} cells rendered)")
     return 1 if failed else 0
 
 

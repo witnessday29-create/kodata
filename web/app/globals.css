@@ -892,6 +892,59 @@ td.down { color: var(--fit); }
 .flat-i span { font-size: 0.52rem; color: var(--faint); text-align: center; }
 @media (max-width: 560px) { .flat-i span { display: none; } }
 
+/* ── the notebook, rendered in place ──────────────────────────────────────
+   A static export cannot serve an .ipynb, and a GitHub link only works while
+   the repo is public — so the audit is displayed here rather than pointed at. */
+.nb {
+  margin: 0 0 1.6rem;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--card);
+  overflow: hidden;
+}
+.nb-md { padding: 1.1rem 1.1rem 0.2rem; }
+.nb-p {
+  font-family: var(--f-read);
+  font-size: 1rem;
+  line-height: 1.64;
+  margin: 0 0 0.85rem;
+  color: var(--ink);
+  max-width: 62ch;
+}
+.nb-p code { font-size: 0.86em; color: var(--mid); }
+.nb-h { font-family: var(--f-read); margin: 0 0 0.7rem; letter-spacing: -0.01em; }
+.nb-h1 { font-size: 1.5rem; line-height: 1.2; }
+.nb-h2 { font-size: 1.22rem; line-height: 1.25; }
+.nb-h3 { font-size: 1.02rem; line-height: 1.3; }
+.nb-h4 { font-size: 0.92rem; }
+.nb-h code { font-size: 0.88em; }
+.nb-rule { border: 0; border-top: 1px solid var(--rule); margin: 0.4rem 0 1.2rem; }
+
+.nb-cell { padding: 0.6rem 1.1rem 1.1rem; display: grid; gap: 0; }
+/* the gutter marks input against output the way a notebook does */
+.nb-in {
+  margin: 0;
+  border-radius: 6px 6px 0 0;
+  border-left: 2px solid var(--fit);
+  font-size: 0.62rem;
+}
+.nb-out {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  background: var(--sunk);
+  border: 1px solid var(--rule);
+  border-top: 0;
+  border-left: 2px solid var(--act);
+  border-radius: 0 0 6px 6px;
+  font-family: var(--f-code);
+  font-size: 0.6rem;
+  line-height: 1.6;
+  color: var(--ink);
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 4;
+}
+
 /* ── two staircases ───────────────────────────────────────────────────────
    r² is the honest measure and it persuades nobody. The same eight-fold gap,
    in the questionnaire's own units, is legible at a glance. */
