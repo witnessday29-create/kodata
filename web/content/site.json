@@ -1,0 +1,43 @@
+{
+  "_comment": [
+    "Everything a human wrote and may want to change, in one place.",
+    "",
+    "The split matters: this file is WRITTEN, the data.json files next to it are",
+    "COMPUTED by the pipelines in analysis/. Never hand-edit those — analysis/verify.py",
+    "will catch it. This file, on the other hand, is yours: edit it, commit, done.",
+    "",
+    "You can edit it straight from github.com in the browser. No build step to run",
+    "locally, no database, no backend."
+  ],
+
+  "wordmark": "kodata",
+  "monogram": "kd",
+  "email": "hello@kodata.id",
+
+  "availability": {
+    "show": true,
+    "label": "open to work"
+  },
+
+  "index": {
+    "lede": "Open data, followed all the way down to <em>one person</em> inside it.",
+    "blurb": "Every piece here starts with a public dataset and ends with a story. The numbers can be checked: any figure set in mono opens its own evidence in a column to the right, so you never have to leave the sentence you are reading to find out whether it is true."
+  },
+
+  "contact": {
+    "lede": "A portfolio of data analysis and narrative writing. Open to work that demands both at once.",
+    "colophon": "Analysis: Python, stdlib. Site: Next.js, static export. No backend and no database — the data changes at human speed, not machine speed, and every figure was computed before the page was built. The column structure is not a style: it is the argument. The prose sits in one column, its evidence opens in the next, and the trail you followed to check a number stays visible along the left edge."
+  },
+
+  "links": [
+    { "label": "hello@kodata.id", "href": "mailto:hello@kodata.id" },
+    { "label": "github", "href": "https://github.com/" },
+    { "label": "other writing", "href": "#" }
+  ],
+
+  "nav": [
+    { "label": "work", "pane": "piece-01" },
+    { "label": "method", "pane": "method" },
+    { "label": "contact", "pane": "contact" }
+  ]
+}

@@ -1,0 +1,26 @@
+# dependencies and build output
+node_modules/
+.next/
+out/
+
+# python
+__pycache__/
+*.pyc
+
+# The abandoned video-background experiment. 15 MB, no longer referenced by any
+# code — kept on disk locally, deliberately out of the repo.
+assets/
+
+# next.js generated / build caches
+web/next-env.d.ts
+web/tsconfig.tsbuildinfo
+
+# a 45 KB static mockup from an earlier design direction, referenced by nothing
+web/content/01-ai-exposure/page-mockup.html
+
+# machine-specific tool permissions
+.claude/settings.local.json
+
+# os / editor
+.DS_Store
+Thumbs.db
