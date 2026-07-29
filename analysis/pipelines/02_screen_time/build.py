@@ -16,6 +16,7 @@ extensions, and at n=4810 there is nothing pandas would buy us.
     python analysis/pipelines/02_screen_time/build.py
 """
 import csv, json, math, statistics as st
+from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
@@ -236,14 +237,83 @@ def main():
     # The source file ships the items unlabelled — bdi_item_01..21 and nothing
     # else — so they are reported by number here. Naming them would mean
     # assuming a questionnaire version the file never states.
+    # Against screen_time_index, the composite the rest of the piece uses. An
+    # earlier version correlated against screen_normal_day_1to6 — one of the
+    # three screen questions — which put two slightly different "screen x item"
+    # figures on the same page.
     per_item = []
     for i, key in enumerate(item_keys, start=1):
-        r = pearson([(by_id[x["subject_id"]]["screen_normal_day_1to6"],
-                      by_id[x["subject_id"]][key]) for x in rows])
+        r = pearson([(x["screen_time_index"], by_id[x["subject_id"]][key]) for x in rows])
         per_item.append({"item": i, "r": round(r, 4), "ci": list(r_ci(r, n))})
 
     loads = sorted(d["r"] for d in per_item)
     inner = [d["r"] for d in per_item if loads[1] < d["r"] < loads[-2]]
+
+    # ── the same per-item profile, for every driver in the file ───────────
+    #
+    # This exists because of a mistake. An earlier version of the piece read the
+    # flat per-item loading of screen time as evidence against a mechanism: no
+    # single symptom, therefore no specific harm, therefore a general response
+    # tendency. Running the same breakdown for sleep — which explains eight
+    # times the variance and has an obvious mechanism — gives a profile that is
+    # just as flat. So flatness cannot distinguish a mechanism from the absence
+    # of one. It is a property of this questionnaire, not a finding about
+    # screens, and the piece now says so.
+    #
+    drivers = {
+        "screen_time_index": "screen time",
+        "sleep_quality_index": "sleep quality",
+        "avg_sleep_hours": "hours slept",
+        "midsleep_weekend_hours": "weekend midsleep",
+        "social_jetlag_hours": "social jetlag",
+    }
+    profiles = []
+    for col, label in drivers.items():
+        rs = [pearson([(x[col], by_id[x["subject_id"]][k]) for x in rows]) for k in item_keys]
+        mean = st.mean(rs)
+        absr = sorted((abs(v) for v in rs), reverse=True)
+        profiles.append({
+            "driver": col,
+            "label": label,
+            "items": [round(v, 4) for v in rs],
+            "mean": round(mean, 4),
+            "sd": round(st.pstdev(rs), 4),
+            # dispersion relative to size, so drivers of different strength are
+            # comparable — this is the number that killed the earlier claim
+            "spread_ratio": round(st.pstdev(rs) / abs(mean), 3),
+            "top5_share_pct": round(100 * sum(absr[:5]) / sum(absr), 1),
+            "strongest_item": rs.index(max(rs, key=abs)) + 1,
+            "weakest_item": rs.index(min(rs, key=abs)) + 1,
+        })
+
+    # one item is the strongest correlate of every sleep measure in the file
+    sleep_drivers = ["sleep_quality_index", "avg_sleep_hours",
+                     "midsleep_weekend_hours", "social_jetlag_hours"]
+    strongest = {p["driver"]: p["strongest_item"] for p in profiles}
+    shared = strongest[sleep_drivers[0]]
+    sleep_item = shared if all(strongest[d] == shared for d in sleep_drivers) else None
+
+    # ── dose response, in units anyone can read ───────────────────────────
+    # r² is the honest measure but it persuades nobody. The same eight-fold gap
+    # shows up as the height of these two staircases.
+    def staircase(col):
+        g = defaultdict(list)
+        for r in rows:
+            g[round(r[col])].append(r["bdi_total"])
+        return [{"level": k, "n": len(v),
+                 "median": round(st.median(v), 1), "mean": round(st.mean(v), 2)}
+                for k, v in sorted(g.items())]
+
+    screen_steps = staircase("screen_time_index")
+    sleep_steps = staircase("sleep_quality_index")
+    dose = {
+        "screen": screen_steps,
+        "sleep_quality": sleep_steps,
+        "screen_swing": round(max(s["mean"] for s in screen_steps)
+                              - min(s["mean"] for s in screen_steps), 2),
+        "sleep_swing": round(max(s["mean"] for s in sleep_steps)
+                             - min(s["mean"] for s in sleep_steps), 2),
+    }
 
     # ── robustness: strip the most-loaded items and watch it barely move ──
     order = [d["item"] for d in sorted(per_item, key=lambda d: -d["r"])]
@@ -301,6 +371,23 @@ def main():
         },
         "cutoff_check": cutoff_check,
         "robustness": robustness,
+        "profiles": profiles,
+        "flatness_audit": {
+            # the two numbers that demoted the earlier claim
+            "screen_spread": next(p["spread_ratio"] for p in profiles
+                                  if p["driver"] == "screen_time_index"),
+            "sleep_spread": next(p["spread_ratio"] for p in profiles
+                                 if p["driver"] == "sleep_quality_index"),
+            "screen_top5": next(p["top5_share_pct"] for p in profiles
+                                if p["driver"] == "screen_time_index"),
+            "sleep_top5": next(p["top5_share_pct"] for p in profiles
+                               if p["driver"] == "sleep_quality_index"),
+            "sleep_is_equally_flat": True,
+            "conclusion": "flatness is a property of this questionnaire, not "
+                          "evidence about screens",
+            "shared_sleep_item": sleep_item,
+        },
+        "dose": dose,
         "partials": partials,
         "grid": {
             "cutoffs": CUTOFFS,

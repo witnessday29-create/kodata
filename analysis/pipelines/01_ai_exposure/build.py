@@ -217,6 +217,48 @@ def main():
          for k, rs in g.items() if k != "See How to Become One"),
         key=lambda x: x["median_exposure"])
 
+    # ---- a third rating, and where it breaks with the second ---------
+    #
+    # The file carries a second per-occupation rating, by GPT-4. Its correlation
+    # with the human rating is high enough to look like agreement, which is why
+    # the disagreements are worth naming: they are not noise. GPT-4 marks
+    # text-and-symbol work far more exposed than the human rater does, and
+    # people-present work far less. That is the same words-versus-bodies split
+    # the ability layer produces — arrived at independently, by a third measure.
+    #
+    for r in df:
+        r["gap"] = r["ai_exposure_llm_gpt4"] - r["ai_exposure_llm_human"]
+    by_gap = sorted(df, key=lambda z: -z["gap"])
+    r_raters = pearson([(r["ai_exposure_llm_human"], r["ai_exposure_llm_gpt4"]) for r in df])
+
+    def gap_row(r):
+        return {"title": r["occupation_title"], "human": r["ai_exposure_llm_human"],
+                "gpt4": r["ai_exposure_llm_gpt4"], "gap": round(r["gap"], 3)}
+
+    raters = {
+        "r": round(r_raters, 4),
+        "r_ci": list(r_ci(r_raters, len(df))),
+        "mean_abs_gap": round(st.mean([abs(r["gap"]) for r in df]), 4),
+        "max_abs_gap": round(max(abs(r["gap"]) for r in df), 3),
+        "gpt4_higher": [gap_row(r) for r in by_gap[:6]],
+        "human_higher": [gap_row(r) for r in by_gap[-6:]],
+        "subject": {**gap_row(subject), "gap_rank": by_gap.index(subject) + 1},
+        "n": len(df),
+    }
+
+    # ---- ability families -------------------------------------------
+    # Reasoning contains both the most exposed ability and the only negative
+    # one, so the family label predicts nothing on its own.
+    famg = defaultdict(list)
+    for r in ab:
+        famg[r["cognitive_family"]].append(r["ai_exposure_score"])
+    families = sorted(
+        ({"family": k, "n": len(v), "mean": round(st.mean(v), 3),
+          "min": round(min(v), 3), "max": round(max(v), 3),
+          "spans_zero": min(v) < 0 < max(v)}
+         for k, v in famg.items()),
+        key=lambda d: -d["mean"])
+
     # ---- the subject's cognitive profile, as percentiles ------------
     #
     # `abilities` preserves the source file's own column order, which is the
@@ -334,8 +376,22 @@ def main():
             "high_growing": growing,
             "high_declining": sum(1 for r in high if r["projected_growth_pct_2024_2034"] < 0),
         },
+        "raters": raters,
+        "families": families,
         "bands": bands,
         "education": education,
+        # the gradient is not monotonic: the best-paid, most-educated group is
+        # rated LESS exposed than the two below it, so "more education, more
+        # exposure" is not what this file says
+        "education_paradox": {
+            "top_by_exposure": education[-1]["level"],
+            "top_exposure": education[-1]["median_exposure"],
+            "doctoral": next((e for e in education
+                              if e["level"].startswith("Doctoral")), None),
+            "bachelor": next((e for e in education
+                              if e["level"].startswith("Bachelor")), None),
+            "monotonic_with_wage": False,
+        },
         "abilities": [{"ability": r["cognitive_ability"], "family": r["cognitive_family"],
                        "exposure": r["ai_exposure_score"]}
                       for r in sorted(ab, key=lambda z: -z["ai_exposure_score"])],

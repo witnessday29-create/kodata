@@ -5619,6 +5619,157 @@
     "high_growing": 72,
     "high_declining": 13
   },
+  "raters": {
+    "r": 0.8348,
+    "r_ci": [
+      0.7947,
+      0.8676
+    ],
+    "mean_abs_gap": 0.0767,
+    "max_abs_gap": 0.643,
+    "gpt4_higher": [
+      {
+        "title": "Medical transcriptionists",
+        "human": 0.232,
+        "gpt4": 0.875,
+        "gap": 0.643
+      },
+      {
+        "title": "Bookkeeping, accounting, and auditing clerks",
+        "human": 0.314,
+        "gpt4": 0.802,
+        "gap": 0.488
+      },
+      {
+        "title": "Court reporters and simultaneous captioners",
+        "human": 0.521,
+        "gpt4": 0.958,
+        "gap": 0.437
+      },
+      {
+        "title": "Music directors and composers",
+        "human": 0.281,
+        "gpt4": 0.711,
+        "gap": 0.43
+      },
+      {
+        "title": "Computer hardware engineers",
+        "human": 0.318,
+        "gpt4": 0.727,
+        "gap": 0.409
+      },
+      {
+        "title": "Musicians and singers",
+        "human": 0.133,
+        "gpt4": 0.408,
+        "gap": 0.275
+      }
+    ],
+    "human_higher": [
+      {
+        "title": "Public relations specialists",
+        "human": 0.788,
+        "gpt4": 0.591,
+        "gap": -0.197
+      },
+      {
+        "title": "Childcare workers",
+        "human": 0.34,
+        "gpt4": 0.141,
+        "gap": -0.199
+      },
+      {
+        "title": "Agricultural and food scientists",
+        "human": 0.658,
+        "gpt4": 0.456,
+        "gap": -0.202
+      },
+      {
+        "title": "Survey researchers",
+        "human": 0.844,
+        "gpt4": 0.625,
+        "gap": -0.219
+      },
+      {
+        "title": "Fitness trainers and instructors",
+        "human": 0.235,
+        "gpt4": 0.015,
+        "gap": -0.22
+      },
+      {
+        "title": "Concierges",
+        "human": 0.7,
+        "gpt4": 0.467,
+        "gap": -0.233
+      }
+    ],
+    "subject": {
+      "title": "Writers and authors",
+      "human": 0.774,
+      "gpt4": 0.877,
+      "gap": 0.103,
+      "gap_rank": 47
+    },
+    "n": 271
+  },
+  "families": [
+    {
+      "family": "Memory",
+      "n": 1,
+      "mean": 1.686,
+      "min": 1.686,
+      "max": 1.686,
+      "spans_zero": false
+    },
+    {
+      "family": "Perceptual",
+      "n": 3,
+      "mean": 1.326,
+      "min": 1.24,
+      "max": 1.377,
+      "spans_zero": false
+    },
+    {
+      "family": "Attention",
+      "n": 2,
+      "mean": 0.911,
+      "min": 0.67,
+      "max": 1.151,
+      "spans_zero": false
+    },
+    {
+      "family": "Reasoning",
+      "n": 7,
+      "mean": 0.855,
+      "min": -0.144,
+      "max": 1.908,
+      "spans_zero": true
+    },
+    {
+      "family": "Verbal",
+      "n": 4,
+      "mean": 0.562,
+      "min": 0.458,
+      "max": 0.7,
+      "spans_zero": false
+    },
+    {
+      "family": "Quantitative",
+      "n": 2,
+      "mean": 0.484,
+      "min": 0.483,
+      "max": 0.486,
+      "spans_zero": false
+    },
+    {
+      "family": "Spatial",
+      "n": 2,
+      "mean": 0.412,
+      "min": 0.375,
+      "max": 0.449,
+      "spans_zero": false
+    }
+  ],
   "bands": [
     {
       "level": "Low",
@@ -5703,6 +5854,25 @@
       "employment": 2627700
     }
   ],
+  "education_paradox": {
+    "top_by_exposure": "Master's degree",
+    "top_exposure": 0.488,
+    "doctoral": {
+      "level": "Doctoral or professional degree",
+      "n": 12,
+      "median_exposure": 0.37,
+      "median_wage": 130170,
+      "employment": 2060600
+    },
+    "bachelor": {
+      "level": "Bachelor's degree",
+      "n": 104,
+      "median_exposure": 0.462,
+      "median_wage": 82580,
+      "employment": 24882800
+    },
+    "monotonic_with_wage": false
+  },
   "abilities": [
     {
       "ability": "Information Ordering",

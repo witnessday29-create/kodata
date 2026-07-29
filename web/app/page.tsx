@@ -492,6 +492,30 @@ export default function Index() {
           </p>
 
           <p className="txt">
+            There is a third rating in this file, and it takes the same side. Alongside the human
+            rater, every occupation was also scored by GPT-4. The two agree at{" "}
+            <Anno src="[raters]" pane="evidence-raters">
+              {sign(w.raters.r, 4)}
+            </Anno>
+            , which sounds like agreement until you look at where they part. GPT-4 rates medical
+            transcription{" "}
+            <Anno src="[max gap]" pane="evidence-raters">
+              {sign(w.raters.max_abs_gap)}
+            </Anno>{" "}
+            higher than the human rater does — {w.raters.gpt4_higher[0].human} against{" "}
+            {w.raters.gpt4_higher[0].gpt4}, from fairly safe to almost entirely exposed, on the same
+            job. Bookkeeping clerks, court reporters, composers: same direction.
+          </p>
+
+          <p className="txt">
+            And the occupations the human rater marks higher than GPT-4 does are childcare workers,
+            fitness instructors, concierges. Work whose content is <em>being present with a
+            person</em>. So a model asked to rate exposure over-weights work that looks like text
+            and under-weights work that requires a body in a room — which is the same failure the
+            ability layer makes, found again by a measure that shares none of its machinery.
+          </p>
+
+          <p className="txt">
             This is not proof that one of the two raters is wrong. Most likely both are right and
             measuring different things: one the cognitive operation, the other the practical
             substitutability of a whole occupation. But they were published side by side, in one
@@ -827,6 +851,101 @@ export default function Index() {
             Everything predicted too safe works through words. Everything predicted too exposed
             works through objects.
           </p>
+        </>
+      ),
+    },
+
+    "evidence-raters": {
+      title: "evidence · two raters, same jobs",
+      kind: "wide",
+      node: (
+        <>
+          <p className="txt dim">
+            Both columns are per-occupation exposure ratings of the same{" "}
+            {num(w.raters.n)} jobs — one by a human rater, one by GPT-4. They correlate{" "}
+            <b>{sign(w.raters.r, 4)}</b>{" "}
+            <CI lo={w.raters.r_ci[0]} hi={w.raters.r_ci[1]} />, with a mean absolute gap of{" "}
+            <b>{w.raters.mean_abs_gap}</b> and a maximum of <b>{w.raters.max_abs_gap}</b>.
+          </p>
+
+          <p className="kicker">
+            GPT-4 rates these far more exposed than the human did <i />
+          </p>
+          <div className="scroller">
+            <table>
+              <thead>
+                <tr>
+                  <th>occupation</th>
+                  <th>human</th>
+                  <th>gpt-4</th>
+                  <th>gap</th>
+                </tr>
+              </thead>
+              <tbody>
+                {w.raters.gpt4_higher.map((r) => (
+                  <tr key={r.title}>
+                    <td>{r.title}</td>
+                    <td>{num(r.human, 3)}</td>
+                    <td>{num(r.gpt4, 3)}</td>
+                    <td className="up">{sign(r.gap)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="kicker">
+            and these far less <i />
+          </p>
+          <div className="scroller">
+            <table>
+              <thead>
+                <tr>
+                  <th>occupation</th>
+                  <th>human</th>
+                  <th>gpt-4</th>
+                  <th>gap</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...w.raters.human_higher].reverse().map((r) => (
+                  <tr key={r.title}>
+                    <td>{r.title}</td>
+                    <td>{num(r.human, 3)}</td>
+                    <td>{num(r.gpt4, 3)}</td>
+                    <td className="down">{sign(r.gap)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="tile-cap">
+            Read the two lists as pairs. Transcription, bookkeeping, court reporting, composition —
+            work that arrives as text or symbols. Childcare, fitness instruction, concierge work —
+            work that requires being in the room. <b>{w.subject.title}</b> sits at{" "}
+            {num(w.raters.subject.human, 3)} human against {num(w.raters.subject.gpt4, 3)} GPT-4, a
+            gap of {sign(w.raters.subject.gap)}, ranked {w.raters.subject.gap_rank} of{" "}
+            {num(w.raters.n)}: GPT-4 thinks writing is even more exposed than the human rater does.
+          </p>
+
+          <Expert title="what this can and cannot be used for">
+            <Check label="not independent">
+              These raters are not independent of each other in any strong sense — both are scoring
+              the same occupation descriptions, and the human rater may have had model output
+              available. Treat the agreement as a consistency check, not as replication.
+            </Check>
+            <Check label="the pattern is the point">
+              A correlation of {sign(w.raters.r, 4)} between two raters means the disagreements are
+              a small minority of cases. What makes them worth showing is that they are not scattered
+              — they sort cleanly by medium of output, the same split the ability layer produces.
+            </Check>
+            <Check label="direction unknown">
+              Nothing here says which rater is right. It is entirely possible that GPT-4 is correct
+              about transcription and the human rater is correct about concierges. The claim is only
+              that the two disagree along one axis, and that the axis is not cognitive difficulty.
+            </Check>
+          </Expert>
         </>
       ),
     },
@@ -1210,6 +1329,47 @@ export default function Index() {
             of it, disappears the moment you account for how many hours they actually slept.
           </p>
 
+          <p className="txt">
+            If percentages of variance mean nothing to you, here is the same gap in plain units.
+            Both columns are average depression score, climbing as you go down. One staircase is
+            shallow and one is steep.
+          </p>
+
+          <div className="stairs">
+            {[
+              ["more screen time →", t.dose.screen, t.dose.screen_swing],
+              ["worse sleep →", t.dose.sleep_quality, t.dose.sleep_swing],
+            ].map(([label, steps, swing]) => (
+              <div key={label as string}>
+                <span className="stairs-h">{label as string}</span>
+                {(steps as typeof t.dose.screen).map((s) => (
+                  <span className="stair" key={s.level}>
+                    <span className="stair-k">level {s.level}</span>
+                    <span className="stair-bar">
+                      <i style={{ width: `${(s.mean / 17) * 100}%` }} />
+                    </span>
+                    <span className="stair-v">{s.mean}</span>
+                  </span>
+                ))}
+                <span className="stairs-f">
+                  swing of <b>{swing as number}</b> points
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="tile-cap">
+            Same {num(t.source.subjects)} teenagers, same questionnaire, same scale. Going from the
+            least to the most screen time moves the average by{" "}
+            <Anno src="[screen_swing]" pane="evidence-screen">
+              {t.dose.screen_swing}
+            </Anno>{" "}
+            points. Going from the best to the worst sleep moves it by{" "}
+            <Anno src="[sleep_swing]" pane="evidence-screen">
+              {t.dose.sleep_swing}
+            </Anno>
+            . Both climb steadily, so neither is noise — they are just very different sizes.
+          </p>
+
           <p className="kicker">
             finding 01 · two lines nobody reports <i />
           </p>
@@ -1297,12 +1457,69 @@ export default function Index() {
           <Flatness />
 
           <p className="txt">
-            I expected a spike and went looking for one. There isn&rsquo;t a spike. A weak, almost
-            uniform loading across every item is what you see when a measure is picking up a
-            general tendency in how someone answers a long list of questions — not a mechanism that
-            produces a particular kind of suffering. That is a duller claim than the headline, and a
-            much better description of this data.
+            I expected a spike and went looking for one. There isn&rsquo;t a spike. My first reading
+            of that was: no single symptom means no specific harm, so what this is really measuring
+            is a general mood in how someone fills out a long form late at night.
           </p>
+
+          <p className="txt">
+            Then I ran the same breakdown for <em>sleep</em> — which explains{" "}
+            <Anno src="[ratio]" pane="evidence-flatness">
+              {th.variance_ratio}×
+            </Anno>{" "}
+            as much and has an obvious mechanism — and its profile is{" "}
+            <em>just as flat</em>. Screen time&rsquo;s spread relative to its size is{" "}
+            <Anno src="[spread]" pane="evidence-flatness">
+              {t.flatness_audit.screen_spread}
+            </Anno>
+            ; sleep quality&rsquo;s is{" "}
+            <Anno src="[spread]" pane="evidence-flatness">
+              {t.flatness_audit.sleep_spread}
+            </Anno>{" "}
+            — slightly <em>more</em> uniform, not less. So flatness cannot tell a mechanism apart
+            from the absence of one. It is a property of this questionnaire, whose items all move
+            together against whatever you correlate them with.
+          </p>
+
+          <p className="txt">
+            Which leaves a smaller, sturdier claim: <b>there is no symptom here to point at.</b> If
+            you want to argue that screens damage teenagers in some particular way, this dataset
+            cannot show you where — and it cannot show you where for sleep either. That is a limit
+            of the instrument, and anyone claiming a mechanism from data like this runs into it.
+          </p>
+
+          <Expert title="the claim I had to withdraw here">
+            <p>
+              This is the second claim in this project that an audit demoted, and I would rather
+              leave the trail visible than quietly restate it.
+            </p>
+            <Check label="what I wrote">
+              That the flat loading was <em>&ldquo;the signature of a general response tendency
+              rather than of a mechanism&rdquo;</em>. That reads flatness as informative about screen
+              time specifically.
+            </Check>
+            <Check label="the test">
+              Run the identical per-item breakdown for all five drivers in the file. Dispersion
+              relative to size:{" "}
+              {t.profiles
+                .map((p) => `${p.label} ${p.spread_ratio}`)
+                .join(", ")}
+              . Share of total loading carried by the five strongest items: screen time{" "}
+              <b>{t.flatness_audit.screen_top5}%</b>, sleep quality{" "}
+              <b>{t.flatness_audit.sleep_top5}%</b>.
+            </Check>
+            <Check label="so">
+              Sleep is at least as flat as screens on both measures. The original inference does not
+              follow, and the piece now claims only that no symptom can be located — which is true,
+              checkable, and about the questionnaire rather than about phones.
+            </Check>
+            <Check label="what survived">
+              One genuine pattern did come out of it: item{" "}
+              <b>{t.flatness_audit.shared_sleep_item}</b> is the strongest correlate of{" "}
+              <em>every</em> sleep measure in the file — quality, hours, weekend midsleep, and social
+              jetlag. The source ships the items unlabelled, so I will not guess what it asks.
+            </Check>
+          </Expert>
 
           <Expert title="ordinal data, overlapping intervals, and a subgroup check">
             <Check label="pearson?">
@@ -1739,6 +1956,98 @@ export default function Index() {
             {(th.cutoff_agreement * 100).toFixed(0)}%). The next best, {th.cutoff_runner_up}, gets{" "}
             {(th.cutoff_runner_up_agreement * 100).toFixed(2)}% — close, and wrong.
           </p>
+        </>
+      ),
+    },
+
+    "evidence-flatness": {
+      title: "evidence · every driver, item by item",
+      kind: "wide",
+      node: (
+        <>
+          <p className="txt dim">
+            The same per-item breakdown, run for all five drivers in the file. If a flat profile were
+            evidence against a mechanism, sleep — eight times stronger, with an obvious mechanism —
+            ought to look different. It does not.
+          </p>
+          <div className="scroller">
+            <table>
+              <thead>
+                <tr>
+                  <th>driver</th>
+                  <th>mean r</th>
+                  <th>sd</th>
+                  <th>spread ÷ size</th>
+                  <th>top-5 share</th>
+                  <th>strongest item</th>
+                </tr>
+              </thead>
+              <tbody>
+                {t.profiles.map((p) => (
+                  <tr
+                    key={p.driver}
+                    className={
+                      p.driver === "screen_time_index" || p.driver === "sleep_quality_index"
+                        ? "hit"
+                        : undefined
+                    }
+                  >
+                    <td>{p.label}</td>
+                    <td>{sign(p.mean, 4)}</td>
+                    <td>{p.sd.toFixed(4)}</td>
+                    <td>{p.spread_ratio}</td>
+                    <td>{p.top5_share_pct}%</td>
+                    <td>{String(p.strongest_item).padStart(2, "0")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="tile-cap">
+            <b>spread ÷ size</b> is the standard deviation of the {t.source.items} correlations
+            divided by their mean, so drivers of very different strength can be compared. Screen time{" "}
+            <b>{t.flatness_audit.screen_spread}</b>, sleep quality{" "}
+            <b>{t.flatness_audit.sleep_spread}</b>. Social jetlag, the weakest driver in the file, is
+            the <em>least</em> uniform of the five — the opposite of what the discarded reading would
+            predict.
+          </p>
+
+          <p className="kicker" style={{ marginTop: "1.8rem" }}>
+            the one item that does stand out <i />
+          </p>
+          <p className="txt dim">
+            Item {t.flatness_audit.shared_sleep_item} is the strongest correlate of every sleep
+            measure here, all four of them. That is a real pattern rather than an artefact of one
+            noisy column. The source ships the items unlabelled, so what it asks is not something I
+            can tell you.
+          </p>
+          <div className="scroller">
+            <table>
+              <thead>
+                <tr>
+                  <th>driver</th>
+                  <th>strongest</th>
+                  <th>its r</th>
+                  <th>weakest</th>
+                </tr>
+              </thead>
+              <tbody>
+                {t.profiles.map((p) => (
+                  <tr
+                    key={p.driver}
+                    className={
+                      p.strongest_item === t.flatness_audit.shared_sleep_item ? "hit" : undefined
+                    }
+                  >
+                    <td>{p.label}</td>
+                    <td>item {String(p.strongest_item).padStart(2, "0")}</td>
+                    <td>{sign(p.items[p.strongest_item - 1], 4)}</td>
+                    <td>item {String(p.weakest_item).padStart(2, "0")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       ),
     },

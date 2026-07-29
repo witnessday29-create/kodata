@@ -215,10 +215,12 @@ export function Flatness() {
         )}
       </p>
       <p className="mach-fine">
-        You cannot take the finding apart by removing symptoms, because it does not live in any of
-        them. A weak, even loading across every item is the signature of a general response
-        tendency — how a tired teenager answers a long questionnaire — rather than of a mechanism
-        that produces a particular symptom.
+        You cannot take the finding apart by removing symptoms, because it does not sit in any of
+        them. Note what this does <em>not</em> establish: sleep quality, which explains eight times
+        as much and has an obvious mechanism, loads just as evenly across these{" "}
+        {d.source.items} items. So an even spread says something about the questionnaire, not about
+        screens. What it does establish is narrower and still worth having — there is no symptom
+        here for anyone to point at.
       </p>
     </div>
   );

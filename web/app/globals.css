@@ -892,6 +892,36 @@ td.down { color: var(--fit); }
 .flat-i span { font-size: 0.52rem; color: var(--faint); text-align: center; }
 @media (max-width: 560px) { .flat-i span { display: none; } }
 
+/* ── two staircases ───────────────────────────────────────────────────────
+   r² is the honest measure and it persuades nobody. The same eight-fold gap,
+   in the questionnaire's own units, is legible at a glance. */
+.stairs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 0 0.9rem;
+}
+.stairs > div { background: var(--card); padding: 0.8rem 0.9rem; display: grid; gap: 0.3rem; }
+.stairs-h {
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 0.2rem;
+}
+.stair { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr) 2.2rem; gap: 0.5rem; align-items: center; }
+.stair-k { font-size: 0.6rem; color: var(--faint); }
+.stair-bar { height: 9px; background: var(--tile); border-radius: 2px; display: block; }
+.stair-bar i { display: block; height: 100%; background: #b4bac1; border-radius: 2px; }
+.stairs > div:last-child .stair-bar i { background: var(--act); }
+.stair-v { font-size: 0.66rem; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stairs-f { margin-top: 0.35rem; font-size: 0.64rem; color: var(--mid); }
+.stairs-f b { font-weight: 500; color: var(--ink); }
+
 /* ── the fable ────────────────────────────────────────────────────────── */
 /* The fourth layer gets its own register: a wider measure, more air, and not a
    single figure in it. Everything checkable has already had its say by here. */
