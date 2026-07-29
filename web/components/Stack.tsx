@@ -16,9 +16,21 @@ export type PaneDef = { title: string; kind?: string; node: React.ReactNode };
  * the container listens once and works that out from where the click landed.
  * That is what lets a figure inside a sentence open its own evidence without
  * the prose knowing anything about the stack.
+ *
+ * `initial` comes from the route, which is pre-rendered as real HTML — so the
+ * writing is in the document before any JavaScript runs. Moving around after
+ * that is done here, with pushState, because a full navigation would throw away
+ * the trail the reader is standing in.
  */
-export function Stack({ panes, root }: { panes: Record<string, PaneDef>; root: string }) {
-  const [trail, setTrail] = useState<string[]>([root]);
+export function Stack({
+  panes,
+  initial,
+}: {
+  panes: Record<string, PaneDef>;
+  initial: string[];
+}) {
+  const [trail, setTrail] = useState<string[]>(initial);
+  const root = initial[0];
   const box = useRef<HTMLDivElement>(null);
 
   /**
@@ -69,22 +81,33 @@ export function Stack({ panes, root }: { panes: Record<string, PaneDef>; root: s
     return () => document.removeEventListener("click", onClick);
   }, [panes]);
 
-  // The trail is the address, so a checked number can be linked to.
-  useEffect(() => {
-    const read = () => {
-      const raw = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
-      const ids = raw.split("/").filter((id) => panes[id]);
-      setTrail(ids[0] === root ? ids : [root, ...ids]);
-    };
-    if (location.hash.length > 2) read();
-    addEventListener("hashchange", read);
-    return () => removeEventListener("hashchange", read);
-  }, [panes, root]);
+  // The path is the trail, so a checked number can be linked to — and every one
+  // of these paths is a pre-rendered HTML file, not a fragment.
+  const asPath = useCallback(
+    (ids: string[]) => "/" + ids.slice(1).join("/"),
+    []
+  );
 
   useEffect(() => {
-    const path = trail.length > 1 ? "#/" + trail.slice(1).join("/") : " ";
-    history.replaceState(null, "", path === " " ? location.pathname : path);
-  }, [trail]);
+    const read = () => {
+      const ids = decodeURIComponent(location.pathname)
+        .split("/")
+        .filter(Boolean)
+        .filter((id) => panes[id]);
+      setTrail([root, ...ids.filter((id) => id !== root)]);
+    };
+    // back and forward have to work: the reader's trail is in the history
+    addEventListener("popstate", read);
+    return () => removeEventListener("popstate", read);
+  }, [panes, root, asPath]);
+
+  useEffect(() => {
+    const next = asPath(trail);
+    if (location.pathname.replace(/\/$/, "") === next.replace(/\/$/, "")) return;
+    // pushState, not replaceState: opening evidence is a step the reader should
+    // be able to walk back out of
+    history.pushState(null, "", next);
+  }, [trail, asPath]);
 
   // reveal whatever just opened
   useEffect(() => {

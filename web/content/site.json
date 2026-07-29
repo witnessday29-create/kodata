@@ -12,6 +12,10 @@
 
   "wordmark": "kodata",
   "monogram": "kd",
+
+  "//url": "CHANGE ME once the domain is settled. Used for sitemap.xml, robots.txt and share-preview URLs, all of which need an absolute address. A wrong value here does not break the site, it just points crawlers at the wrong host.",
+  "url": "https://kodata.vercel.app",
+
   "email": "juanmaulana29@gmail.com",
 
   "availability": {
