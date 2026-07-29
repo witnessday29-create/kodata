@@ -44,11 +44,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <b>{site.wordmark}</b>
           </a>
           <nav className="nav">
-            {site.nav.map((n) => (
-              <button key={n.pane} type="button" data-pane={n.pane} aria-label={n.label}>
-                <Bracket>{n.label}</Bracket>
-              </button>
-            ))}
+            {site.nav.map((n) =>
+              "href" in n ? (
+                // leaves the site, so it is a real link rather than a pane trigger
+                <a
+                  key={n.label}
+                  href={n.href}
+                  className="nav-out"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Bracket>{n.label}</Bracket>
+                </a>
+              ) : (
+                <button key={n.pane} type="button" data-pane={n.pane} aria-label={n.label}>
+                  <Bracket>{n.label}</Bracket>
+                </button>
+              )
+            )}
           </nav>
           <a className="mailto" href={`mailto:${site.email}`}>
             <span>{site.email}</span> ↗

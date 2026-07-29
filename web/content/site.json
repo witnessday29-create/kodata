@@ -39,9 +39,11 @@
     { "label": "other writing", "href": "https://kodarchive.studio" }
   ],
 
+  "//nav": "An entry has either `pane` (opens a pane in the stack) or `href` (leaves the site).",
   "nav": [
     { "label": "work", "pane": "piece-01" },
     { "label": "method", "pane": "method" },
-    { "label": "contact", "pane": "contact" }
+    { "label": "contact", "pane": "contact" },
+    { "label": "read!", "href": "https://kodarchive.space" }
   ]
 }

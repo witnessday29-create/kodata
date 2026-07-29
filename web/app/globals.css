@@ -91,6 +91,10 @@ a { color: inherit; }
 .nav button, .nav a { color: var(--mid); text-decoration: none; padding: 0.3rem 0.15rem; transition: color 0.3s; }
 .nav button:hover, .nav a:hover, .nav .on { color: var(--ink); }
 .nav .on .brk i { color: var(--act); }
+/* leaves the site, so it is marked rather than looking like the pane triggers */
+.nav-out { color: var(--act); }
+.nav-out:hover { color: var(--act); }
+.nav-out .brk i { color: var(--act); }
 
 .sr {
   position: absolute;
