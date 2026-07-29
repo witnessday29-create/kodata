@@ -45,17 +45,23 @@ export function Stack({
    */
   const [reveal, setReveal] = useState<{ n: number; at: number } | null>(null);
 
+  /** The container also holds the heading, so `children[i]` is off by one. */
+  const paneAt = useCallback(
+    (i: number) => box.current?.querySelectorAll<HTMLElement>(".pane")[i],
+    []
+  );
+
   const scrollTo = useCallback((i: number, smooth = true) => {
     const el = box.current;
     if (!el) return;
-    const pane = el.children[i] as HTMLElement | undefined;
+    const pane = paneAt(i);
     if (!pane) return;
     const spine = pane.querySelector(".spine") as HTMLElement | null;
     el.scrollTo({
       left: Math.max(0, pane.offsetLeft - (spine?.offsetWidth ?? 44) * i),
       behavior: smooth ? "smooth" : "auto",
     });
-  }, []);
+  }, [paneAt]);
 
   // Delegated on the document, not the container: the top bar lives outside the
   // stack but still opens panes, and a trigger with no pane around it opens
@@ -112,18 +118,34 @@ export function Stack({
   // reveal whatever just opened
   useEffect(() => {
     if (!reveal) return;
+    let second = 0;
     const frame = requestAnimationFrame(() => {
       const at = Math.min(reveal.at, trail.length - 1);
       scrollTo(at);
       // A pane that just opened must start at its own beginning — including
       // when it replaced a pane at the same depth, which is why this cannot
       // key off the trail's length.
-      const pane = box.current?.children[at] as HTMLElement | undefined;
+      const pane = paneAt(at);
       const body = pane?.querySelector(".pane-body") as HTMLElement | null;
       if (body) body.scrollTop = 0;
+
+      // Focus used to stay on the figure that was clicked, so a pane appeared
+      // off to the right and nothing announced it. Moving focus to the new
+      // pane's heading is what tells a screen reader where it now is.
+      //
+      // It has to wait a frame: called in the same tick as a smooth scrollTo on
+      // the container, the focus does not take.
+      second = requestAnimationFrame(() => {
+        (pane?.querySelector(".pane-bar h2") as HTMLElement | null)?.focus({
+          preventScroll: true,
+        });
+      });
     });
-    return () => cancelAnimationFrame(frame);
-  }, [reveal, trail.length, scrollTo]);
+    return () => {
+      cancelAnimationFrame(frame);
+      cancelAnimationFrame(second);
+    };
+  }, [reveal, trail.length, scrollTo, paneAt]);
 
   const close = (i: number) => {
     if (i === 0) return;
@@ -132,17 +154,38 @@ export function Stack({
     setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: i - 1 }));
   };
 
+  const leaf = panes[trail[trail.length - 1]];
+
   return (
-    <div className="stack" ref={box}>
+    <main className="stack" id="stack" ref={box} aria-label="Reading columns">
+      {/* The page had no h1 at all: pane titles are h2 and there was nothing
+          above them. This names the current trail for anyone navigating by
+          heading, and follows it as the trail changes. */}
+      <h1 className="sr">
+        {leaf ? leaf.title : "index"} — kodata
+      </h1>
+
+      {/* A pane opening is a visual event off to the right, which announces
+          itself to nobody. Focus is moved to the new pane's heading as well,
+          but this does not depend on focus landing — so it is the part that can
+          be relied on. */}
+      <p className="sr" aria-live="polite" aria-atomic="true">
+        {trail.length > 1
+          ? `Column ${trail.length}: ${leaf?.title ?? ""}`
+          : "Index column"}
+      </p>
+
       {trail.map((id, i) => {
         const p = panes[id];
         if (!p) return null;
+        const last = i === trail.length - 1;
         return (
           <article
             key={id + i}
             className={"pane" + (p.kind ? " pane-" + p.kind : "")}
             data-i={i}
             style={{ ["--i" as string]: i, zIndex: i + 1 }}
+            aria-labelledby={`pane-h-${i}`}
           >
             <button
               type="button"
@@ -150,6 +193,7 @@ export function Stack({
               onClick={() => scrollTo(i)}
               title={p.title}
               aria-label={`Back to ${p.title}`}
+              aria-current={last ? "true" : undefined}
             >
               <span className="spine-no">{String(i + 1).padStart(2, "0")}</span>
               <span className="spine-t">{p.title}</span>
@@ -157,7 +201,11 @@ export function Stack({
 
             <div className="pane-card">
               <header className="pane-bar">
-                <h2>{p.title}</h2>
+                {/* tabindex -1 so focus can be moved here when the pane opens,
+                    without adding a stop to the normal tab order */}
+                <h2 id={`pane-h-${i}`} tabIndex={-1}>
+                  {p.title}
+                </h2>
                 {i > 0 && (
                   <button
                     type="button"
@@ -174,6 +222,6 @@ export function Stack({
           </article>
         );
       })}
-    </div>
+    </main>
   );
 }

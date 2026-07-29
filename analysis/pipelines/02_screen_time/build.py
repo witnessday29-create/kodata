@@ -221,6 +221,40 @@ def main():
             })
         cells.append({"threshold": k, "n_heavy": len(heavy), "n_light": len(light), "row": row})
 
+    # ── the same grid, per sex ────────────────────────────────────────────
+    # The correlations barely differ by sex, which is itself worth being able to
+    # see rather than take on trust: the reader can hold both thresholds still
+    # and switch the subgroup, and watch how little moves.
+    def grid_for(subset):
+        out = []
+        for k in THRESHOLDS:
+            heavy = [r for r in subset if r["screen_time_index"] >= k]
+            light = [r for r in subset if r["screen_time_index"] < k]
+            row = []
+            for cut in CUTOFFS:
+                if not heavy or not light:
+                    row.append({"rr": None, "ci": [None, None], "solid": False,
+                                "ph": None, "pl": None, "nh_flagged": 0, "nl_flagged": 0})
+                    continue
+                a = sum(1 for r in heavy if r["bdi_total"] >= cut)
+                c = sum(1 for r in light if r["bdi_total"] >= cut)
+                ph, pl = a / len(heavy), c / len(light)
+                ci = rr_ci(a, len(heavy), c, len(light))
+                row.append({
+                    "rr": round(ph / pl, 3) if pl > 0 else None,
+                    "ci": list(ci),
+                    "solid": bool(ci[0] and ci[0] > 1),
+                    "ph": round(100 * ph, 2), "pl": round(100 * pl, 2),
+                    "nh_flagged": a, "nl_flagged": c,
+                })
+            out.append({"threshold": k, "n_heavy": len(heavy),
+                        "n_light": len(light), "row": row})
+        return out
+
+    grid_by_sex = {
+        s: grid_for([r for r in rows if r["sex"] == s]) for s in ["Boy", "Girl"]
+    }
+
     rrs = [c["rr"] for g in cells for c in g["row"] if c["rr"] is not None]
     n_solid = sum(1 for g in cells for c in g["row"] if c["solid"])
     n_cells = sum(len(g["row"]) for g in cells)
@@ -399,6 +433,7 @@ def main():
             "default_threshold": 3,
             "hours_at": hours_at,
             "cells": cells,
+            "by_sex": grid_by_sex,
             "rr_min": min(rrs),
             "rr_max": max(rrs),
         },

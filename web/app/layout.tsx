@@ -38,6 +38,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* The bar is shared by every route, so it lives here rather than being
             re-declared per page. Its nav carries `data-pane`, which the stack
             picks up from a document-level listener. */}
+        {/* the bar is four tab stops before the reading columns start */}
+        <a className="skip" href="#stack">
+          Skip to the columns
+        </a>
         <header className="bar">
           <a className="mark" href="/">
             <span className="mark-dot">{site.monogram}</span>

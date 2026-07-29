@@ -1408,6 +1408,23 @@ export const panes: Record<string, PaneDef> = {
           </p>
 
           <p className="txt">
+            And there is a third lever, which the switch above the sliders exposes. Hold both
+            thresholds exactly where the source file puts them and change nothing but the subgroup:
+            the pooled answer is <b>1.43×</b>, boys alone <b>1.75×</b>, girls alone <b>1.31×</b>.
+            The correlation itself barely differs by sex —{" "}
+            <Anno src="[by_sex]" pane="evidence-screen">
+              {sign(t.robustness.by_sex[0].pearson, 4)}
+            </Anno>{" "}
+            against{" "}
+            <Anno src="[by_sex]" pane="evidence-screen">
+              {sign(t.robustness.by_sex[1].pearson, 4)}
+            </Anno>{" "}
+            — so this is not a finding about boys. It is the same arithmetic showing that a
+            threshold amplifies whatever it is pointed at, and that a claim can be made a third
+            larger by a choice nobody reports.
+          </p>
+
+          <p className="txt">
             There is a harder version of this. Of those{" "}
             {t.grid.cutoffs.length * t.grid.thresholds.length} ratios,{" "}
             <Anno src="[grid_solid]" pane="evidence-intervals">

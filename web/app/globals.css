@@ -107,6 +107,27 @@ a { color: inherit; }
   border: 0;
 }
 
+/* visible only once it has focus */
+.skip {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 0.8rem;
+  background: var(--ink);
+  color: var(--card);
+  border-radius: 6px;
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform 0.2s;
+}
+.skip:focus { transform: none; }
+
+/* focus is moved here when a pane opens, so it must not draw a ring as if it
+   were an interactive control */
+.pane-bar h2:focus { outline: none; }
+.pane-bar h2:focus-visible { outline: 2px solid var(--act); outline-offset: 3px; }
+
 .brk { display: inline-flex; align-items: baseline; }
 .brk-vis { display: inline-flex; align-items: baseline; }
 .brk i { font-style: normal; color: var(--faint); transition: color 0.3s; }
@@ -949,6 +970,28 @@ td.down { color: var(--fit); }
   tab-size: 4;
 }
 
+/* ── touch ────────────────────────────────────────────────────────────────
+   Measured on a 390px viewport: the range inputs were 18px tall, which is a
+   poor joke when dragging them is the point of piece 02, and the close button
+   and the mailto arrow were smaller still. Scoped to coarse pointers so the
+   desktop rhythm is untouched. Figures inside a sentence are left alone —
+   WCAG exempts targets in running text, and padding them would break the
+   line spacing the whole typographic rule depends on. */
+@media (pointer: coarse) {
+  .mach-ctl input[type="range"] { height: 2rem; }
+  .mach-ctl input[type="range"]::-webkit-slider-thumb { width: 22px; height: 22px; margin-top: -9px; }
+  .mach-ctl input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; }
+
+  .pane-x { padding: 0.55rem 0.4rem; }
+  .mailto { padding: 0.5rem 0.35rem; margin-right: -0.35rem; }
+  .nav button, .nav a { padding: 0.55rem 0.3rem; }
+  .spine { padding-block: 1.1rem; }
+  .mach-cell { height: 22px; }
+  .row-go { padding: 0.4rem 0; }
+  .links a { display: inline-block; padding: 0.35rem 0; }
+  .xp > summary { padding-block: 0.85rem; }
+}
+
 /* ── two staircases ───────────────────────────────────────────────────────
    r² is the honest measure and it persuades nobody. The same eight-fold gap,
    in the questionnaire's own units, is legible at a glance. */
@@ -1036,3 +1079,64 @@ td.down { color: var(--fit); }
   .sig i { transform: none !important; }
   .stack { scroll-behavior: auto; }
 }
+
+/* ── the subgroup switch ──────────────────────────────────────────────────
+   A third undeclared lever. At the source file's own thresholds the pooled
+   answer is 1.43x, boys 1.75x and girls 1.31x — the correlations barely differ
+   by sex, but the ratio does, which is this piece's argument one level down. */
+.who { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin: 1.2rem 0 0; }
+.who > span { font-size: 0.72rem; color: var(--mid); }
+.who button {
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.66rem;
+  color: var(--mid);
+  transition: border-color 0.25s, color 0.25s, background 0.25s;
+}
+.who button:hover { border-color: var(--faint); color: var(--ink); }
+.who button.on { border-color: var(--act); color: var(--act); background: var(--act-t); }
+
+/* ── two jobs, side by side ───────────────────────────────────────────────
+   Bars are normalised inside each measure, so the two columns are comparable
+   with each other rather than with an absolute zero. */
+.pin {
+  width: 1.4rem; height: 1.4rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-size: 0.66rem;
+  color: var(--faint);
+  transition: border-color 0.25s, color 0.25s, background 0.25s;
+}
+.pin:hover { border-color: var(--faint); color: var(--ink); }
+.pin.on { border-color: var(--act); color: var(--act); background: var(--act-t); }
+
+.vs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1px;
+  margin: 1.2rem 0 0;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.vs-col { background: var(--card); padding: 0.85rem 0.9rem; display: grid; align-content: start; gap: 0.7rem; }
+.vs-t {
+  font-family: var(--f-read);
+  font-size: 1rem;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.vs-col dl { margin: 0; display: grid; gap: 0.55rem; }
+.vs-col dl > div { display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 0.6rem; }
+.vs-col dt { font-size: 0.62rem; color: var(--faint); }
+.vs-col dd { margin: 0; font-size: 0.72rem; color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; }
+.vs-bar { grid-column: 1 / -1; height: 4px; background: var(--tile); border-radius: 2px; }
+.vs-bar i { display: block; height: 100%; background: var(--act); border-radius: 2px; }
+.vs-x { font-size: 0.62rem; color: var(--faint); justify-self: start; }
+.vs-x:hover { color: var(--act); }
+.vs-empty { background: var(--sunk); }
+.vs-empty p { margin: 0; font-size: 0.72rem; line-height: 1.6; color: var(--mid); }
+.vs-empty b { color: var(--act); }

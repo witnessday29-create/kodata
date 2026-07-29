@@ -22,9 +22,13 @@ export function Headline() {
   const g = d.grid;
   const [ci, setCi] = useState(g.cutoffs.indexOf(g.default_cutoff));
   const [ti, setTi] = useState(g.thresholds.indexOf(g.default_threshold));
+  // A third lever nobody reports. The correlations barely differ by sex, yet
+  // the ratio does — which is the argument of this whole piece, one level down.
+  const [who, setWho] = useState<"all" | "Boy" | "Girl">("all");
 
   const cutoff = g.cutoffs[ci];
-  const band = g.cells[ti];
+  const cells = who === "all" ? g.cells : g.by_sex[who];
+  const band = cells[ti];
   const cell = band.row[ci];
   const hours = g.hours_at[String(band.threshold) as keyof typeof g.hours_at];
 
@@ -34,9 +38,15 @@ export function Headline() {
   // is the strongest version of this piece's argument, so it is never hidden.
   const weak = !cell.solid;
 
-  const rrs = g.cells.flatMap((b) => b.row.map((c) => c.rr ?? 0));
+  // read from the grid on screen, not the whole-sample one, or the caption
+  // describes a different set of numbers than the reader is looking at
+  const rrs = cells.flatMap((b) => b.row.map((c) => c.rr).filter((v): v is number => v != null));
   const lo = Math.min(...rrs);
   const hi = Math.max(...rrs);
+  const weakCount = cells.reduce(
+    (n, b) => n + b.row.filter((c) => c.rr != null && !c.solid).length,
+    0
+  );
 
   return (
     <div className="mach">
@@ -46,12 +56,30 @@ export function Headline() {
       </p>
       <p className="mach-fine">
         …where <em>“more than about {hours} hours”</em> means a screen-time index of{" "}
-        {band.threshold} or more ({num(band.n_heavy)} of {num(d.source.subjects)} teenagers), and{" "}
+        {band.threshold} or more ({num(band.n_heavy)} of {num(band.n_heavy + band.n_light)}{" "}
+        {who === "all" ? "teenagers" : who === "Boy" ? "boys" : "girls"}), and{" "}
         <em>“depressed”</em> means a questionnaire total of {cutoff} or more —{" "}
         {num(cell.nh_flagged)} heavy users and {num(cell.nl_flagged)} others.{" "}
-        {cell.ph.toFixed(1)}% versus {cell.pl.toFixed(1)}%.{" "}
+        {cell.ph?.toFixed(1)}% versus {cell.pl?.toFixed(1)}%.{" "}
         <RatioCI lo={cell.ci[0]} hi={cell.ci[1]} />
       </p>
+
+      <div className="who">
+        <span>measured on</span>
+        {([["all", `all ${num(d.source.subjects)}`], ["Boy", "boys only"], ["Girl", "girls only"]] as const).map(
+          ([k, label]) => (
+            <button
+              key={k}
+              type="button"
+              className={who === k ? "on" : undefined}
+              onClick={() => setWho(k)}
+              aria-pressed={who === k}
+            >
+              {label}
+            </button>
+          )
+        )}
+      </div>
 
       <div className="mach-ctl">
         <label>
@@ -107,8 +135,8 @@ export function Headline() {
         </p>
       ) : null}
 
-      <div className="mach-grid" role="group" aria-label="All 130 available headlines">
-        {g.cells.map((b, bi) => (
+      <div className="mach-grid" role="group" aria-label={`All ${rrs.length} available headlines`}>
+        {cells.map((b, bi) => (
           <div className="mach-band" key={b.threshold}>
             <span className="mach-band-k">≥{b.threshold}</span>
             {b.row.map((c, k) => {
@@ -138,7 +166,7 @@ export function Headline() {
           <span>cutoff {g.cutoffs[0]}</span>
           <span>
             {rrs.length} true headlines, {lo.toFixed(2)}× to {hi.toFixed(2)}× · hatched ={" "}
-            {d.robustness.grid_cells - d.robustness.grid_solid} whose interval includes 1
+            {weakCount} whose interval includes 1
           </span>
           <span>{g.cutoffs[g.cutoffs.length - 1]}</span>
         </span>
