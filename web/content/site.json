@@ -12,7 +12,7 @@
 
   "wordmark": "kodata",
   "monogram": "kd",
-  "email": "hello@kodata.id",
+  "email": "juanmaulana29@gmail.com",
 
   "availability": {
     "show": true,
@@ -30,9 +30,9 @@
   },
 
   "links": [
-    { "label": "hello@kodata.id", "href": "mailto:hello@kodata.id" },
+    { "label": "juanmaulana29@gmail.com", "href": "mailto:juanmaulana29@gmail.com" },
     { "label": "github", "href": "https://github.com/" },
-    { "label": "other writing", "href": "#" }
+    { "label": "other writing", "href": "kodarchive.studio" }
   ],
 
   "nav": [
