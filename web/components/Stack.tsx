@@ -20,7 +20,18 @@ export type PaneDef = { title: string; kind?: string; node: React.ReactNode };
 export function Stack({ panes, root }: { panes: Record<string, PaneDef>; root: string }) {
   const [trail, setTrail] = useState<string[]>([root]);
   const box = useRef<HTMLDivElement>(null);
-  const opened = useRef(0);
+
+  /**
+   * Which pane to reveal, and a counter to force it.
+   *
+   * This used to key off `trail.length`, which broke the commonest move on the
+   * site: opening piece 02 while piece 01 is open replaces a pane at the same
+   * depth, so the length never changed, so nothing scrolled and the new pane
+   * inherited the old one's scroll position. It read as a dead link. The
+   * counter changes on every open — even a re-open of what is already there,
+   * which should still take you to it.
+   */
+  const [reveal, setReveal] = useState<{ n: number; at: number } | null>(null);
 
   const scrollTo = useCallback((i: number, smooth = true) => {
     const el = box.current;
@@ -49,11 +60,9 @@ export function Stack({ panes, root }: { panes: Record<string, PaneDef>; root: s
       const from = trigger.closest(".pane") as HTMLElement | null;
       const i = from ? Number(from.dataset.i ?? 0) : 0;
 
-      setTrail((cur) => {
-        if (cur[i + 1] === id) return cur;
-        opened.current += 1;
-        return [...cur.slice(0, i + 1), id];
-      });
+      // already open at this depth: leave the trail alone, but still go there
+      setTrail((cur) => (cur[i + 1] === id ? cur : [...cur.slice(0, i + 1), id]));
+      setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: i + 1 }));
     };
 
     document.addEventListener("click", onClick);
@@ -78,23 +87,26 @@ export function Stack({ panes, root }: { panes: Record<string, PaneDef>; root: s
   }, [trail]);
 
   // reveal whatever just opened
-  const count = trail.length;
   useEffect(() => {
-    if (opened.current === 0) return;
-    const id = requestAnimationFrame(() => {
-      scrollTo(count - 1);
-      // a pane that just opened must start at its own beginning, whatever the
-      // browser decided to do with scroll position while it was mounting
-      const pane = box.current?.children[count - 1] as HTMLElement | undefined;
+    if (!reveal) return;
+    const frame = requestAnimationFrame(() => {
+      const at = Math.min(reveal.at, trail.length - 1);
+      scrollTo(at);
+      // A pane that just opened must start at its own beginning — including
+      // when it replaced a pane at the same depth, which is why this cannot
+      // key off the trail's length.
+      const pane = box.current?.children[at] as HTMLElement | undefined;
       const body = pane?.querySelector(".pane-body") as HTMLElement | null;
       if (body) body.scrollTop = 0;
     });
-    return () => cancelAnimationFrame(id);
-  }, [count, scrollTo]);
+    return () => cancelAnimationFrame(frame);
+  }, [reveal, trail.length, scrollTo]);
 
   const close = (i: number) => {
     if (i === 0) return;
     setTrail((cur) => cur.slice(0, i));
+    // bring the pane that is now last back into view
+    setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: i - 1 }));
   };
 
   return (

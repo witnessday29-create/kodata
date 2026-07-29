@@ -10,8 +10,11 @@ change, but the site is not computing those ratios live: every cell of the
 The slider indexes into a precomputed array. So a figure on screen is still
 traceable to a source file, which is the whole promise of the site.
 
-stdlib only: this machine's Application Control policy blocks pandas' compiled
-extensions, and at n=4810 there is nothing pandas would buy us.
+stdlib only, on purpose: at n=4810 pandas buys nothing, and a pipeline with no
+third-party dependency beyond kagglehub runs anywhere Python does. (An earlier
+version of this note claimed pandas was blocked on the machine this was written
+on. That was true once and is no longer — analysis/notebooks/ deliberately uses
+pandas to re-derive these results down a different arithmetic path.)
 
     python analysis/pipelines/02_screen_time/build.py
 """

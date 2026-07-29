@@ -24,9 +24,12 @@ analysis/
   pipelines/01_ai_exposure/build.py     271 occupations, AI exposure, wages
   pipelines/02_screen_time/build.py     4,810 teenagers, screens, sleep, BDI
   verify.py                             re-runs both, refuses to publish drift
+  notebooks/audit.ipynb                 re-derives every claim, in pandas
+  notebooks/make_audit.py               regenerates it with real outputs
 web/
   content/01-ai-exposure/data.json      computed — never edit by hand
   content/02-screen-time/data.json      computed — never edit by hand
+  content/audit.json                    computed — the notebook's pass count
   content/site.json                     written — this one is yours to edit
   app/, components/, lib/               Next.js, static export
 ```
@@ -59,6 +62,27 @@ old sentences, which is precisely the failure this project is built to avoid.
 changed), **tamper** (a `data.json` was hand-edited), and **break** (a pipeline
 assertion failed). Run it as a pull-request gate and drift gets caught without
 being published.
+
+## Checking the numbers without trusting the pipeline
+
+`analysis/notebooks/audit.ipynb` re-derives every published figure from the raw
+Kaggle files and asserts it matches the committed `data.json`. It deliberately
+does not import `build.py`: the pipelines are stdlib, the notebook is pandas and
+numpy, so where the two agree the number is not an artefact of either
+implementation. **33 of 33 claims check out**, including the two places the site
+admits a weakness.
+
+GitHub renders `.ipynb`, so it is readable in the browser without running
+anything. The outputs committed to it are real — `make_audit.py` executes each
+cell and embeds what it actually printed.
+
+```bash
+python analysis/notebooks/make_audit.py   # regenerates the notebook and audit.json
+```
+
+Two guards, different jobs. `verify.py` checks that the committed data still
+comes out of the pipelines. `audit.ipynb` checks that the sentences still match
+the data.
 
 ## On the analysis being wrong
 

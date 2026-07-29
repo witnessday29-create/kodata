@@ -3,8 +3,11 @@
 Emits web/content/01-ai-exposure/data.json, the single contract between this
 analysis and the web layer. Nothing downstream re-computes anything.
 
-stdlib only: this machine's Application Control policy blocks pandas' compiled
-extensions, and at n=271 there is nothing pandas would buy us.
+stdlib only, on purpose: at n=271 pandas buys nothing, and a pipeline with no
+third-party dependency beyond kagglehub runs anywhere Python does. (An earlier
+version of this note claimed pandas was blocked on the machine this was written
+on. That was true once and is no longer — analysis/notebooks/ deliberately uses
+pandas to re-derive these results down a different arithmetic path.)
 
     python analysis/pipelines/01_ai_exposure/build.py
 """

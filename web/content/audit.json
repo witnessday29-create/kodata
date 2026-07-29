@@ -1,0 +1,10 @@
+{
+ "notebook": "analysis/notebooks/audit.ipynb",
+ "generator": "analysis/notebooks/make_audit.py",
+ "checks": 33,
+ "passed": 33,
+ "failed": [],
+ "cells": 20,
+ "stack": "pandas + numpy only, no scipy",
+ "independent_of_pipeline": true
+}

@@ -1,6 +1,11 @@
 import exposure from "@/content/01-ai-exposure/data.json";
 import screen from "@/content/02-screen-time/data.json";
 import siteConfig from "@/content/site.json";
+import auditSummary from "@/content/audit.json";
+
+/** Emitted by analysis/notebooks/make_audit.py, so the page never restates a
+ *  pass count by hand. */
+export const audit = auditSummary;
 
 /** Written copy, kept out of the code so it can be edited without touching TSX.
  *  The data.json files beside it are computed; this one is hand-written. */
