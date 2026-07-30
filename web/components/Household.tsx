@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { wages as d, num } from "@/lib/works";
 import { ShareLink } from "./ShareLink";
-import { readParam, writeParams } from "@/lib/urlState";
+import { readIndex, readParam, writeParams } from "@/lib/urlState";
 
 /**
  * The formula, operated by hand.
@@ -35,12 +35,14 @@ export function Household() {
   useEffect(() => {
     const p = readParam("prov");
     if (p && m.provinces.includes(p)) setProv(p);
-    const a = Number(readParam("area"));
-    if (Number.isInteger(a) && a >= 0 && a < m.area_labels.length) setArea(a);
-    const s = Number(readParam("size"));
-    if (Number.isInteger(s) && s >= 0 && s < m.sizes.length) setSize(s);
-    const e = Number(readParam("earn"));
-    if (Number.isInteger(e) && e >= 0 && e < m.earners.length) setEarn(e);
+    // readIndex, not Number(...), so an absent parameter leaves the default
+    // standing instead of resolving to index 0 — see lib/urlState.ts
+    const a = readIndex("area", m.area_labels.length);
+    if (a !== null) setArea(a);
+    const s = readIndex("size", m.sizes.length);
+    if (s !== null) setSize(s);
+    const e = readIndex("earn", m.earners.length);
+    if (e !== null) setEarn(e);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // Skip the write on the very first run: nothing has changed yet, and

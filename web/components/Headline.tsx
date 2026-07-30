@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { screenTime as d, num } from "@/lib/works";
 import { RatioCI } from "./Expert";
 import { ShareLink } from "./ShareLink";
-import { readParam, writeParams } from "@/lib/urlState";
+import { readNumber, readParam, writeParams } from "@/lib/urlState";
 
 /**
  * The headline machine.
@@ -33,10 +33,12 @@ export function Headline() {
   // Read once after mount, not in useState's initializer, so the first paint
   // still matches the statically exported default and hydration does not warn.
   useEffect(() => {
-    const c = g.cutoffs.indexOf(Number(readParam("cutoff")));
-    if (c !== -1) setCi(c);
-    const t = g.thresholds.indexOf(Number(readParam("threshold")));
-    if (t !== -1) setTi(t);
+    // readNumber, not Number(...), so an absent parameter cannot resolve to 0
+    // and match an axis that contains one — see lib/urlState.ts
+    const c = readNumber("cutoff");
+    if (c !== null && g.cutoffs.indexOf(c) !== -1) setCi(g.cutoffs.indexOf(c));
+    const t = readNumber("threshold");
+    if (t !== null && g.thresholds.indexOf(t) !== -1) setTi(g.thresholds.indexOf(t));
     const w = readParam("who");
     if (w === "Boy" || w === "Girl" || w === "all") setWho(w);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,8 +217,9 @@ export function Flatness() {
   const [k, setK] = useState(0);
 
   useEffect(() => {
-    const removed = Number(readParam("removed"));
-    const found = d.drop_series.findIndex((s) => s.dropped === removed);
+    const removed = readNumber("removed");
+    const found =
+      removed === null ? -1 : d.drop_series.findIndex((s) => s.dropped === removed);
     if (found !== -1) setK(found);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
