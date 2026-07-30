@@ -190,6 +190,14 @@ a { color: inherit; }
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
+  /* a table's own .scroller sits inside this one, and on touch both are
+     horizontally scrollable — without a touch-action hint, a swipe that
+     starts over the table can be captured ambiguously and settle into
+     neither, reading as the stack stuck mid-slide until swiped again.
+     "manipulation" keeps pinch-zoom (unlike pan-x/pan-y alone, which would
+     quietly disable it) and only drops the double-tap-zoom delay/ambiguity. */
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 .stack::-webkit-scrollbar { display: none; }
@@ -575,7 +583,13 @@ a { color: inherit; }
 .lnk:hover, .lnk:hover::after { color: var(--act); border-color: var(--act); }
 
 /* ── tables ───────────────────────────────────────────────────────────── */
-.scroller { overflow-x: auto; overscroll-behavior-x: contain; margin: 0 0 1.6rem; }
+.scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  margin: 0 0 1.6rem;
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
+}
 table { width: 100%; min-width: 26rem; border-collapse: collapse; font-size: 0.72rem; font-variant-numeric: tabular-nums; }
 th {
   text-align: right;
