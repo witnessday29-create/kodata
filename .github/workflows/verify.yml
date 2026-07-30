@@ -1,0 +1,121 @@
+# The two guards the README describes, actually run.
+#
+# Until now both existed only as instructions: `verify.py` said "run it as a
+# pull-request gate" and nothing did. For a site whose entire claim is that its
+# numbers can be checked, a checker nobody runs is the weakest possible link.
+#
+# The jobs are split because they fail for different reasons and one of them
+# needs credentials:
+#
+#   site   no secrets, no network beyond npm — so it is green or the code is
+#          broken. `next build` is a real gate here: app/page.tsx calls
+#          assertGraph() at module scope, so a dead deep link fails the build,
+#          and the export renders all 35 pane routes, so a pane that throws is
+#          caught rather than shipped.
+#
+#   data   re-runs both pipelines against the live Kaggle datasets and diffs
+#          them against the committed data.json. That needs Kaggle credentials,
+#          so it skips itself when they are absent instead of going red — a
+#          fork's pull request should not look broken for lacking a secret.
+#
+# Deliberately not on a schedule. The README explains why at length: drift is
+# not a build failure, it is a signal that prose has to be re-read by a person.
+# `workflow_dispatch` is there so drift can be checked on purpose.
+
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  site:
+    name: site builds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: install
+        working-directory: web
+        run: npm ci
+
+      - name: build
+        working-directory: web
+        run: npm run build
+
+      # A static export that produced no HTML would still exit 0, so check the
+      # thing the routing work was for: that a pane is a real file with real
+      # prose in it, not an empty shell for the client to fill in.
+      - name: the writing is in the HTML
+        working-directory: web
+        run: |
+          test -f out/index.html
+          test -f out/piece-01/evidence-writers.html
+          test -f out/piece-03/evidence-2021.html
+          grep -q "Originality" out/piece-01.html
+          grep -q "YOGYAKARTA" out/piece-03.html
+
+      # Both of these have silently regressed once already: the card was
+      # emitted without a file extension, and every deep link shipped an
+      # og:title with no og:image beside it. Neither breaks a build.
+      - name: the share card exists and every page points at it
+        working-directory: web
+        run: |
+          test -f out/og.png
+          head -c 8 out/og.png | grep -q PNG
+          for f in out/index.html out/piece-01.html out/piece-01/evidence-writers.html; do
+            grep -q 'og:image" content="[^"]*/og\.png"' "$f" || {
+              echo "no og:image in $f"; exit 1;
+            }
+          done
+
+  data:
+    name: data reproduces
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: install kagglehub
+        run: pip install --disable-pip-version-check kagglehub
+
+      # `secrets` is not available in a job-level `if`, so the skip is decided
+      # here and read by the step below.
+      - name: are there credentials
+        id: creds
+        env:
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          if [ -n "$KAGGLE_KEY" ]; then
+            echo "have=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "have=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No KAGGLE_KEY, so the pipelines cannot be re-run. Skipping the drift check."
+          fi
+
+      - name: verify
+        if: steps.creds.outputs.have == 'true'
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: python analysis/verify.py
+
+      # verify.py leaves a drifted data.json on disk on purpose, so the diff is
+      # reviewable. Nothing is ever committed from CI; this just shows it.
+      - name: what moved
+        if: failure() && steps.creds.outputs.have == 'true'
+        run: git --no-pager diff -- web/content

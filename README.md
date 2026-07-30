@@ -23,12 +23,14 @@ keeps every number on screen traceable to a source file.
 analysis/
   pipelines/01_ai_exposure/build.py     271 occupations, AI exposure, wages
   pipelines/02_screen_time/build.py     4,810 teenagers, screens, sleep, BDI
-  verify.py                             re-runs both, refuses to publish drift
+  pipelines/03_pekerja_sejahtera/       34 provinces, minimum wage, poverty line
+  verify.py                             re-runs all three, refuses to publish drift
   notebooks/audit.ipynb                 re-derives every claim, in pandas
   notebooks/make_audit.py               regenerates it with real outputs
 web/
   content/01-ai-exposure/data.json      computed — never edit by hand
   content/02-screen-time/data.json      computed — never edit by hand
+  content/03-pekerja-sejahtera/         computed — never edit by hand
   content/audit.json                    computed — the notebook's pass count
   content/site.json                     written — this one is yours to edit
   app/, components/, lib/               Next.js, static export
@@ -40,6 +42,7 @@ web/
 # the analysis (stdlib only, no pandas; kagglehub fetches the data)
 python analysis/pipelines/01_ai_exposure/build.py
 python analysis/pipelines/02_screen_time/build.py
+python analysis/pipelines/03_pekerja_sejahtera/build.py
 
 # check the committed output still reproduces
 python analysis/verify.py
@@ -60,8 +63,18 @@ old sentences, which is precisely the failure this project is built to avoid.
 `verify.py` exists instead. It re-runs both pipelines, never writes to
 `web/content`, and reports three failures apart: **drift** (the upstream dataset
 changed), **tamper** (a `data.json` was hand-edited), and **break** (a pipeline
-assertion failed). Run it as a pull-request gate and drift gets caught without
-being published.
+assertion failed). Drift gets caught without being published.
+
+`.github/workflows/verify.yml` runs it on every pull request, in two jobs that
+fail for different reasons. **site** needs no secrets: `next build` is a real
+gate, because `app/page.tsx` calls `assertGraph()` at module scope — so a dead
+deep link fails the build rather than shipping — and the export renders all 35
+pane routes, so a pane that throws is caught. It then checks the prose is in the
+HTML and that every page carries a share card. **data** re-runs the pipelines
+against live Kaggle and diffs them against the commit; that needs
+`KAGGLE_USERNAME` and `KAGGLE_KEY`, and skips itself when they are absent rather
+than going red. Neither job is on a schedule, for the reason above; use
+`workflow_dispatch` to check for drift on purpose.
 
 ## Checking the numbers without trusting the pipeline
 
@@ -69,8 +82,15 @@ being published.
 Kaggle files and asserts it matches the committed `data.json`. It deliberately
 does not import `build.py`: the pipelines are stdlib, the notebook is pandas and
 numpy, so where the two agree the number is not an artefact of either
-implementation. **33 of 33 claims check out**, including the two places the site
+implementation. **73 of 73 claims check out**, including the places the site
 admits a weakness.
+
+It has already earned its keep. Piece 03 published a threshold count computed
+from ratios that had been rounded to three decimals first, which put a
+province-year of 4.99998 on the wrong side of “under five people” and cost a
+percentage point off a headline figure. The stdlib pipeline was self-consistent
+and wrong; the pandas re-derivation disagreed, and the pipeline now compares
+exact values and rounds only for display.
 
 The outputs committed to it are real — `make_audit.py` executes each cell and
 embeds what it actually printed. GitHub renders `.ipynb`, and the generator also

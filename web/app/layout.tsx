@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/works";
+import { OG } from "@/lib/og";
 import { Bracket } from "@/components/Bracket";
 
 /* Two faces, and the rule the whole site rests on:
@@ -22,13 +23,36 @@ const serif = Newsreader({
   display: "swap",
 });
 
+const TITLE = "kodata — open data, followed all the way down to one person";
+const DESCRIPTION =
+  "Every piece starts with a public dataset and ends with a story. The numbers can be checked; the story could not have been invented freely.";
+
 export const metadata: Metadata = {
   // absolute share-preview URLs need this; it comes from site.json so the
   // domain is editable without touching code
   metadataBase: new URL(site.url),
-  title: "kodata — open data, followed all the way down to one person",
-  description:
-    "Every piece starts with a public dataset and ends with a story. The numbers can be checked; the story could not have been invented freely.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  // A link to this site is nearly always pasted into a chat window rather than
+  // typed, so the card is the first impression. app/og.png/route.tsx draws it.
+  // The image is named here rather than left to Next's file convention because
+  // that convention skips any route with its own openGraph — which is every
+  // route in app/[...trail].
+  openGraph: {
+    type: "website",
+    siteName: site.wordmark,
+    url: "/",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [OG],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [OG.url],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

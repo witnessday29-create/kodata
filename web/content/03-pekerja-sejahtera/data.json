@@ -1,0 +1,2920 @@
+{
+ "slug": "03-pekerja-sejahtera",
+ "title": "How Many People Is a Wage",
+ "source": {
+  "name": "Pekerja Sejahtera",
+  "kaggle": "rezkyyayang/pekerja-sejahtera",
+  "retrieved": "2026-07-30",
+  "rows_in_file": 35,
+  "provinces": 34,
+  "national_row": "INDONESIA",
+  "ump_from": 2002,
+  "ump_to": 2022,
+  "gk_from": 2013,
+  "gk_to": 2022,
+  "upah_from": 2015,
+  "upah_to": 2022,
+  "peng_from": 2007,
+  "peng_to": 2022,
+  "period": "MARET",
+  "area": "PERDESAANPERKOTAAN",
+  "hours_per_month": 173,
+  "years_used": [
+   2015,
+   2016,
+   2017,
+   2018,
+   2019,
+   2020,
+   2022
+  ],
+  "files": [
+   {
+    "name": "ump.csv",
+    "rows": 35,
+    "unit": "a province, as 21 years of minimum wage"
+   },
+   {
+    "name": "gk.df.csv",
+    "rows": 5460,
+    "unit": "a province-year-period-area-kind poverty line"
+   },
+   {
+    "name": "peng.df.csv",
+    "rows": 4620,
+    "unit": "a province-year-area-kind expenditure"
+   },
+   {
+    "name": "upah.df.csv",
+    "rows": 280,
+    "unit": "a province-year hourly wage"
+   }
+  ]
+ },
+ "integrity": {
+  "excluded_year": 2021,
+  "rho_2020_2022": 0.9958,
+  "rho_2020_2021": 0.6812,
+  "rho_2021_2022": 0.6723,
+  "rho_neighbours_2019_2020": 0.9944,
+  "n_provinces": 34,
+  "n_violations": 13,
+  "n_traced": 9,
+  "violations": [
+   {
+    "province": "JAMBI",
+    "y2020": 2630162,
+    "in_file": 2788826,
+    "y2022": 2698941,
+    "belongs_to": "GORONTALO",
+    "belongs_to_year": 2020,
+    "off_by_rp": 0,
+    "row_delta": 24
+   },
+   {
+    "province": "BENGKULU",
+    "y2020": 2213604,
+    "in_file": 2460996,
+    "y2022": 2238094,
+    "belongs_to": "BANTEN",
+    "belongs_to_year": 2020,
+    "off_by_rp": 1,
+    "row_delta": 9
+   },
+   {
+    "province": "KEP. BANGKA BELITUNG",
+    "y2020": 3230024,
+    "in_file": 3000804,
+    "y2022": 3264884,
+    "belongs_to": "KALIMANTAN UTARA",
+    "belongs_to_year": 2020,
+    "off_by_rp": 0,
+    "row_delta": 15
+   },
+   {
+    "province": "DKI JAKARTA",
+    "y2020": 4276350,
+    "in_file": 1765000,
+    "y2022": 4641854,
+    "belongs_to": null,
+    "belongs_to_year": null,
+    "off_by_rp": null,
+    "row_delta": null
+   },
+   {
+    "province": "JAWA BARAT",
+    "y2020": 1810351,
+    "in_file": 2630162,
+    "y2022": 1841487,
+    "belongs_to": "JAMBI",
+    "belongs_to_year": 2020,
+    "off_by_rp": 0,
+    "row_delta": -7
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "y2020": 1704608,
+    "in_file": 2215000,
+    "y2022": 1840916,
+    "belongs_to": null,
+    "belongs_to_year": null,
+    "off_by_rp": null,
+    "row_delta": null
+   },
+   {
+    "province": "BANTEN",
+    "y2020": 2460997,
+    "in_file": 3230023,
+    "y2022": 2501203,
+    "belongs_to": "KEP. BANGKA BELITUNG",
+    "belongs_to_year": 2020,
+    "off_by_rp": 1,
+    "row_delta": -7
+   },
+   {
+    "province": "KALIMANTAN BARAT",
+    "y2020": 2399699,
+    "in_file": 1868777,
+    "y2022": 2434328,
+    "belongs_to": null,
+    "belongs_to_year": null,
+    "off_by_rp": null,
+    "row_delta": null
+   },
+   {
+    "province": "KALIMANTAN TENGAH",
+    "y2020": 2903145,
+    "in_file": 2877448,
+    "y2022": 2922516,
+    "belongs_to": "KALIMANTAN SELATAN",
+    "belongs_to_year": 2020,
+    "off_by_rp": 1,
+    "row_delta": 1
+   },
+   {
+    "province": "KALIMANTAN SELATAN",
+    "y2020": 2877449,
+    "in_file": 2399698,
+    "y2022": 2906473,
+    "belongs_to": "KALIMANTAN BARAT",
+    "belongs_to_year": 2020,
+    "off_by_rp": 1,
+    "row_delta": -2
+   },
+   {
+    "province": "KALIMANTAN TIMUR",
+    "y2020": 2981379,
+    "in_file": 2903144,
+    "y2022": 3014497,
+    "belongs_to": "KALIMANTAN TENGAH",
+    "belongs_to_year": 2020,
+    "off_by_rp": 1,
+    "row_delta": -2
+   },
+   {
+    "province": "KALIMANTAN UTARA",
+    "y2020": 3000804,
+    "in_file": 2981378,
+    "y2022": 3016738,
+    "belongs_to": "KALIMANTAN TIMUR",
+    "belongs_to_year": 2020,
+    "off_by_rp": 1,
+    "row_delta": -1
+   },
+   {
+    "province": "GORONTALO",
+    "y2020": 2788826,
+    "in_file": 4416186,
+    "y2022": 2800580,
+    "belongs_to": null,
+    "belongs_to_year": null,
+    "off_by_rp": null,
+    "row_delta": null
+   }
+  ],
+  "shift_hypothesis": {
+   "rho_repaired_vs_2020": 0.2101,
+   "rho_raw_vs_2020": 0.6812,
+   "rejected": true,
+   "row_deltas": [
+    -7,
+    -2,
+    -1,
+    1,
+    9,
+    15,
+    24
+   ]
+  },
+  "frozen_exactly": 18,
+  "clean_rows": 21,
+  "rupiah_off_by_one": [
+   "LAMPUNG",
+   "SULAWESI TENGGARA"
+  ],
+  "no_province_fell_2020_to_2022": true
+ },
+ "headline": {
+  "persons_median_first": 4.674,
+  "persons_median_last": 4.774,
+  "persons_median_peak": 5.22,
+  "persons_peak_year": 2020,
+  "persons_min": 2.792,
+  "persons_max": 8.861,
+  "cv_first": 0.2312,
+  "cv_last": 0.2232,
+  "under_four_pct": 8.0,
+  "under_five_pct": 54.6,
+  "province_years": 238,
+  "oneway_beta": 1.1457,
+  "twoway_beta": -0.2621,
+  "twoway_ci": [
+   -0.689,
+   0.164
+  ],
+  "cross_r2_pct": 22.7,
+  "theil_first": 0.01982,
+  "theil_last": 0.02086,
+  "rank_spearman": 0.9199,
+  "floor_median_first": 1.3995,
+  "floor_median_last": 1.1315,
+  "below_minimum_first": 0,
+  "below_minimum_last": 9
+ },
+ "subject": {
+  "province": "DI YOGYAKARTA",
+  "series": [
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2015,
+    "ump": 988500,
+    "gk": 335886,
+    "persons": 2.943
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2016,
+    "ump": 988500,
+    "gk": 354084,
+    "persons": 2.792
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2017,
+    "ump": 1337645,
+    "gk": 374008,
+    "persons": 3.577
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2018,
+    "ump": 1454154,
+    "gk": 409744,
+    "persons": 3.549
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2019,
+    "ump": 1570923,
+    "gk": 432026,
+    "persons": 3.636
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2020,
+    "ump": 1704608,
+    "gk": 463480,
+    "persons": 3.678
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2022,
+    "ump": 1840916,
+    "gk": 521672,
+    "persons": 3.529
+   }
+  ],
+  "worst": {
+   "province": "DI YOGYAKARTA",
+   "year": 2016,
+   "ump": 988500,
+   "gk": 354084,
+   "persons": 2.792
+  },
+  "latest": {
+   "province": "DI YOGYAKARTA",
+   "year": 2022,
+   "ump": 1840916,
+   "gk": 521672,
+   "persons": 3.529
+  },
+  "lowest_in_every_year": true
+ },
+ "persons": {
+  "years": [
+   2015,
+   2016,
+   2017,
+   2018,
+   2019,
+   2020,
+   2022
+  ],
+  "by_year": [
+   {
+    "year": 2015,
+    "n": 34,
+    "median": 4.674,
+    "p10": 3.277,
+    "min": 2.943,
+    "max": 8.052,
+    "cv": 0.2312,
+    "lowest": "DI YOGYAKARTA",
+    "highest": "SULAWESI SELATAN"
+   },
+   {
+    "year": 2016,
+    "n": 34,
+    "median": 4.84,
+    "p10": 3.854,
+    "min": 2.792,
+    "max": 8.315,
+    "cv": 0.246,
+    "lowest": "DI YOGYAKARTA",
+    "highest": "SULAWESI SELATAN"
+   },
+   {
+    "year": 2017,
+    "n": 34,
+    "median": 4.962,
+    "p10": 4.102,
+    "min": 3.577,
+    "max": 8.592,
+    "cv": 0.2227,
+    "lowest": "DI YOGYAKARTA",
+    "highest": "SULAWESI SELATAN"
+   },
+   {
+    "year": 2018,
+    "n": 34,
+    "median": 5.068,
+    "p10": 4.199,
+    "min": 3.549,
+    "max": 8.637,
+    "cv": 0.2206,
+    "lowest": "DI YOGYAKARTA",
+    "highest": "SULAWESI SELATAN"
+   },
+   {
+    "year": 2019,
+    "n": 34,
+    "median": 5.174,
+    "p10": 4.245,
+    "min": 3.636,
+    "max": 8.671,
+    "cv": 0.2203,
+    "lowest": "DI YOGYAKARTA",
+    "highest": "SULAWESI SELATAN"
+   },
+   {
+    "year": 2020,
+    "n": 34,
+    "median": 5.22,
+    "p10": 4.405,
+    "min": 3.678,
+    "max": 8.861,
+    "cv": 0.226,
+    "lowest": "DI YOGYAKARTA",
+    "highest": "SULAWESI SELATAN"
+   },
+   {
+    "year": 2022,
+    "n": 34,
+    "median": 4.774,
+    "p10": 4.069,
+    "min": 3.529,
+    "max": 7.92,
+    "cv": 0.2232,
+    "lowest": "DI YOGYAKARTA",
+    "highest": "SULAWESI SELATAN"
+   }
+  ],
+  "cells": [
+   {
+    "province": "ACEH",
+    "year": 2015,
+    "ump": 1900000,
+    "gk": 390150,
+    "persons": 4.87
+   },
+   {
+    "province": "ACEH",
+    "year": 2016,
+    "ump": 2118500,
+    "gk": 410956,
+    "persons": 5.155
+   },
+   {
+    "province": "ACEH",
+    "year": 2017,
+    "ump": 2500000,
+    "gk": 435454,
+    "persons": 5.741
+   },
+   {
+    "province": "ACEH",
+    "year": 2018,
+    "ump": 2700000,
+    "gk": 464626,
+    "persons": 5.811
+   },
+   {
+    "province": "ACEH",
+    "year": 2019,
+    "ump": 2916810,
+    "gk": 486935,
+    "persons": 5.99
+   },
+   {
+    "province": "ACEH",
+    "year": 2020,
+    "ump": 3165031,
+    "gk": 522125,
+    "persons": 6.062
+   },
+   {
+    "province": "ACEH",
+    "year": 2022,
+    "ump": 3166460,
+    "gk": 579228,
+    "persons": 5.467
+   },
+   {
+    "province": "SUMATERA UTARA",
+    "year": 2015,
+    "ump": 1625000,
+    "gk": 347953,
+    "persons": 4.67
+   },
+   {
+    "province": "SUMATERA UTARA",
+    "year": 2016,
+    "ump": 1811875,
+    "gk": 388156,
+    "persons": 4.668
+   },
+   {
+    "province": "SUMATERA UTARA",
+    "year": 2017,
+    "ump": 1961354,
+    "gk": 411345,
+    "persons": 4.768
+   },
+   {
+    "province": "SUMATERA UTARA",
+    "year": 2018,
+    "ump": 2132189,
+    "gk": 435970,
+    "persons": 4.891
+   },
+   {
+    "province": "SUMATERA UTARA",
+    "year": 2019,
+    "ump": 2303403,
+    "gk": 466122,
+    "persons": 4.942
+   },
+   {
+    "province": "SUMATERA UTARA",
+    "year": 2020,
+    "ump": 2499423,
+    "gk": 502904,
+    "persons": 4.97
+   },
+   {
+    "province": "SUMATERA UTARA",
+    "year": 2022,
+    "ump": 2522610,
+    "gk": 561004,
+    "persons": 4.497
+   },
+   {
+    "province": "SUMATERA BARAT",
+    "year": 2015,
+    "ump": 1615000,
+    "gk": 384278,
+    "persons": 4.203
+   },
+   {
+    "province": "SUMATERA BARAT",
+    "year": 2016,
+    "ump": 1800725,
+    "gk": 425141,
+    "persons": 4.236
+   },
+   {
+    "province": "SUMATERA BARAT",
+    "year": 2017,
+    "ump": 1949284,
+    "gk": 453611,
+    "persons": 4.297
+   },
+   {
+    "province": "SUMATERA BARAT",
+    "year": 2018,
+    "ump": 2119067,
+    "gk": 476554,
+    "persons": 4.447
+   },
+   {
+    "province": "SUMATERA BARAT",
+    "year": 2019,
+    "ump": 2289220,
+    "gk": 503652,
+    "persons": 4.545
+   },
+   {
+    "province": "SUMATERA BARAT",
+    "year": 2020,
+    "ump": 2484041,
+    "gk": 544315,
+    "persons": 4.564
+   },
+   {
+    "province": "SUMATERA BARAT",
+    "year": 2022,
+    "ump": 2512539,
+    "gk": 610940,
+    "persons": 4.113
+   },
+   {
+    "province": "RIAU",
+    "year": 2015,
+    "ump": 1878000,
+    "gk": 399212,
+    "persons": 4.704
+   },
+   {
+    "province": "RIAU",
+    "year": 2016,
+    "ump": 2095000,
+    "gk": 426000,
+    "persons": 4.918
+   },
+   {
+    "province": "RIAU",
+    "year": 2017,
+    "ump": 2266722,
+    "gk": 456493,
+    "persons": 4.966
+   },
+   {
+    "province": "RIAU",
+    "year": 2018,
+    "ump": 2464154,
+    "gk": 479944,
+    "persons": 5.134
+   },
+   {
+    "province": "RIAU",
+    "year": 2019,
+    "ump": 2662026,
+    "gk": 500612,
+    "persons": 5.318
+   },
+   {
+    "province": "RIAU",
+    "year": 2020,
+    "ump": 2888564,
+    "gk": 544058,
+    "persons": 5.309
+   },
+   {
+    "province": "RIAU",
+    "year": 2022,
+    "ump": 2938564,
+    "gk": 605912,
+    "persons": 4.85
+   },
+   {
+    "province": "JAMBI",
+    "year": 2015,
+    "ump": 1710000,
+    "gk": 343935,
+    "persons": 4.972
+   },
+   {
+    "province": "JAMBI",
+    "year": 2016,
+    "ump": 1906650,
+    "gk": 371876,
+    "persons": 5.127
+   },
+   {
+    "province": "JAMBI",
+    "year": 2017,
+    "ump": 2063000,
+    "gk": 389595,
+    "persons": 5.295
+   },
+   {
+    "province": "JAMBI",
+    "year": 2018,
+    "ump": 2243719,
+    "gk": 426251,
+    "persons": 5.264
+   },
+   {
+    "province": "JAMBI",
+    "year": 2019,
+    "ump": 2423889,
+    "gk": 448508,
+    "persons": 5.404
+   },
+   {
+    "province": "JAMBI",
+    "year": 2020,
+    "ump": 2630162,
+    "gk": 483542,
+    "persons": 5.439
+   },
+   {
+    "province": "JAMBI",
+    "year": 2022,
+    "ump": 2698941,
+    "gk": 545870,
+    "persons": 4.944
+   },
+   {
+    "province": "SUMATERA SELATAN",
+    "year": 2015,
+    "ump": 1974346,
+    "gk": 326905,
+    "persons": 6.04
+   },
+   {
+    "province": "SUMATERA SELATAN",
+    "year": 2016,
+    "ump": 2206000,
+    "gk": 351984,
+    "persons": 6.267
+   },
+   {
+    "province": "SUMATERA SELATAN",
+    "year": 2017,
+    "ump": 2388000,
+    "gk": 370059,
+    "persons": 6.453
+   },
+   {
+    "province": "SUMATERA SELATAN",
+    "year": 2018,
+    "ump": 2595995,
+    "gk": 397149,
+    "persons": 6.537
+   },
+   {
+    "province": "SUMATERA SELATAN",
+    "year": 2019,
+    "ump": 2804453,
+    "gk": 410532,
+    "persons": 6.831
+   },
+   {
+    "province": "SUMATERA SELATAN",
+    "year": 2020,
+    "ump": 3043111,
+    "gk": 439042,
+    "persons": 6.931
+   },
+   {
+    "province": "SUMATERA SELATAN",
+    "year": 2022,
+    "ump": 3144446,
+    "gk": 485069,
+    "persons": 6.482
+   },
+   {
+    "province": "BENGKULU",
+    "year": 2015,
+    "ump": 1500000,
+    "gk": 380028,
+    "persons": 3.947
+   },
+   {
+    "province": "BENGKULU",
+    "year": 2016,
+    "ump": 1605000,
+    "gk": 416427,
+    "persons": 3.854
+   },
+   {
+    "province": "BENGKULU",
+    "year": 2017,
+    "ump": 1737412,
+    "gk": 450647,
+    "persons": 3.855
+   },
+   {
+    "province": "BENGKULU",
+    "year": 2018,
+    "ump": 1888741,
+    "gk": 481425,
+    "persons": 3.923
+   },
+   {
+    "province": "BENGKULU",
+    "year": 2019,
+    "ump": 2040407,
+    "gk": 499660,
+    "persons": 4.084
+   },
+   {
+    "province": "BENGKULU",
+    "year": 2020,
+    "ump": 2213604,
+    "gk": 527032,
+    "persons": 4.2
+   },
+   {
+    "province": "BENGKULU",
+    "year": 2022,
+    "ump": 2238094,
+    "gk": 590755,
+    "persons": 3.789
+   },
+   {
+    "province": "LAMPUNG",
+    "year": 2015,
+    "ump": 1581000,
+    "gk": 337996,
+    "persons": 4.678
+   },
+   {
+    "province": "LAMPUNG",
+    "year": 2016,
+    "ump": 1763000,
+    "gk": 364922,
+    "persons": 4.831
+   },
+   {
+    "province": "LAMPUNG",
+    "year": 2017,
+    "ump": 1908447,
+    "gk": 384881,
+    "persons": 4.959
+   },
+   {
+    "province": "LAMPUNG",
+    "year": 2018,
+    "ump": 2074673,
+    "gk": 402307,
+    "persons": 5.157
+   },
+   {
+    "province": "LAMPUNG",
+    "year": 2019,
+    "ump": 2241270,
+    "gk": 418309,
+    "persons": 5.358
+   },
+   {
+    "province": "LAMPUNG",
+    "year": 2020,
+    "ump": 2432002,
+    "gk": 453732,
+    "persons": 5.36
+   },
+   {
+    "province": "LAMPUNG",
+    "year": 2022,
+    "ump": 2440486,
+    "gk": 514039,
+    "persons": 4.748
+   },
+   {
+    "province": "KEP. BANGKA BELITUNG",
+    "year": 2015,
+    "ump": 2100000,
+    "gk": 488701,
+    "persons": 4.297
+   },
+   {
+    "province": "KEP. BANGKA BELITUNG",
+    "year": 2016,
+    "ump": 2341500,
+    "gk": 534230,
+    "persons": 4.383
+   },
+   {
+    "province": "KEP. BANGKA BELITUNG",
+    "year": 2017,
+    "ump": 2538673,
+    "gk": 587530,
+    "persons": 4.321
+   },
+   {
+    "province": "KEP. BANGKA BELITUNG",
+    "year": 2018,
+    "ump": 2755444,
+    "gk": 631467,
+    "persons": 4.364
+   },
+   {
+    "province": "KEP. BANGKA BELITUNG",
+    "year": 2019,
+    "ump": 2976706,
+    "gk": 677717,
+    "persons": 4.392
+   },
+   {
+    "province": "KEP. BANGKA BELITUNG",
+    "year": 2020,
+    "ump": 3230024,
+    "gk": 721455,
+    "persons": 4.477
+   },
+   {
+    "province": "KEP. BANGKA BELITUNG",
+    "year": 2022,
+    "ump": 3264884,
+    "gk": 801438,
+    "persons": 4.074
+   },
+   {
+    "province": "KEP. RIAU",
+    "year": 2015,
+    "ump": 1954000,
+    "gk": 448652,
+    "persons": 4.355
+   },
+   {
+    "province": "KEP. RIAU",
+    "year": 2016,
+    "ump": 2178710,
+    "gk": 490157,
+    "persons": 4.445
+   },
+   {
+    "province": "KEP. RIAU",
+    "year": 2017,
+    "ump": 2358454,
+    "gk": 513236,
+    "persons": 4.595
+   },
+   {
+    "province": "KEP. RIAU",
+    "year": 2018,
+    "ump": 2563875,
+    "gk": 559291,
+    "persons": 4.584
+   },
+   {
+    "province": "KEP. RIAU",
+    "year": 2019,
+    "ump": 2769754,
+    "gk": 594059,
+    "persons": 4.662
+   },
+   {
+    "province": "KEP. RIAU",
+    "year": 2020,
+    "ump": 3005460,
+    "gk": 614727,
+    "persons": 4.889
+   },
+   {
+    "province": "KEP. RIAU",
+    "year": 2022,
+    "ump": 3050172,
+    "gk": 684069,
+    "persons": 4.459
+   },
+   {
+    "province": "DKI JAKARTA",
+    "year": 2015,
+    "ump": 2700000,
+    "gk": 487388,
+    "persons": 5.54
+   },
+   {
+    "province": "DKI JAKARTA",
+    "year": 2016,
+    "ump": 3100000,
+    "gk": 510359,
+    "persons": 6.074
+   },
+   {
+    "province": "DKI JAKARTA",
+    "year": 2017,
+    "ump": 3355750,
+    "gk": 536545,
+    "persons": 6.254
+   },
+   {
+    "province": "DKI JAKARTA",
+    "year": 2018,
+    "ump": 3648036,
+    "gk": 593107,
+    "persons": 6.151
+   },
+   {
+    "province": "DKI JAKARTA",
+    "year": 2019,
+    "ump": 3940973,
+    "gk": 637260,
+    "persons": 6.184
+   },
+   {
+    "province": "DKI JAKARTA",
+    "year": 2020,
+    "ump": 4276350,
+    "gk": 680401,
+    "persons": 6.285
+   },
+   {
+    "province": "DKI JAKARTA",
+    "year": 2022,
+    "ump": 4641854,
+    "gk": 738955,
+    "persons": 6.282
+   },
+   {
+    "province": "JAWA BARAT",
+    "year": 2015,
+    "ump": 1000000,
+    "gk": 306876,
+    "persons": 3.259
+   },
+   {
+    "province": "JAWA BARAT",
+    "year": 2016,
+    "ump": 2250000,
+    "gk": 324992,
+    "persons": 6.923
+   },
+   {
+    "province": "JAWA BARAT",
+    "year": 2017,
+    "ump": 1420624,
+    "gk": 344427,
+    "persons": 4.125
+   },
+   {
+    "province": "JAWA BARAT",
+    "year": 2018,
+    "ump": 1544361,
+    "gk": 367754,
+    "persons": 4.199
+   },
+   {
+    "province": "JAWA BARAT",
+    "year": 2019,
+    "ump": 1668373,
+    "gk": 386198,
+    "persons": 4.32
+   },
+   {
+    "province": "JAWA BARAT",
+    "year": 2020,
+    "ump": 1810351,
+    "gk": 410988,
+    "persons": 4.405
+   },
+   {
+    "province": "JAWA BARAT",
+    "year": 2022,
+    "ump": 1841487,
+    "gk": 452580,
+    "persons": 4.069
+   },
+   {
+    "province": "JAWA TENGAH",
+    "year": 2015,
+    "ump": 910000,
+    "gk": 297851,
+    "persons": 3.055
+   },
+   {
+    "province": "JAWA TENGAH",
+    "year": 2016,
+    "ump": 910000,
+    "gk": 317348,
+    "persons": 2.868
+   },
+   {
+    "province": "JAWA TENGAH",
+    "year": 2017,
+    "ump": 1367000,
+    "gk": 333224,
+    "persons": 4.102
+   },
+   {
+    "province": "JAWA TENGAH",
+    "year": 2018,
+    "ump": 1486065,
+    "gk": 350875,
+    "persons": 4.235
+   },
+   {
+    "province": "JAWA TENGAH",
+    "year": 2019,
+    "ump": 1605396,
+    "gk": 369385,
+    "persons": 4.346
+   },
+   {
+    "province": "JAWA TENGAH",
+    "year": 2020,
+    "ump": 1742015,
+    "gk": 395408,
+    "persons": 4.406
+   },
+   {
+    "province": "JAWA TENGAH",
+    "year": 2022,
+    "ump": 1812935,
+    "gk": 438833,
+    "persons": 4.131
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2015,
+    "ump": 988500,
+    "gk": 335886,
+    "persons": 2.943
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2016,
+    "ump": 988500,
+    "gk": 354084,
+    "persons": 2.792
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2017,
+    "ump": 1337645,
+    "gk": 374008,
+    "persons": 3.577
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2018,
+    "ump": 1454154,
+    "gk": 409744,
+    "persons": 3.549
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2019,
+    "ump": 1570923,
+    "gk": 432026,
+    "persons": 3.636
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2020,
+    "ump": 1704608,
+    "gk": 463480,
+    "persons": 3.678
+   },
+   {
+    "province": "DI YOGYAKARTA",
+    "year": 2022,
+    "ump": 1840916,
+    "gk": 521672,
+    "persons": 3.529
+   },
+   {
+    "province": "JAWA TIMUR",
+    "year": 2015,
+    "ump": 1000000,
+    "gk": 305171,
+    "persons": 3.277
+   },
+   {
+    "province": "JAWA TIMUR",
+    "year": 2016,
+    "ump": 1000000,
+    "gk": 321762,
+    "persons": 3.108
+   },
+   {
+    "province": "JAWA TIMUR",
+    "year": 2017,
+    "ump": 1338000,
+    "gk": 342091,
+    "persons": 3.911
+   },
+   {
+    "province": "JAWA TIMUR",
+    "year": 2018,
+    "ump": 1508895,
+    "gk": 373574,
+    "persons": 4.039
+   },
+   {
+    "province": "JAWA TIMUR",
+    "year": 2019,
+    "ump": 1630059,
+    "gk": 397687,
+    "persons": 4.099
+   },
+   {
+    "province": "JAWA TIMUR",
+    "year": 2020,
+    "ump": 1768777,
+    "gk": 416001,
+    "persons": 4.252
+   },
+   {
+    "province": "JAWA TIMUR",
+    "year": 2022,
+    "ump": 1891567,
+    "gk": 460909,
+    "persons": 4.104
+   },
+   {
+    "province": "BANTEN",
+    "year": 2015,
+    "ump": 1600000,
+    "gk": 336483,
+    "persons": 4.755
+   },
+   {
+    "province": "BANTEN",
+    "year": 2016,
+    "ump": 1784000,
+    "gk": 367949,
+    "persons": 4.848
+   },
+   {
+    "province": "BANTEN",
+    "year": 2017,
+    "ump": 1931180,
+    "gk": 386752,
+    "persons": 4.993
+   },
+   {
+    "province": "BANTEN",
+    "year": 2018,
+    "ump": 2099385,
+    "gk": 431068,
+    "persons": 4.87
+   },
+   {
+    "province": "BANTEN",
+    "year": 2019,
+    "ump": 2267990,
+    "gk": 462727,
+    "persons": 4.901
+   },
+   {
+    "province": "BANTEN",
+    "year": 2020,
+    "ump": 2460997,
+    "gk": 508092,
+    "persons": 4.844
+   },
+   {
+    "province": "BANTEN",
+    "year": 2022,
+    "ump": 2501203,
+    "gk": 570367,
+    "persons": 4.385
+   },
+   {
+    "province": "BALI",
+    "year": 2015,
+    "ump": 1621172,
+    "gk": 321834,
+    "persons": 5.037
+   },
+   {
+    "province": "BALI",
+    "year": 2016,
+    "ump": 1807600,
+    "gk": 338967,
+    "persons": 5.333
+   },
+   {
+    "province": "BALI",
+    "year": 2017,
+    "ump": 1956727,
+    "gk": 361387,
+    "persons": 5.414
+   },
+   {
+    "province": "BALI",
+    "year": 2018,
+    "ump": 2127157,
+    "gk": 382599,
+    "persons": 5.56
+   },
+   {
+    "province": "BALI",
+    "year": 2019,
+    "ump": 2297969,
+    "gk": 400624,
+    "persons": 5.736
+   },
+   {
+    "province": "BALI",
+    "year": 2020,
+    "ump": 2494000,
+    "gk": 429834,
+    "persons": 5.802
+   },
+   {
+    "province": "BALI",
+    "year": 2022,
+    "ump": 2516971,
+    "gk": 485021,
+    "persons": 5.189
+   },
+   {
+    "province": "NUSA TENGGARA BARAT",
+    "year": 2015,
+    "ump": 1330000,
+    "gk": 314238,
+    "persons": 4.232
+   },
+   {
+    "province": "NUSA TENGGARA BARAT",
+    "year": 2016,
+    "ump": 1482950,
+    "gk": 333995,
+    "persons": 4.44
+   },
+   {
+    "province": "NUSA TENGGARA BARAT",
+    "year": 2017,
+    "ump": 1631245,
+    "gk": 345341,
+    "persons": 4.724
+   },
+   {
+    "province": "NUSA TENGGARA BARAT",
+    "year": 2018,
+    "ump": 1825000,
+    "gk": 365901,
+    "persons": 4.988
+   },
+   {
+    "province": "NUSA TENGGARA BARAT",
+    "year": 2019,
+    "ump": 2012610,
+    "gk": 384880,
+    "persons": 5.229
+   },
+   {
+    "province": "NUSA TENGGARA BARAT",
+    "year": 2020,
+    "ump": 2183883,
+    "gk": 404942,
+    "persons": 5.393
+   },
+   {
+    "province": "NUSA TENGGARA BARAT",
+    "year": 2022,
+    "ump": 2207212,
+    "gk": 459827,
+    "persons": 4.8
+   },
+   {
+    "province": "NUSA TENGGARA TIMUR",
+    "year": 2015,
+    "ump": 1250000,
+    "gk": 297863,
+    "persons": 4.197
+   },
+   {
+    "province": "NUSA TENGGARA TIMUR",
+    "year": 2016,
+    "ump": 1425000,
+    "gk": 322947,
+    "persons": 4.412
+   },
+   {
+    "province": "NUSA TENGGARA TIMUR",
+    "year": 2017,
+    "ump": 1525000,
+    "gk": 343396,
+    "persons": 4.441
+   },
+   {
+    "province": "NUSA TENGGARA TIMUR",
+    "year": 2018,
+    "ump": 1660000,
+    "gk": 354898,
+    "persons": 4.677
+   },
+   {
+    "province": "NUSA TENGGARA TIMUR",
+    "year": 2019,
+    "ump": 1795000,
+    "gk": 373922,
+    "persons": 4.8
+   },
+   {
+    "province": "NUSA TENGGARA TIMUR",
+    "year": 2020,
+    "ump": 1950000,
+    "gk": 403005,
+    "persons": 4.839
+   },
+   {
+    "province": "NUSA TENGGARA TIMUR",
+    "year": 2022,
+    "ump": 1975000,
+    "gk": 460823,
+    "persons": 4.286
+   },
+   {
+    "province": "KALIMANTAN BARAT",
+    "year": 2015,
+    "ump": 1560000,
+    "gk": 323615,
+    "persons": 4.821
+   },
+   {
+    "province": "KALIMANTAN BARAT",
+    "year": 2016,
+    "ump": 1739400,
+    "gk": 347881,
+    "persons": 5.0
+   },
+   {
+    "province": "KALIMANTAN BARAT",
+    "year": 2017,
+    "ump": 1882900,
+    "gk": 377219,
+    "persons": 4.992
+   },
+   {
+    "province": "KALIMANTAN BARAT",
+    "year": 2018,
+    "ump": 2046900,
+    "gk": 409286,
+    "persons": 5.001
+   },
+   {
+    "province": "KALIMANTAN BARAT",
+    "year": 2019,
+    "ump": 2211500,
+    "gk": 438555,
+    "persons": 5.043
+   },
+   {
+    "province": "KALIMANTAN BARAT",
+    "year": 2020,
+    "ump": 2399699,
+    "gk": 471200,
+    "persons": 5.093
+   },
+   {
+    "province": "KALIMANTAN BARAT",
+    "year": 2022,
+    "ump": 2434328,
+    "gk": 520660,
+    "persons": 4.675
+   },
+   {
+    "province": "KALIMANTAN TENGAH",
+    "year": 2015,
+    "ump": 1896367,
+    "gk": 349726,
+    "persons": 5.422
+   },
+   {
+    "province": "KALIMANTAN TENGAH",
+    "year": 2016,
+    "ump": 2057558,
+    "gk": 373484,
+    "persons": 5.509
+   },
+   {
+    "province": "KALIMANTAN TENGAH",
+    "year": 2017,
+    "ump": 2227307,
+    "gk": 401536,
+    "persons": 5.547
+   },
+   {
+    "province": "KALIMANTAN TENGAH",
+    "year": 2018,
+    "ump": 2421305,
+    "gk": 413528,
+    "persons": 5.855
+   },
+   {
+    "province": "KALIMANTAN TENGAH",
+    "year": 2019,
+    "ump": 2663435,
+    "gk": 438248,
+    "persons": 6.077
+   },
+   {
+    "province": "KALIMANTAN TENGAH",
+    "year": 2020,
+    "ump": 2903145,
+    "gk": 485634,
+    "persons": 5.978
+   },
+   {
+    "province": "KALIMANTAN TENGAH",
+    "year": 2022,
+    "ump": 2922516,
+    "gk": 548817,
+    "persons": 5.325
+   },
+   {
+    "province": "KALIMANTAN SELATAN",
+    "year": 2015,
+    "ump": 1870000,
+    "gk": 341349,
+    "persons": 5.478
+   },
+   {
+    "province": "KALIMANTAN SELATAN",
+    "year": 2016,
+    "ump": 2085050,
+    "gk": 377480,
+    "persons": 5.524
+   },
+   {
+    "province": "KALIMANTAN SELATAN",
+    "year": 2017,
+    "ump": 2258000,
+    "gk": 402423,
+    "persons": 5.611
+   },
+   {
+    "province": "KALIMANTAN SELATAN",
+    "year": 2018,
+    "ump": 2454671,
+    "gk": 427774,
+    "persons": 5.738
+   },
+   {
+    "province": "KALIMANTAN SELATAN",
+    "year": 2019,
+    "ump": 2651782,
+    "gk": 457221,
+    "persons": 5.8
+   },
+   {
+    "province": "KALIMANTAN SELATAN",
+    "year": 2020,
+    "ump": 2877449,
+    "gk": 497262,
+    "persons": 5.787
+   },
+   {
+    "province": "KALIMANTAN SELATAN",
+    "year": 2022,
+    "ump": 2906473,
+    "gk": 553073,
+    "persons": 5.255
+   },
+   {
+    "province": "KALIMANTAN TIMUR",
+    "year": 2015,
+    "ump": 2026126,
+    "gk": 473709,
+    "persons": 4.277
+   },
+   {
+    "province": "KALIMANTAN TIMUR",
+    "year": 2016,
+    "ump": 2161253,
+    "gk": 511205,
+    "persons": 4.228
+   },
+   {
+    "province": "KALIMANTAN TIMUR",
+    "year": 2017,
+    "ump": 2354800,
+    "gk": 548094,
+    "persons": 4.296
+   },
+   {
+    "province": "KALIMANTAN TIMUR",
+    "year": 2018,
+    "ump": 2543332,
+    "gk": 574704,
+    "persons": 4.425
+   },
+   {
+    "province": "KALIMANTAN TIMUR",
+    "year": 2019,
+    "ump": 2747561,
+    "gk": 609156,
+    "persons": 4.51
+   },
+   {
+    "province": "KALIMANTAN TIMUR",
+    "year": 2020,
+    "ump": 2981379,
+    "gk": 662302,
+    "persons": 4.502
+   },
+   {
+    "province": "KALIMANTAN TIMUR",
+    "year": 2022,
+    "ump": 3014497,
+    "gk": 728208,
+    "persons": 4.14
+   },
+   {
+    "province": "KALIMANTAN UTARA",
+    "year": 2015,
+    "ump": 2026126,
+    "gk": 475621,
+    "persons": 4.26
+   },
+   {
+    "province": "KALIMANTAN UTARA",
+    "year": 2016,
+    "ump": 2175340,
+    "gk": 513614,
+    "persons": 4.235
+   },
+   {
+    "province": "KALIMANTAN UTARA",
+    "year": 2017,
+    "ump": 2358800,
+    "gk": 552039,
+    "persons": 4.273
+   },
+   {
+    "province": "KALIMANTAN UTARA",
+    "year": 2018,
+    "ump": 2559903,
+    "gk": 586048,
+    "persons": 4.368
+   },
+   {
+    "province": "KALIMANTAN UTARA",
+    "year": 2019,
+    "ump": 2765463,
+    "gk": 651416,
+    "persons": 4.245
+   },
+   {
+    "province": "KALIMANTAN UTARA",
+    "year": 2020,
+    "ump": 3000804,
+    "gk": 681035,
+    "persons": 4.406
+   },
+   {
+    "province": "KALIMANTAN UTARA",
+    "year": 2022,
+    "ump": 3016738,
+    "gk": 772914,
+    "persons": 3.903
+   },
+   {
+    "province": "SULAWESI UTARA",
+    "year": 2015,
+    "ump": 2150000,
+    "gk": 295365,
+    "persons": 7.279
+   },
+   {
+    "province": "SULAWESI UTARA",
+    "year": 2016,
+    "ump": 2400000,
+    "gk": 317478,
+    "persons": 7.56
+   },
+   {
+    "province": "SULAWESI UTARA",
+    "year": 2017,
+    "ump": 2598000,
+    "gk": 333510,
+    "persons": 7.79
+   },
+   {
+    "province": "SULAWESI UTARA",
+    "year": 2018,
+    "ump": 2824286,
+    "gk": 344418,
+    "persons": 8.2
+   },
+   {
+    "province": "SULAWESI UTARA",
+    "year": 2019,
+    "ump": 3051076,
+    "gk": 371282,
+    "persons": 8.218
+   },
+   {
+    "province": "SULAWESI UTARA",
+    "year": 2020,
+    "ump": 3310723,
+    "gk": 391197,
+    "persons": 8.463
+   },
+   {
+    "province": "SULAWESI UTARA",
+    "year": 2022,
+    "ump": 3310723,
+    "gk": 427016,
+    "persons": 7.753
+   },
+   {
+    "province": "SULAWESI TENGAH",
+    "year": 2015,
+    "ump": 1500000,
+    "gk": 338443,
+    "persons": 4.432
+   },
+   {
+    "province": "SULAWESI TENGAH",
+    "year": 2016,
+    "ump": 1670000,
+    "gk": 375659,
+    "persons": 4.446
+   },
+   {
+    "province": "SULAWESI TENGAH",
+    "year": 2017,
+    "ump": 1807775,
+    "gk": 391763,
+    "persons": 4.614
+   },
+   {
+    "province": "SULAWESI TENGAH",
+    "year": 2018,
+    "ump": 1965232,
+    "gk": 413785,
+    "persons": 4.749
+   },
+   {
+    "province": "SULAWESI TENGAH",
+    "year": 2019,
+    "ump": 2123040,
+    "gk": 441036,
+    "persons": 4.814
+   },
+   {
+    "province": "SULAWESI TENGAH",
+    "year": 2020,
+    "ump": 2303711,
+    "gk": 474627,
+    "persons": 4.854
+   },
+   {
+    "province": "SULAWESI TENGAH",
+    "year": 2022,
+    "ump": 2390739,
+    "gk": 530251,
+    "persons": 4.509
+   },
+   {
+    "province": "SULAWESI SELATAN",
+    "year": 2015,
+    "ump": 2000000,
+    "gk": 248391,
+    "persons": 8.052
+   },
+   {
+    "province": "SULAWESI SELATAN",
+    "year": 2016,
+    "ump": 2250000,
+    "gk": 270601,
+    "persons": 8.315
+   },
+   {
+    "province": "SULAWESI SELATAN",
+    "year": 2017,
+    "ump": 2435625,
+    "gk": 283461,
+    "persons": 8.592
+   },
+   {
+    "province": "SULAWESI SELATAN",
+    "year": 2018,
+    "ump": 2647767,
+    "gk": 306545,
+    "persons": 8.637
+   },
+   {
+    "province": "SULAWESI SELATAN",
+    "year": 2019,
+    "ump": 2860382,
+    "gk": 329880,
+    "persons": 8.671
+   },
+   {
+    "province": "SULAWESI SELATAN",
+    "year": 2020,
+    "ump": 3103800,
+    "gk": 350264,
+    "persons": 8.861
+   },
+   {
+    "province": "SULAWESI SELATAN",
+    "year": 2022,
+    "ump": 3165876,
+    "gk": 399755,
+    "persons": 7.92
+   },
+   {
+    "province": "SULAWESI TENGGARA",
+    "year": 2015,
+    "ump": 1652000,
+    "gk": 257553,
+    "persons": 6.414
+   },
+   {
+    "province": "SULAWESI TENGGARA",
+    "year": 2016,
+    "ump": 1850000,
+    "gk": 277288,
+    "persons": 6.672
+   },
+   {
+    "province": "SULAWESI TENGGARA",
+    "year": 2017,
+    "ump": 2002625,
+    "gk": 285609,
+    "persons": 7.012
+   },
+   {
+    "province": "SULAWESI TENGGARA",
+    "year": 2018,
+    "ump": 2177052,
+    "gk": 303618,
+    "persons": 7.17
+   },
+   {
+    "province": "SULAWESI TENGGARA",
+    "year": 2019,
+    "ump": 2351870,
+    "gk": 327402,
+    "persons": 7.183
+   },
+   {
+    "province": "SULAWESI TENGGARA",
+    "year": 2020,
+    "ump": 2552015,
+    "gk": 356444,
+    "persons": 7.16
+   },
+   {
+    "province": "SULAWESI TENGGARA",
+    "year": 2022,
+    "ump": 2710596,
+    "gk": 404137,
+    "persons": 6.707
+   },
+   {
+    "province": "GORONTALO",
+    "year": 2015,
+    "ump": 1600000,
+    "gk": 263653,
+    "persons": 6.069
+   },
+   {
+    "province": "GORONTALO",
+    "year": 2016,
+    "ump": 1875000,
+    "gk": 284233,
+    "persons": 6.597
+   },
+   {
+    "province": "GORONTALO",
+    "year": 2017,
+    "ump": 2030000,
+    "gk": 296730,
+    "persons": 6.841
+   },
+   {
+    "province": "GORONTALO",
+    "year": 2018,
+    "ump": 2206813,
+    "gk": 316296,
+    "persons": 6.977
+   },
+   {
+    "province": "GORONTALO",
+    "year": 2019,
+    "ump": 2384020,
+    "gk": 333070,
+    "persons": 7.158
+   },
+   {
+    "province": "GORONTALO",
+    "year": 2020,
+    "ump": 2788826,
+    "gk": 368990,
+    "persons": 7.558
+   },
+   {
+    "province": "GORONTALO",
+    "year": 2022,
+    "ump": 2800580,
+    "gk": 411907,
+    "persons": 6.799
+   },
+   {
+    "province": "SULAWESI BARAT",
+    "year": 2015,
+    "ump": 1655500,
+    "gk": 261882,
+    "persons": 6.322
+   },
+   {
+    "province": "SULAWESI BARAT",
+    "year": 2016,
+    "ump": 1864000,
+    "gk": 286840,
+    "persons": 6.498
+   },
+   {
+    "province": "SULAWESI BARAT",
+    "year": 2017,
+    "ump": 2017780,
+    "gk": 302851,
+    "persons": 6.663
+   },
+   {
+    "province": "SULAWESI BARAT",
+    "year": 2018,
+    "ump": 2193530,
+    "gk": 319121,
+    "persons": 6.874
+   },
+   {
+    "province": "SULAWESI BARAT",
+    "year": 2019,
+    "ump": 2381000,
+    "gk": 328144,
+    "persons": 7.256
+   },
+   {
+    "province": "SULAWESI BARAT",
+    "year": 2020,
+    "ump": 2678863,
+    "gk": 350743,
+    "persons": 7.638
+   },
+   {
+    "province": "SULAWESI BARAT",
+    "year": 2022,
+    "ump": 2678863,
+    "gk": 405187,
+    "persons": 6.611
+   },
+   {
+    "province": "MALUKU",
+    "year": 2015,
+    "ump": 1650000,
+    "gk": 399632,
+    "persons": 4.129
+   },
+   {
+    "province": "MALUKU",
+    "year": 2016,
+    "ump": 1775000,
+    "gk": 414302,
+    "persons": 4.284
+   },
+   {
+    "province": "MALUKU",
+    "year": 2017,
+    "ump": 1925000,
+    "gk": 436864,
+    "persons": 4.406
+   },
+   {
+    "province": "MALUKU",
+    "year": 2018,
+    "ump": 2222220,
+    "gk": 456456,
+    "persons": 4.868
+   },
+   {
+    "province": "MALUKU",
+    "year": 2019,
+    "ump": 2400664,
+    "gk": 508778,
+    "persons": 4.718
+   },
+   {
+    "province": "MALUKU",
+    "year": 2020,
+    "ump": 2604961,
+    "gk": 555197,
+    "persons": 4.692
+   },
+   {
+    "province": "MALUKU",
+    "year": 2022,
+    "ump": 2619313,
+    "gk": 631326,
+    "persons": 4.149
+   },
+   {
+    "province": "MALUKU UTARA",
+    "year": 2015,
+    "ump": 1577617,
+    "gk": 344087,
+    "persons": 4.585
+   },
+   {
+    "province": "MALUKU UTARA",
+    "year": 2016,
+    "ump": 1681266,
+    "gk": 376554,
+    "persons": 4.465
+   },
+   {
+    "province": "MALUKU UTARA",
+    "year": 2017,
+    "ump": 1975000,
+    "gk": 390998,
+    "persons": 5.051
+   },
+   {
+    "province": "MALUKU UTARA",
+    "year": 2018,
+    "ump": 2320803,
+    "gk": 412267,
+    "persons": 5.629
+   },
+   {
+    "province": "MALUKU UTARA",
+    "year": 2019,
+    "ump": 2508091,
+    "gk": 444650,
+    "persons": 5.641
+   },
+   {
+    "province": "MALUKU UTARA",
+    "year": 2020,
+    "ump": 2721530,
+    "gk": 462639,
+    "persons": 5.883
+   },
+   {
+    "province": "MALUKU UTARA",
+    "year": 2022,
+    "ump": 2862231,
+    "gk": 514382,
+    "persons": 5.564
+   },
+   {
+    "province": "PAPUA BARAT",
+    "year": 2015,
+    "ump": 2015000,
+    "gk": 441569,
+    "persons": 4.563
+   },
+   {
+    "province": "PAPUA BARAT",
+    "year": 2016,
+    "ump": 2237000,
+    "gk": 474967,
+    "persons": 4.71
+   },
+   {
+    "province": "PAPUA BARAT",
+    "year": 2017,
+    "ump": 2421500,
+    "gk": 499777,
+    "persons": 4.845
+   },
+   {
+    "province": "PAPUA BARAT",
+    "year": 2018,
+    "ump": 2667000,
+    "gk": 516362,
+    "persons": 5.165
+   },
+   {
+    "province": "PAPUA BARAT",
+    "year": 2019,
+    "ump": 2934500,
+    "gk": 573313,
+    "persons": 5.118
+   },
+   {
+    "province": "PAPUA BARAT",
+    "year": 2020,
+    "ump": 3134600,
+    "gk": 610888,
+    "persons": 5.131
+   },
+   {
+    "province": "PAPUA BARAT",
+    "year": 2022,
+    "ump": 3200000,
+    "gk": 665604,
+    "persons": 4.808
+   },
+   {
+    "province": "PAPUA",
+    "year": 2015,
+    "ump": 2193000,
+    "gk": 402031,
+    "persons": 5.455
+   },
+   {
+    "province": "PAPUA",
+    "year": 2016,
+    "ump": 2435000,
+    "gk": 427175,
+    "persons": 5.7
+   },
+   {
+    "province": "PAPUA",
+    "year": 2017,
+    "ump": 2663646,
+    "gk": 457541,
+    "persons": 5.822
+   },
+   {
+    "province": "PAPUA",
+    "year": 2018,
+    "ump": 3000000,
+    "gk": 499463,
+    "persons": 6.006
+   },
+   {
+    "province": "PAPUA",
+    "year": 2019,
+    "ump": 3240900,
+    "gk": 540099,
+    "persons": 6.001
+   },
+   {
+    "province": "PAPUA",
+    "year": 2020,
+    "ump": 3516700,
+    "gk": 562992,
+    "persons": 6.246
+   },
+   {
+    "province": "PAPUA",
+    "year": 2022,
+    "ump": 3561932,
+    "gk": 629175,
+    "persons": 5.661
+   }
+  ],
+  "thresholds": [
+   {
+    "people": 3,
+    "n": 3,
+    "pct": 1.3
+   },
+   {
+    "people": 4,
+    "n": 19,
+    "pct": 8.0
+   },
+   {
+    "people": 5,
+    "n": 130,
+    "pct": 54.6
+   },
+   {
+    "people": 6,
+    "n": 184,
+    "pct": 77.3
+   }
+  ]
+ },
+ "elasticity": {
+  "province_fe": {
+   "beta": 1.1457,
+   "se": 0.0336,
+   "t": 34.05,
+   "se_cluster": 0.0422,
+   "t_cluster": 27.12,
+   "ci_cluster": [
+    1.063,
+    1.229
+   ],
+   "n": 238,
+   "clusters": 34,
+   "df": 203
+  },
+  "twoway_fe": {
+   "beta": -0.2621,
+   "se": 0.2061,
+   "t": -1.27,
+   "se_cluster": 0.2176,
+   "t_cluster": -1.2,
+   "ci_cluster": [
+    -0.689,
+    0.164
+   ],
+   "n": 238,
+   "clusters": 34,
+   "df": 196
+  },
+  "cross_section": [
+   {
+    "year": 2015,
+    "n": 34,
+    "r": 0.5573,
+    "rho": 0.5099,
+    "elasticity": 0.646,
+    "r2": 0.2343,
+    "r2_pct": 23.4
+   },
+   {
+    "year": 2016,
+    "n": 34,
+    "r": 0.4705,
+    "rho": 0.354,
+    "elasticity": 0.568,
+    "r2": 0.1663,
+    "r2_pct": 16.6
+   },
+   {
+    "year": 2017,
+    "n": 34,
+    "r": 0.5219,
+    "rho": 0.4264,
+    "elasticity": 0.528,
+    "r2": 0.2272,
+    "r2_pct": 22.7
+   },
+   {
+    "year": 2018,
+    "n": 34,
+    "r": 0.531,
+    "rho": 0.4521,
+    "elasticity": 0.519,
+    "r2": 0.2285,
+    "r2_pct": 22.9
+   },
+   {
+    "year": 2019,
+    "n": 34,
+    "r": 0.5419,
+    "rho": 0.4649,
+    "elasticity": 0.515,
+    "r2": 0.2419,
+    "r2_pct": 24.2
+   },
+   {
+    "year": 2020,
+    "n": 34,
+    "r": 0.5169,
+    "rho": 0.4163,
+    "elasticity": 0.497,
+    "r2": 0.2186,
+    "r2_pct": 21.9
+   },
+   {
+    "year": 2022,
+    "n": 34,
+    "r": 0.4962,
+    "rho": 0.4124,
+    "elasticity": 0.493,
+    "r2": 0.2111,
+    "r2_pct": 21.1
+   }
+  ]
+ },
+ "dispersion": {
+  "series": [
+   {
+    "year": 2002,
+    "n": 30,
+    "theil": 0.01982,
+    "cv": 0.2096,
+    "max_over_min": 2.413
+   },
+   {
+    "year": 2003,
+    "n": 30,
+    "theil": 0.01646,
+    "cv": 0.1888,
+    "max_over_min": 2.305
+   },
+   {
+    "year": 2004,
+    "n": 30,
+    "theil": 0.01537,
+    "cv": 0.1811,
+    "max_over_min": 2.166
+   },
+   {
+    "year": 2005,
+    "n": 31,
+    "theil": 0.01452,
+    "cv": 0.1743,
+    "max_over_min": 2.094
+   },
+   {
+    "year": 2006,
+    "n": 33,
+    "theil": 0.01747,
+    "cv": 0.1907,
+    "max_over_min": 2.109
+   },
+   {
+    "year": 2007,
+    "n": 33,
+    "theil": 0.01675,
+    "cv": 0.1878,
+    "max_over_min": 2.201
+   },
+   {
+    "year": 2008,
+    "n": 33,
+    "theil": 0.0174,
+    "cv": 0.1919,
+    "max_over_min": 2.211
+   },
+   {
+    "year": 2009,
+    "n": 33,
+    "theil": 0.01741,
+    "cv": 0.1918,
+    "max_over_min": 2.134
+   },
+   {
+    "year": 2010,
+    "n": 33,
+    "theil": 0.01599,
+    "cv": 0.1837,
+    "max_over_min": 2.09
+   },
+   {
+    "year": 2011,
+    "n": 33,
+    "theil": 0.01756,
+    "cv": 0.1922,
+    "max_over_min": 2.089
+   },
+   {
+    "year": 2012,
+    "n": 33,
+    "theil": 0.01845,
+    "cv": 0.1967,
+    "max_over_min": 2.128
+   },
+   {
+    "year": 2013,
+    "n": 33,
+    "theil": 0.02484,
+    "cv": 0.2301,
+    "max_over_min": 2.651
+   },
+   {
+    "year": 2014,
+    "n": 33,
+    "theil": 0.02345,
+    "cv": 0.2205,
+    "max_over_min": 2.682
+   },
+   {
+    "year": 2015,
+    "n": 34,
+    "theil": 0.02605,
+    "cv": 0.2276,
+    "max_over_min": 2.967
+   },
+   {
+    "year": 2016,
+    "n": 34,
+    "theil": 0.02681,
+    "cv": 0.2292,
+    "max_over_min": 3.407
+   },
+   {
+    "year": 2017,
+    "n": 34,
+    "theil": 0.02114,
+    "cv": 0.2092,
+    "max_over_min": 2.509
+   },
+   {
+    "year": 2018,
+    "n": 34,
+    "theil": 0.02078,
+    "cv": 0.2073,
+    "max_over_min": 2.509
+   },
+   {
+    "year": 2019,
+    "n": 34,
+    "theil": 0.02078,
+    "cv": 0.2073,
+    "max_over_min": 2.509
+   },
+   {
+    "year": 2020,
+    "n": 34,
+    "theil": 0.02063,
+    "cv": 0.2062,
+    "max_over_min": 2.509
+   },
+   {
+    "year": 2022,
+    "n": 34,
+    "theil": 0.02086,
+    "cv": 0.21,
+    "max_over_min": 2.56
+   }
+  ],
+  "persistence": {
+   "first_year": 2015,
+   "last_year": 2022,
+   "n": 34,
+   "spearman": 0.9199,
+   "pearson": 0.9375,
+   "fell_most": [
+    {
+     "province": "BANTEN",
+     "first": 4.755,
+     "last": 4.385,
+     "change": -0.37
+    },
+    {
+     "province": "KALIMANTAN UTARA",
+     "first": 4.26,
+     "last": 3.903,
+     "change": -0.357
+    },
+    {
+     "province": "KEP. BANGKA BELITUNG",
+     "first": 4.297,
+     "last": 4.074,
+     "change": -0.223
+    }
+   ],
+   "rose_most": [
+    {
+     "province": "JAWA TENGAH",
+     "first": 3.055,
+     "last": 4.131,
+     "change": 1.076
+    },
+    {
+     "province": "MALUKU UTARA",
+     "first": 4.585,
+     "last": 5.564,
+     "change": 0.979
+    },
+    {
+     "province": "JAWA TIMUR",
+     "first": 3.277,
+     "last": 4.104,
+     "change": 0.827
+    }
+   ]
+  }
+ },
+ "engel": [
+  {
+   "year": 2007,
+   "area": "PERKOTAAN",
+   "n_spending": 33,
+   "n_line": 0,
+   "spending_food_share": 0.4792,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2007,
+   "area": "PERDESAAN",
+   "n_spending": 32,
+   "n_line": 0,
+   "spending_food_share": 0.5906,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2008,
+   "area": "PERKOTAAN",
+   "n_spending": 33,
+   "n_line": 0,
+   "spending_food_share": 0.4763,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2008,
+   "area": "PERDESAAN",
+   "n_spending": 32,
+   "n_line": 0,
+   "spending_food_share": 0.5874,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2009,
+   "area": "PERKOTAAN",
+   "n_spending": 33,
+   "n_line": 0,
+   "spending_food_share": 0.4843,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2009,
+   "area": "PERDESAAN",
+   "n_spending": 32,
+   "n_line": 0,
+   "spending_food_share": 0.593,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2010,
+   "area": "PERKOTAAN",
+   "n_spending": 33,
+   "n_line": 0,
+   "spending_food_share": 0.4845,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2010,
+   "area": "PERDESAAN",
+   "n_spending": 32,
+   "n_line": 0,
+   "spending_food_share": 0.5964,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2011,
+   "area": "PERKOTAAN",
+   "n_spending": 33,
+   "n_line": 0,
+   "spending_food_share": 0.4653,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2011,
+   "area": "PERDESAAN",
+   "n_spending": 32,
+   "n_line": 0,
+   "spending_food_share": 0.5821,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2012,
+   "area": "PERKOTAAN",
+   "n_spending": 33,
+   "n_line": 0,
+   "spending_food_share": 0.4839,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2012,
+   "area": "PERDESAAN",
+   "n_spending": 32,
+   "n_line": 0,
+   "spending_food_share": 0.5797,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2013,
+   "area": "PERKOTAAN",
+   "n_spending": 33,
+   "n_line": 0,
+   "spending_food_share": 0.4632,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2013,
+   "area": "PERDESAAN",
+   "n_spending": 32,
+   "n_line": 0,
+   "spending_food_share": 0.5915,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2014,
+   "area": "PERKOTAAN",
+   "n_spending": 33,
+   "n_line": 0,
+   "spending_food_share": 0.4564,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2014,
+   "area": "PERDESAAN",
+   "n_spending": 32,
+   "n_line": 0,
+   "spending_food_share": 0.5849,
+   "line_food_share": null,
+   "gap": null
+  },
+  {
+   "year": 2015,
+   "area": "PERKOTAAN",
+   "n_spending": 34,
+   "n_line": 34,
+   "spending_food_share": 0.4513,
+   "line_food_share": 0.7075,
+   "gap": 0.2562
+  },
+  {
+   "year": 2015,
+   "area": "PERDESAAN",
+   "n_spending": 33,
+   "n_line": 33,
+   "spending_food_share": 0.5528,
+   "line_food_share": 0.7816,
+   "gap": 0.2289
+  },
+  {
+   "year": 2016,
+   "area": "PERKOTAAN",
+   "n_spending": 34,
+   "n_line": 34,
+   "spending_food_share": 0.4583,
+   "line_food_share": 0.7094,
+   "gap": 0.2512
+  },
+  {
+   "year": 2016,
+   "area": "PERDESAAN",
+   "n_spending": 33,
+   "n_line": 33,
+   "spending_food_share": 0.5505,
+   "line_food_share": 0.7864,
+   "gap": 0.2358
+  },
+  {
+   "year": 2017,
+   "area": "PERKOTAAN",
+   "n_spending": 34,
+   "n_line": 34,
+   "spending_food_share": 0.4792,
+   "line_food_share": 0.7138,
+   "gap": 0.2346
+  },
+  {
+   "year": 2017,
+   "area": "PERDESAAN",
+   "n_spending": 33,
+   "n_line": 33,
+   "spending_food_share": 0.5833,
+   "line_food_share": 0.7781,
+   "gap": 0.1948
+  },
+  {
+   "year": 2018,
+   "area": "PERKOTAAN",
+   "n_spending": 34,
+   "n_line": 34,
+   "spending_food_share": 0.464,
+   "line_food_share": 0.7178,
+   "gap": 0.2538
+  },
+  {
+   "year": 2018,
+   "area": "PERDESAAN",
+   "n_spending": 33,
+   "n_line": 33,
+   "spending_food_share": 0.5496,
+   "line_food_share": 0.773,
+   "gap": 0.2234
+  },
+  {
+   "year": 2019,
+   "area": "PERKOTAAN",
+   "n_spending": 34,
+   "n_line": 34,
+   "spending_food_share": 0.4641,
+   "line_food_share": 0.7247,
+   "gap": 0.2607
+  },
+  {
+   "year": 2019,
+   "area": "PERDESAAN",
+   "n_spending": 33,
+   "n_line": 33,
+   "spending_food_share": 0.5495,
+   "line_food_share": 0.7699,
+   "gap": 0.2204
+  },
+  {
+   "year": 2020,
+   "area": "PERKOTAAN",
+   "n_spending": 34,
+   "n_line": 34,
+   "spending_food_share": 0.4577,
+   "line_food_share": 0.7269,
+   "gap": 0.2692
+  },
+  {
+   "year": 2020,
+   "area": "PERDESAAN",
+   "n_spending": 33,
+   "n_line": 33,
+   "spending_food_share": 0.5462,
+   "line_food_share": 0.7691,
+   "gap": 0.2229
+  },
+  {
+   "year": 2021,
+   "area": "PERKOTAAN",
+   "n_spending": 34,
+   "n_line": 34,
+   "spending_food_share": 0.4667,
+   "line_food_share": 0.7271,
+   "gap": 0.2604
+  },
+  {
+   "year": 2021,
+   "area": "PERDESAAN",
+   "n_spending": 33,
+   "n_line": 33,
+   "spending_food_share": 0.5483,
+   "line_food_share": 0.7656,
+   "gap": 0.2173
+  },
+  {
+   "year": 2022,
+   "area": "PERKOTAAN",
+   "n_spending": 34,
+   "n_line": 34,
+   "spending_food_share": 0.472,
+   "line_food_share": 0.7278,
+   "gap": 0.2557
+  },
+  {
+   "year": 2022,
+   "area": "PERDESAAN",
+   "n_spending": 33,
+   "n_line": 33,
+   "spending_food_share": 0.5652,
+   "line_food_share": 0.7614,
+   "gap": 0.1962
+  }
+ ],
+ "floor": {
+  "hours": 173,
+  "series": [
+   {
+    "year": 2015,
+    "n": 34,
+    "median": 1.3995,
+    "below_minimum": 0,
+    "lowest": [
+     {
+      "province": "SUMATERA SELATAN",
+      "ratio": 1.018
+     },
+     {
+      "province": "ACEH",
+      "ratio": 1.022
+     },
+     {
+      "province": "SULAWESI UTARA",
+      "ratio": 1.027
+     }
+    ]
+   },
+   {
+    "year": 2016,
+    "n": 34,
+    "median": 1.361,
+    "below_minimum": 1,
+    "lowest": [
+     {
+      "province": "SUMATERA SELATAN",
+      "ratio": 0.982
+     },
+     {
+      "province": "LAMPUNG",
+      "ratio": 1.019
+     },
+     {
+      "province": "KEP. BANGKA BELITUNG",
+      "ratio": 1.053
+     }
+    ]
+   },
+   {
+    "year": 2017,
+    "n": 34,
+    "median": 1.3277,
+    "below_minimum": 1,
+    "lowest": [
+     {
+      "province": "SUMATERA SELATAN",
+      "ratio": 0.919
+     },
+     {
+      "province": "KEP. BANGKA BELITUNG",
+      "ratio": 1.01
+     },
+     {
+      "province": "LAMPUNG",
+      "ratio": 1.018
+     }
+    ]
+   },
+   {
+    "year": 2018,
+    "n": 34,
+    "median": 1.191,
+    "below_minimum": 6,
+    "lowest": [
+     {
+      "province": "SUMATERA SELATAN",
+      "ratio": 0.881
+     },
+     {
+      "province": "ACEH",
+      "ratio": 0.885
+     },
+     {
+      "province": "GORONTALO",
+      "ratio": 0.932
+     }
+    ]
+   },
+   {
+    "year": 2019,
+    "n": 34,
+    "median": 1.1857,
+    "below_minimum": 5,
+    "lowest": [
+     {
+      "province": "SUMATERA SELATAN",
+      "ratio": 0.838
+     },
+     {
+      "province": "ACEH",
+      "ratio": 0.894
+     },
+     {
+      "province": "SULAWESI BARAT",
+      "ratio": 0.954
+     }
+    ]
+   },
+   {
+    "year": 2020,
+    "n": 34,
+    "median": 1.2326,
+    "below_minimum": 4,
+    "lowest": [
+     {
+      "province": "KEP. BANGKA BELITUNG",
+      "ratio": 0.844
+     },
+     {
+      "province": "SUMATERA SELATAN",
+      "ratio": 0.857
+     },
+     {
+      "province": "GORONTALO",
+      "ratio": 0.938
+     }
+    ]
+   },
+   {
+    "year": 2022,
+    "n": 34,
+    "median": 1.1315,
+    "below_minimum": 9,
+    "lowest": [
+     {
+      "province": "SUMATERA SELATAN",
+      "ratio": 0.879
+     },
+     {
+      "province": "GORONTALO",
+      "ratio": 0.883
+     },
+     {
+      "province": "ACEH",
+      "ratio": 0.916
+     }
+    ]
+   }
+  ]
+ },
+ "hist": {
+  "bins": 48,
+  "top": 9.6,
+  "counts": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   2,
+   2,
+   2,
+   3,
+   3,
+   6,
+   15,
+   26,
+   25,
+   16,
+   29,
+   13,
+   11,
+   13,
+   10,
+   7,
+   9,
+   6,
+   6,
+   5,
+   6,
+   5,
+   2,
+   2,
+   3,
+   1,
+   1,
+   3,
+   2,
+   2,
+   1,
+   0,
+   0,
+   0
+  ],
+  "mark": 17
+ },
+ "robustness": {
+  "variants": [
+   {
+    "period": "MARET",
+    "area": "PERDESAANPERKOTAAN",
+    "median_persons": 4.91,
+    "n": 238
+   },
+   {
+    "period": "MARET",
+    "area": "PERKOTAAN",
+    "median_persons": 4.686,
+    "n": 238
+   },
+   {
+    "period": "MARET",
+    "area": "PERDESAAN",
+    "median_persons": 5.049,
+    "n": 231
+   },
+   {
+    "period": "SEPTEMBER",
+    "area": "PERDESAANPERKOTAAN",
+    "median_persons": 4.767,
+    "n": 238
+   },
+   {
+    "period": "SEPTEMBER",
+    "area": "PERKOTAAN",
+    "median_persons": 4.573,
+    "n": 238
+   },
+   {
+    "period": "SEPTEMBER",
+    "area": "PERDESAAN",
+    "median_persons": 4.896,
+    "n": 231
+   }
+  ],
+  "bad_year_if_kept": {
+   "year": 2021,
+   "n": 34,
+   "median": 5.034,
+   "cv": 0.2967,
+   "min": 2.53,
+   "max": 11.329
+  },
+  "household_size_is_external": "This pipeline emits people, not a verdict. The average Indonesian household size is not in this file, so it is never multiplied in.",
+  "scale_economies": "A per-capita line times N assumes a household of N shares nothing. It does, so this ratio understates how many a wage can hold.",
+  "upah_unit_assumed": "`upah` is read as rupiah per hour. The file does not say so; upah x 173 sits within a quarter of the legal monthly floor in every province-year, which is the only evidence for it."
+ }
+}

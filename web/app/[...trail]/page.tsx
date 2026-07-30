@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Stack } from "@/components/Stack";
 import { panes, paneTrails, PANE_BLURB } from "@/lib/panes";
 import { site } from "@/lib/works";
+import { OG } from "@/lib/og";
 
 /**
  * A real page per trail.
@@ -47,7 +48,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: "/" + trail.join("/") },
-    openGraph: { title, description, type: "article" },
+    // `images` has to be repeated here. Declaring openGraph at all opts this
+    // route out of the inherited one, so without it every deep link — which is
+    // 34 of the 35 pages, and the ones actually shared — previews with no card.
+    openGraph: { title, description, type: "article", images: [OG] },
+    twitter: { card: "summary_large_image", title, description, images: [OG.url] },
   };
 }
 

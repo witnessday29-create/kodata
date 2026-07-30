@@ -35,6 +35,7 @@ CONTENT = ROOT / "web" / "content"
 PIPELINES = [
     ("01-ai-exposure", "analysis/pipelines/01_ai_exposure/build.py"),
     ("02-screen-time", "analysis/pipelines/02_screen_time/build.py"),
+    ("03-pekerja-sejahtera", "analysis/pipelines/03_pekerja_sejahtera/build.py"),
 ]
 
 # `retrieved` is stamped with today's date on every run, so it is expected to

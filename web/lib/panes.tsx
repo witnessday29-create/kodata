@@ -1,4 +1,14 @@
-import { works, screenTime, site, audit, num, sign } from "@/lib/works";
+import {
+  works,
+  screenTime,
+  wages,
+  site,
+  audit,
+  num,
+  sign,
+  exposureHist,
+  exposureMark,
+} from "@/lib/works";
 import { Headline, Flatness } from "@/components/Headline";
 import { Expert, CI, Check } from "@/components/Expert";
 import { Intro } from "@/components/Intro";
@@ -8,6 +18,9 @@ import type { PaneDef } from "@/components/Stack";
 import { Anno } from "@/components/Anno";
 import { AbilityBars } from "@/components/AbilityBars";
 import { SlopeGraph } from "@/components/SlopeGraph";
+// Piece 03 lives in its own module; this file had reached 2,400 lines and the
+// registry is the one part of it that has to stay scannable.
+import { piece03, piece03Blurbs, piece03Row } from "@/lib/piece03";
 
 function Signature({ hist, mark }: { hist: number[]; mark: number }) {
   const max = Math.max(...hist);
@@ -22,12 +35,6 @@ function Signature({ hist, mark }: { hist: number[]; mark: number }) {
       ))}
     </span>
   );
-}
-
-function histogram(values: number[], bins = 56, max = 0.9) {
-  const h = new Array(bins).fill(0);
-  for (const v of values) h[Math.min(bins - 1, Math.floor((v / max) * bins))]++;
-  return h;
 }
 
 /**
@@ -74,9 +81,9 @@ const f = w.findings;
 const t = screenTime;
 const th = t.headline;
 const sleep = t.partials.find((p) => p.control === "avg_sleep_hours")!;
-const exposures = w.opening.cloud.map((c) => c[0]);
-const hist = histogram(exposures);
-const mark = Math.min(55, Math.floor((s.exposure / 0.9) * 56));
+/* binned in lib/works.ts, because the share card draws the same bars */
+const hist = exposureHist;
+const mark = exposureMark;
 
 export const panes: Record<string, PaneDef> = {
     /* ── the index ────────────────────────────────────────────────────── */
@@ -98,12 +105,8 @@ export const panes: Record<string, PaneDef> = {
 
           <div className="ledger">
             <div>
-              <b>02</b>
+              <b>03</b>
               <span>pieces</span>
-            </div>
-            <div>
-              <b>02</b>
-              <span>public datasets</span>
             </div>
             <div>
               <b>{num(w.source.occupations)}</b>
@@ -112,6 +115,10 @@ export const panes: Record<string, PaneDef> = {
             <div>
               <b>{num(t.source.subjects)}</b>
               <span>teenagers</span>
+            </div>
+            <div>
+              <b>{wages.source.provinces}</b>
+              <span>provinces</span>
             </div>
           </div>
 
@@ -168,6 +175,25 @@ export const panes: Record<string, PaneDef> = {
                       line, at {th.cutoff_in_file}
                     </span>
                     <span>{t.source.bdi_max}</span>
+                  </span>
+                </span>
+              </span>
+              <span className="row-go">→</span>
+            </button>
+            <button className="row" data-pane="piece-03" type="button" aria-label={piece03Row.title}>
+              <span className="row-k">03</span>
+              <span>
+                <span className="row-t">
+                  {piece03Row.title}
+                  <span className="tag">{piece03Row.tag}</span>
+                </span>
+                <span className="row-s">{piece03Row.blurb}</span>
+                <span className="row-fig">
+                  {piece03Row.figure}
+                  <span className="axis">
+                    <span>{piece03Row.axisLeft}</span>
+                    <span>{piece03Row.axisMid}</span>
+                    <span>{piece03Row.axisRight}</span>
                   </span>
                 </span>
               </span>
@@ -2313,6 +2339,8 @@ PASS  every committed data.json reproduces exactly.`}</pre>
         </>
       ),
     },
+
+    ...piece03,
   };
 
 /**
@@ -2339,6 +2367,15 @@ export const PANE_LINKS: Record<string, string[]> = {
     "evidence-cutoff",
     "evidence-intervals",
     "evidence-flatness",
+  ],
+  "piece-03": [
+    "evidence-national",
+    "evidence-2021",
+    "evidence-people",
+    "evidence-tracking",
+    "evidence-spread",
+    "evidence-engel",
+    "evidence-floor",
   ],
   notebook: ["verify"],
 };
@@ -2375,4 +2412,5 @@ export const PANE_BLURB: Record<string, string> = {
   verify: "Re-runs both pipelines and refuses to publish anything that drifted.",
   method: "Four layers, in the same order every time.",
   contact: "A portfolio of data analysis and narrative writing.",
+  ...piece03Blurbs,
 };
