@@ -434,6 +434,34 @@ export const piece03: Record<string, PaneDef> = {
         </p>
 
         <p className="kicker">
+          what the file is called <i />
+        </p>
+
+        <p className="txt">
+          The dataset is named <em>pekerja sejahtera</em> — the prosperous worker. Nothing in it
+          measures prosperity. It measures distance from destitution, which is a different quantity
+          and a much smaller one. Aristotle separated <em>zēn</em>, living, from <em>eu zēn</em>,
+          living well, and held that only the second was worth organising a city around. A poverty
+          line is an instrument for the first. Amartya Sen made the modern version of the objection:
+          income sits in the space of commodities and well-being sits in the space of what a person
+          is actually able to do, and the rate of exchange between them differs by place — which is
+          one way to read a spread of {h.persons_min.toFixed(2)} to {h.persons_max.toFixed(2)} that
+          has not closed in {last.year - first.year} years.
+        </p>
+
+        <p className="txt">
+          So the honest reading of this file is narrow, and worth stating plainly. It cannot tell
+          you whether an Indonesian worker is prospering. It can tell you that the number meant to
+          answer that question has stopped tracking the thing it is named after, that the legal
+          floor is sinking toward the going rate, and that the basket used to define poverty is one
+          nobody has ever filled.{" "}
+          <Anno src="[integrity]" pane="evidence-2021">
+            And it can tell you that one of its own columns is not to be trusted
+          </Anno>
+          , which is the only claim here the file makes entirely against itself.
+        </p>
+
+        <p className="kicker">
           the story <i />
         </p>
         <div className="tale">
@@ -661,44 +689,38 @@ export const piece03: Record<string, PaneDef> = {
           </p>
         </div>
 
-        <p className="kicker">
-          what the file is called <i />
-        </p>
-
-        <p className="txt">
-          The dataset is named <em>pekerja sejahtera</em> — the prosperous worker. Nothing in it
-          measures prosperity. It measures distance from destitution, which is a different quantity
-          and a much smaller one. Aristotle separated <em>zēn</em>, living, from <em>eu zēn</em>,
-          living well, and held that only the second was worth organising a city around. A poverty
-          line is an instrument for the first. Amartya Sen made the modern version of the objection:
-          income sits in the space of commodities and well-being sits in the space of what a person
-          is actually able to do, and the rate of exchange between them differs by place — which is
-          one way to read a spread of {h.persons_min.toFixed(2)} to {h.persons_max.toFixed(2)} that
-          has not closed in {last.year - first.year} years.
-        </p>
-
-        <p className="txt">
-          So the honest reading of this file is narrow, and worth stating plainly. It cannot tell
-          you whether an Indonesian worker is prospering. It can tell you that the number meant to
-          answer that question has stopped tracking the thing it is named after, that the legal
-          floor is sinking toward the going rate, and that the basket used to define poverty is one
-          nobody has ever filled.{" "}
-          <Anno src="[integrity]" pane="evidence-2021">
-            And it can tell you that one of its own columns is not to be trusted
-          </Anno>
-          , which is the only claim here the file makes entirely against itself.
-        </p>
-
-        <p className="txt dim" style={{ marginTop: "2rem" }}>
-          Sources are two BPS series and one Kaggle mirror of them, listed in the intro above.
-          Everything on this page was computed by{" "}
-          <code>analysis/pipelines/03_pekerja_sejahtera/build.py</code> and committed as{" "}
-          <code>data.json</code> before the page was built. Nothing here recomputes.{" "}
-          <button type="button" className="d d-go" data-pane="verify">
-            verify.py
-          </button>{" "}
-          re-runs it and refuses to publish drift.
-        </p>
+        <div className="notes">
+          <p>
+            <b>Source.</b> <i>{k.source.name}</i>, Kaggle — <code>{k.source.kaggle}</code>.
+            Retrieved {k.source.retrieved}. A mirror of two BPS series: provincial minimum wages{" "}
+            {k.source.ump_from}–{k.source.ump_to}, poverty lines {k.source.gk_from}–
+            {k.source.gk_to}, per-capita expenditure {k.source.peng_from}–{k.source.peng_to}, hourly
+            wages {k.source.upah_from}–{k.source.upah_to}. {k.source.provinces} provinces, plus a{" "}
+            <code>{k.source.national_row}</code> row among them that is removed. Figures use the{" "}
+            {k.source.period.toLowerCase()} poverty line, {k.source.area.toLowerCase()}, with{" "}
+            {k.integrity.excluded_year} excluded. Pipeline and committed data:{" "}
+            <code>analysis/pipelines/03_pekerja_sejahtera/build.py</code> and{" "}
+            <code>web/content/03-pekerja-sejahtera/data.json</code>, both in the repository.
+          </p>
+          <p>
+            <b>Limits.</b> Dividing a per-worker wage by a per-person poverty line is my analytical
+            decision, not a claim the dataset makes — though it is the arithmetic Indonesian law
+            adopted in 2021. A household of four shares a roof and a stove, so a per-person line
+            multiplied by four overstates what four people cost, and the ratio therefore
+            <em> understates</em> how many a wage can hold; it also assumes one earner, which is why
+            the number of earners is a lever the reader can move. Average household size is not in
+            this file and is never multiplied in anywhere. Nothing here identifies a causal
+            direction: a poverty line is itself partly a function of prices that wages help set, so
+            the fixed-effects results describe whether two published series move together and no
+            more. The two-way estimate rests on {k.source.years_used.length} usable years, and its
+            interval is wide because the panel is thin, not because the effect is precisely zero. The
+            hourly wage is read as rupiah per hour on internal evidence only. Four of the{" "}
+            {k.integrity.n_violations} corrupted {k.integrity.excluded_year} rows cannot be traced
+            from inside the file and are left unattributed rather than guessed. Every figure set in
+            mono is traceable to the committed data file; the fable is fiction, and deliberately
+            contains no figures at all.
+          </p>
+        </div>
       </>
     ),
   },
