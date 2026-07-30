@@ -190,13 +190,14 @@ a { color: inherit; }
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
-  /* a table's own .scroller sits inside this one, and on touch both are
-     horizontally scrollable — without a touch-action hint, a swipe that
-     starts over the table can be captured ambiguously and settle into
-     neither, reading as the stack stuck mid-slide until swiped again.
-     "manipulation" keeps pinch-zoom (unlike pan-x/pan-y alone, which would
-     quietly disable it) and only drops the double-tap-zoom delay/ambiguity. */
-  touch-action: manipulation;
+  /* .pane-body scrolls vertically inside this, so a mostly-vertical reading
+     swipe could still be read as belonging to this horizontal scroller for
+     its first few pixels — a brief sideways jump that then snaps back,
+     which is what read as a stuck slide needing a second swipe. Declaring
+     the axis each level actually owns (here, and on .pane-body/.scroller
+     below) removes the ambiguity; pinch-zoom stays explicit so it is never
+     quietly lost. */
+  touch-action: pan-x pinch-zoom;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -290,6 +291,9 @@ a { color: inherit; }
   padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1rem, 3vw, 1.9rem) 5rem;
   scrollbar-width: thin;
   scrollbar-color: var(--rule) transparent;
+  /* the vertical counterpart to .stack's pan-x: this is what actually
+     disambiguates a reading swipe from the horizontal stack it sits inside */
+  touch-action: pan-y pinch-zoom;
 }
 .pane-body::-webkit-scrollbar { width: 10px; }
 .pane-body::-webkit-scrollbar-thumb {
@@ -587,7 +591,9 @@ a { color: inherit; }
   overflow-x: auto;
   overscroll-behavior-x: contain;
   margin: 0 0 1.6rem;
-  touch-action: manipulation;
+  /* horizontal like .stack, nested inside the vertical .pane-body — same
+     axis hint, for the same reason */
+  touch-action: pan-x pinch-zoom;
   -webkit-overflow-scrolling: touch;
 }
 table { width: 100%; min-width: 26rem; border-collapse: collapse; font-size: 0.72rem; font-variant-numeric: tabular-nums; }
