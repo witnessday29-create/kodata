@@ -81,12 +81,38 @@ const w = works["01-ai-exposure"];
 const s = w.subject;
 const f = w.findings;
 
+/* Figures the prose names, looked up rather than typed.
+
+   Each of these was a literal in a sentence — and one of them sat inside an
+   <Anno>, which is the mark that promises a number came out of the pipeline.
+   They were all correct, which is exactly the problem: nothing would have
+   said so once a re-emit moved them, and a hand-typed figure wearing the
+   traceable mark is the one failure this site is built to make impossible. */
+const janitors = w.occupations.find((o) => o.t.startsWith("Janitors"))!;
+/* everything below the subject: the ranks above it are the subject's own,
+   minus itself */
+const belowSubject = w.source.occupations - s.exposure_rank;
+const originality = w.subject_profile.find((r) => r.ability === "Originality")!;
+
 const t = screenTime;
 const th = t.headline;
 const sleep = t.partials.find((p) => p.control === "avg_sleep_hours")!;
 /* binned in lib/works.ts, because the share card draws the same bars */
 const hist = exposureHist;
 const mark = exposureMark;
+
+/* The subgroup switch, read at the two thresholds the source file itself
+   draws — the one place the prose quotes all three ratios at once. */
+const atSourceLines = (() => {
+  const g = t.grid;
+  const ci = g.cutoffs.indexOf(g.default_cutoff);
+  const ti = g.thresholds.indexOf(g.default_threshold);
+  return {
+    pooled: g.cells[ti].row[ci].rr,
+    boys: g.by_sex.Boy[ti].row[ci].rr,
+    girls: g.by_sex.Girl[ti].row[ci].rr,
+  };
+})();
 
 export const panes: Record<string, PaneDef> = {
     /* ── the index ────────────────────────────────────────────────────── */
@@ -223,7 +249,7 @@ export const panes: Record<string, PaneDef> = {
               [
                 "checks",
                 "every check",
-                "All 18 evidence panes, grouped by piece, in one list.",
+                `All ${Object.values(PANE_LINKS).flat().filter((id) => id.startsWith("evidence-")).length} evidence panes, grouped by piece, in one list.`,
               ],
               ["contact", "Contact", "Email, github, colophon."],
               // `label` rather than `t`, which is the screen-time dataset above
@@ -348,11 +374,11 @@ export const panes: Record<string, PaneDef> = {
 
           <p className="txt">
             Only three sit above it: survey researchers, translators, and public relations
-            specialists. Below it sit <Anno src="[271−4]">267</Anno> others — including almost
-            every job we have spent a decade imagining would go first. Janitors are down there,
-            scoring{" "}
+            specialists. Below it sit <Anno src="[n−rank]">{belowSubject}</Anno> others — including
+            almost every job we have spent a decade imagining would go first. Janitors are down
+            there, scoring{" "}
             <Anno src="[Janitors]" pane="evidence-extremes">
-              0.028
+              {janitors.e.toFixed(3)}
             </Anno>
             : twenty-eight times lower than writing.
           </p>
@@ -992,7 +1018,7 @@ export const panes: Record<string, PaneDef> = {
             Writers are below the median on <b>all ten</b> of the most exposed abilities, and above
             the 90th percentile on four — every one of which sits in the least exposed half. Exactly
             one ability scores negative: <b>Originality, {sign(f.originality_exposure)}</b>, and
-            there writers reach the <b>97.4</b>th percentile.
+            there writers reach the <b>{originality.percentile.toFixed(1)}</b>th percentile.
           </p>
 
           <p className="kicker" style={{ marginTop: "1.8rem" }}>
@@ -1429,7 +1455,9 @@ export const panes: Record<string, PaneDef> = {
           <p className="txt">
             And there is a third lever, which the switch above the sliders exposes. Hold both
             thresholds exactly where the source file puts them and change nothing but the subgroup:
-            the pooled answer is <b>1.43×</b>, boys alone <b>1.75×</b>, girls alone <b>1.31×</b>.
+            the pooled answer is <b>{atSourceLines.pooled?.toFixed(2)}×</b>, boys alone{" "}
+            <b>{atSourceLines.boys?.toFixed(2)}×</b>, girls alone{" "}
+            <b>{atSourceLines.girls?.toFixed(2)}×</b>.
             The correlation itself barely differs by sex —{" "}
             <Anno src="[by_sex]" pane="evidence-screen">
               {sign(t.robustness.by_sex[0].pearson, 4)}
