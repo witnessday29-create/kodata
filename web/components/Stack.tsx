@@ -168,6 +168,28 @@ export function Stack({
     history.pushState(null, "", next);
   }, [trail, trailUrl]);
 
+  /**
+   * Land on the pane the URL actually names.
+   *
+   * Every deep link opened at the index. The stack starts at scrollLeft 0 and
+   * nothing moved it, so `/piece-01/evidence-two-layers` rendered its three
+   * panes and left the reader looking at the first — the evidence pane the URL
+   * is about, and whose title, description and share card the page carries,
+   * sat off the right edge entirely. On a phone that is two full screens away.
+   * Since deep links are 34 of the 35 pages and the ones actually shared, this
+   * was the common case, and it is what EvidenceBack was written for: a reader
+   * who arrives cold rather than by clicking.
+   *
+   * No animation — this is where the page begins, not a move the reader made.
+   * It runs again while the trail is still settling, because a `?via=` link
+   * gains its ancestors a tick after the route's own panes, and stops the
+   * moment `reveal` exists: from then on the reader's position is their own.
+   */
+  useEffect(() => {
+    if (reveal || trail.length <= 1) return;
+    scrollTo(trail.length - 1, false);
+  }, [trail.length, reveal, scrollTo]);
+
   // reveal whatever just opened
   useEffect(() => {
     if (!reveal) return;
