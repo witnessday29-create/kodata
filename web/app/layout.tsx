@@ -4,6 +4,7 @@ import "./globals.css";
 import { site } from "@/lib/works";
 import { OG } from "@/lib/og";
 import { Bracket } from "@/components/Bracket";
+import { ShareLink } from "@/components/ShareLink";
 
 /* Two faces, and the rule the whole site rests on:
      mono  — anything that can be traced to a source file
@@ -85,12 +86,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <Bracket>{n.label}</Bracket>
                 </a>
               ) : (
-                <button key={n.pane} type="button" data-pane={n.pane} aria-label={n.label}>
+                <a key={n.pane} href={"/" + n.pane} data-pane={n.pane}>
                   <Bracket>{n.label}</Bracket>
-                </button>
+                </a>
               )
             )}
           </nav>
+          <ShareLink label="copy link" className="share-bar" />
           <a className="mailto" href={`mailto:${site.email}`}>
             <span>{site.email}</span> ↗
           </a>

@@ -32,6 +32,12 @@ export function Stack({
   const [trail, setTrail] = useState<string[]>(initial);
   const root = initial[0];
   const box = useRef<HTMLDivElement>(null);
+  // the click handler is bound once (see the effect below) and would
+  // otherwise close over the trail from that first render
+  const trailRef = useRef(trail);
+  useEffect(() => {
+    trailRef.current = trail;
+  }, [trail]);
 
   /**
    * Which pane to reveal, and a counter to force it.
@@ -78,9 +84,18 @@ export function Stack({
       const from = trigger.closest(".pane") as HTMLElement | null;
       const i = from ? Number(from.dataset.i ?? 0) : 0;
 
-      // already open at this depth: leave the trail alone, but still go there
-      setTrail((cur) => (cur[i + 1] === id ? cur : [...cur.slice(0, i + 1), id]));
-      setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: i + 1 }));
+      // Already open somewhere in the trail — including further left, which is
+      // what a link back to an ancestor (EvidenceBack, or re-clicking a pane
+      // that opened this one) looks like — go there instead of appending a
+      // second copy of it.
+      const existing = trailRef.current.indexOf(id);
+      const at = existing !== -1 ? existing : i + 1;
+      setTrail((cur) => {
+        const j = cur.indexOf(id);
+        if (j !== -1) return cur.slice(0, j + 1);
+        return cur[i + 1] === id ? cur : [...cur.slice(0, i + 1), id];
+      });
+      setReveal((r) => ({ n: (r?.n ?? 0) + 1, at }));
     };
 
     document.addEventListener("click", onClick);
@@ -153,6 +168,31 @@ export function Stack({
     // bring the pane that is now last back into view
     setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: i - 1 }));
   };
+
+  // Escape closes the last pane like it would a dialog; Home returns to the
+  // index. Both skip while a form control has focus, so they never fight a
+  // search input's own use of those keys.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      const inField = /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable;
+      if (e.key === "Escape" && !inField) {
+        setTrail((cur) => {
+          if (cur.length <= 1) return cur;
+          setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: cur.length - 2 }));
+          return cur.slice(0, -1);
+        });
+      } else if (e.key === "Home" && !inField) {
+        setTrail((cur) => {
+          if (cur.length <= 1) return cur;
+          setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: 0 }));
+          return [cur[0]];
+        });
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   const leaf = panes[trail[trail.length - 1]];
 

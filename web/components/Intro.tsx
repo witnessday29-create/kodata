@@ -64,29 +64,29 @@ export function Intro({
         </div>
       </dl>
 
-      <h4 className="intro-h">What this data is</h4>
+      <h3 className="intro-h">What this data is</h3>
       <div className="intro-b">{what}</div>
 
-      <h4 className="intro-h">Abstract</h4>
+      <h3 className="intro-h">Abstract</h3>
       <div className="intro-b abs">{abstract}</div>
 
-      <h4 className="intro-h">What this piece asks</h4>
+      <h3 className="intro-h">What this piece asks</h3>
       <ol className="asks">
         {asks.map((a, i) => (
           <li key={i}>{a}</li>
         ))}
       </ol>
 
-      <h4 className="intro-h">How the data is structured</h4>
-      <div className="scroller">
+      <h3 className="intro-h">How the data is structured</h3>
+      <div className="scroller" tabIndex={0} role="region" aria-label="Table: file, rows, cols, one row is, columns used here">
         <table>
           <thead>
             <tr>
-              <th>file</th>
-              <th>rows</th>
-              <th>cols</th>
-              <th>one row is</th>
-              <th>columns used here</th>
+              <th scope="col">file</th>
+              <th scope="col">rows</th>
+              <th scope="col">cols</th>
+              <th scope="col">one row is</th>
+              <th scope="col">columns used here</th>
             </tr>
           </thead>
           <tbody>

@@ -16,8 +16,8 @@
   --sunk: #fafafb;
 
   --ink:   #16181c;
-  --mid:   #6b7076;
-  --faint: #9aa0a7;
+  --mid:   #585d63;
+  --faint: #63696f;
   --rule:  #e5e7ea;
   --hair:  #eef0f2;
 
@@ -87,7 +87,14 @@ a { color: inherit; }
 }
 .mark b { font-weight: 500; font-size: 0.92rem; letter-spacing: -0.01em; }
 
-.nav { display: flex; align-items: center; gap: 0.3rem; margin-right: auto; }
+.nav { display: flex; align-items: center; gap: 0.3rem; margin-right: auto; min-width: 0; }
+@media (max-width: 480px) {
+  /* mark + nav + mailto no longer fit on one line at phone widths; the nav
+     scrolls within itself rather than pushing "read!" off past the edge */
+  .nav { overflow-x: auto; scrollbar-width: none; flex-shrink: 1; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav button, .nav a { flex: 0 0 auto; }
+}
 .nav button, .nav a { color: var(--mid); text-decoration: none; padding: 0.3rem 0.15rem; transition: color 0.3s; }
 .nav button:hover, .nav a:hover, .nav .on { color: var(--ink); }
 .nav .on .brk i { color: var(--act); }
@@ -150,7 +157,28 @@ a { color: inherit; }
   transition: border-color 0.3s, color 0.3s;
 }
 .mailto:hover { border-color: var(--act); color: var(--act); }
-@media (max-width: 640px) { .mailto span { display: none; } }
+
+/* the current page, copyable — same understated treatment as the mailto link */
+.share-bar {
+  color: var(--mid);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+  transition: border-color 0.3s, color 0.3s;
+}
+.share-bar:hover { border-color: var(--act); color: var(--act); }
+@media (max-width: 560px) { .share-bar { display: none; } }
+@media (max-width: 640px) {
+  .mailto span {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
 
 /* ── the stack ────────────────────────────────────────────────────────── */
 .stack {
@@ -236,7 +264,16 @@ a { color: inherit; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.pane-x { font-size: 0.7rem; color: var(--faint); transition: color 0.3s; }
+.pane-x {
+  font-size: 0.7rem;
+  color: var(--faint);
+  transition: color 0.3s;
+  padding: 0.5rem 0.35rem;
+  margin: -0.5rem -0.35rem;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+}
 .pane-x:hover { color: var(--act); }
 
 .pane-body {
@@ -253,6 +290,17 @@ a { color: inherit; }
   border: 3px solid transparent;
   background-clip: content-box;
 }
+
+/* the way back to the claim, for a reader who landed on evidence directly */
+.ev-back { margin: 0 0 1.2rem; font-size: 0.72rem; }
+.ev-back a {
+  color: var(--mid);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  transition: color 0.25s, border-color 0.25s;
+}
+.ev-back a:hover { color: var(--act); border-color: var(--act); }
+.ev-back b { font-family: var(--f-read); font-style: italic; font-weight: 500; }
 
 /* on a phone the stack reads one pane at a time; a half-scrolled pair of
    columns is worse than either column on its own */
@@ -323,20 +371,25 @@ a { color: inherit; }
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-button.d-go {
+.d-go {
   border-bottom: 1px solid var(--faint);
   border-radius: 4px 4px 0 0;
   transition: background 0.25s, border-color 0.25s, color 0.25s;
+  text-decoration: none;
+  /* .d's nowrap is for a short figure; a couple of evidence links wrap a
+     whole clause instead, and forcing that onto one line is what pushed the
+     pane wide enough to scroll sideways */
+  white-space: normal;
 }
-button.d-go::after {
+.d-go::after {
   content: "↗";
   font-size: 0.82em;
   margin-left: 0.28em;
   color: var(--faint);
   transition: color 0.25s;
 }
-button.d-go:hover { background: var(--act-t); border-color: var(--act); color: var(--act); }
-button.d-go:hover::after { color: var(--act); }
+.d-go:hover { background: var(--act-t); border-color: var(--act); color: var(--act); }
+.d-go:hover::after { color: var(--act); }
 
 /* ── the pill ─────────────────────────────────────────────────────────── */
 .pill {
@@ -388,7 +441,7 @@ button.d-go:hover::after { color: var(--act); }
   transition: background 0.25s;
 }
 .rows .row:last-child { border-bottom: 1px solid var(--hair); }
-button.row:hover { background: var(--sunk); }
+.row:hover { background: var(--sunk); }
 .row-k { font-size: 0.72rem; color: var(--faint); font-variant-numeric: tabular-nums; }
 .row-t {
   font-family: var(--f-read);
@@ -399,7 +452,7 @@ button.row:hover { background: var(--sunk); }
 }
 .row-s { display: block; font-size: 0.76rem; color: var(--mid); margin-top: 0.32rem; line-height: 1.6; }
 .row-go { font-size: 0.78rem; color: var(--faint); transition: transform 0.3s var(--eo), color 0.3s; }
-button.row:hover .row-go { color: var(--act); transform: translateX(3px); }
+.row:hover .row-go { color: var(--act); transform: translateX(3px); }
 .row.off { opacity: 0.45; }
 
 /* each piece carries the shape of its own data, in its own row — a single chart
@@ -408,8 +461,8 @@ button.row:hover .row-go { color: var(--act); transform: translateX(3px); }
 .row-fig .sig { height: 44px; }
 .row-fig .axis { font-size: 0.58rem; }
 .row-fig .axis span:nth-child(2) { text-align: center; }
-button.row:hover .sig i { background: #b9bec4; }
-button.row:hover .sig i.mark { background: var(--act); }
+.row:hover .sig i { background: #b9bec4; }
+.row:hover .sig i.mark { background: var(--act); }
 @media (max-width: 620px) { .row-fig .axis span:nth-child(2) { display: none; } }
 .row .tag {
   display: inline-block;
@@ -488,7 +541,7 @@ button.row:hover .sig i.mark { background: var(--act); }
   white-space: nowrap;
 }
 .kv .hit { background: var(--act-t); }
-.kv .hit dt, .kv .hit dd { color: var(--act); }
+.kv .hit dt, .kv .hit dd { color: #c23811; }
 
 /* ── code ─────────────────────────────────────────────────────────────── */
 .code {
@@ -534,7 +587,7 @@ th {
 th:first-child, td:first-child { text-align: left; }
 td { text-align: right; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--hair); color: var(--mid); }
 tbody tr:hover td { background: var(--sunk); }
-tr.hit td { background: var(--act-t); color: var(--act); }
+tr.hit td { background: var(--act-t); color: #c23811; }
 
 /* ── ability bars ─────────────────────────────────────────────────────── */
 .bars { display: grid; gap: 2px; min-width: 24rem; }
@@ -547,7 +600,7 @@ tr.hit td { background: var(--act-t); color: var(--act); }
 .bar-row.hi .bar-fill { background: #8f969e; }
 .bar-row.strong .bar-name { color: var(--ink); }
 .bar-row.neg .bar-fill { background: var(--act); }
-.bar-row.neg .bar-name { color: var(--act); }
+.bar-row.neg .bar-name { color: #c23811; }
 .bar-pct { font-size: 0.66rem; text-align: right; color: var(--faint); font-variant-numeric: tabular-nums; }
 .bar-row.strong .bar-pct { color: var(--ink); }
 
@@ -566,7 +619,7 @@ tr.hit td { background: var(--act-t); color: var(--act); }
 .seam-cell p { margin: 0; font-size: 0.78rem; line-height: 1.65; color: var(--mid); }
 .seam-cell.decision { background: var(--sunk); }
 .seam-cell.decision p { font-family: var(--f-read); font-size: 1rem; line-height: 1.55; color: var(--ink); }
-.seam-cell.decision em { font-style: italic; color: var(--act); }
+.seam-cell.decision em { font-style: italic; color: #c23811; }
 @media (max-width: 560px) { .seam-row { grid-template-columns: 1fr; } }
 
 /* ── footnotes ────────────────────────────────────────────────────────── */
@@ -623,7 +676,7 @@ tr.hit td { background: var(--act-t); color: var(--act); }
   font-size: 0.58rem;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: var(--act);
+  color: #c23811;
 }
 .xp-k.inline { display: inline-block; vertical-align: 0.08em; }
 .xp-t { flex: 1; font-size: 0.7rem; color: var(--mid); }
@@ -669,7 +722,7 @@ tr.hit td { background: var(--act-t); color: var(--act); }
   white-space: nowrap;
 }
 .ci em { font-style: normal; color: var(--faint); }
-.ci-weak { background: var(--act-t); color: var(--act); }
+.ci-weak { background: var(--act-t); color: #c23811; }
 
 /* ── the introduction ─────────────────────────────────────────────────── */
 .intro { margin: 0 0 2.2rem; }
@@ -732,7 +785,7 @@ tr.hit td { background: var(--act-t); color: var(--act); }
   font-size: 0.6rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--act);
+  color: #c23811;
 }
 .intro-caveat > div { font-size: 0.8rem; line-height: 1.7; color: var(--mid); }
 
@@ -761,7 +814,7 @@ tr.hit td { background: var(--act-t); color: var(--act); }
 .find input:focus { outline: 2px solid var(--act); outline-offset: 1px; border-color: var(--act); }
 .find input::placeholder { color: var(--faint); }
 
-td.up { color: var(--act); }
+td.up { color: #c23811; }
 td.down { color: var(--fit); }
 
 /* ── the machine ──────────────────────────────────────────────────────────
@@ -789,7 +842,7 @@ td.down { color: var(--fit); }
 .mach-rr {
   font-family: var(--f-code);
   font-size: 0.92em;
-  color: var(--act);
+  color: #c23811;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -876,7 +929,7 @@ td.down { color: var(--fit); }
   line-height: 1.65;
   color: var(--mid);
 }
-.mach-flag.warn { border-left-color: var(--act); background: var(--act-t); color: var(--act); }
+.mach-flag.warn { border-left-color: var(--act); background: var(--act-t); color: #c23811; }
 
 /* every headline this dataset can produce, at a glance */
 .mach-grid { margin: 1.4rem 0 0; display: grid; gap: 2px; }
@@ -1113,7 +1166,19 @@ td.down { color: var(--fit); }
   transition: border-color 0.25s, color 0.25s, background 0.25s;
 }
 .who button:hover { border-color: var(--faint); color: var(--ink); }
-.who button.on { border-color: var(--act); color: var(--act); background: var(--act-t); }
+.who button.on { border-color: var(--act); color: #c23811; background: var(--act-t); }
+
+/* the result a reader built themselves, made copyable */
+.share {
+  margin-top: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 0.66rem;
+  color: var(--mid);
+  transition: border-color 0.25s, color 0.25s, background 0.25s;
+}
+.share:hover { border-color: var(--faint); color: var(--ink); }
 
 /* ── two jobs, side by side ───────────────────────────────────────────────
    Bars are normalised inside each measure, so the two columns are comparable
@@ -1127,7 +1192,7 @@ td.down { color: var(--fit); }
   transition: border-color 0.25s, color 0.25s, background 0.25s;
 }
 .pin:hover { border-color: var(--faint); color: var(--ink); }
-.pin.on { border-color: var(--act); color: var(--act); background: var(--act-t); }
+.pin.on { border-color: var(--act); color: #c23811; background: var(--act-t); }
 
 .vs {
   display: grid;
@@ -1156,4 +1221,4 @@ td.down { color: var(--fit); }
 .vs-x:hover { color: var(--act); }
 .vs-empty { background: var(--sunk); }
 .vs-empty p { margin: 0; font-size: 0.72rem; line-height: 1.6; color: var(--mid); }
-.vs-empty b { color: var(--act); }
+.vs-empty b { color: #c23811; }

@@ -2,8 +2,10 @@ import { wages, num, sign } from "@/lib/works";
 import { Intro } from "@/components/Intro";
 import { Expert, CI, Check } from "@/components/Expert";
 import { Anno } from "@/components/Anno";
+import { EvidenceBack } from "@/components/EvidenceBack";
 import { Household } from "@/components/Household";
 import type { PaneDef } from "@/components/Stack";
+import { paneHref } from "@/lib/paneGraph";
 
 /**
  * Piece 03 and its evidence, kept in its own module.
@@ -731,6 +733,7 @@ export const piece03: Record<string, PaneDef> = {
     title: "evidence · the aggregate among the units",
     node: (
       <>
+        <EvidenceBack parent="piece-03" title={k.title} />
         <p className="txt dim">
           The file has {g.n_provinces + 1} rows in its province column. One of them is the country.
           It is not flagged, not last, and not named differently from the rest — in{" "}
@@ -774,6 +777,7 @@ export const piece03: Record<string, PaneDef> = {
     kind: "wide",
     node: (
       <>
+        <EvidenceBack parent="piece-03" title={k.title} />
         <p className="txt dim">
           Three tests, none of which needs a source outside the file. Indonesian minimum wages are
           nominally non-decreasing, and in this file no province has a {g.excluded_year - 1} wage
@@ -817,17 +821,17 @@ export const piece03: Record<string, PaneDef> = {
         <p className="kicker">
           test two and three · which rows, and whose numbers <i />
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: province, in file, the value belongs to, off by, row gap">
           <table>
             <thead>
               <tr>
-                <th>province</th>
-                <th>{g.excluded_year - 1}</th>
-                <th>{g.excluded_year} in file</th>
-                <th>{g.excluded_year + 1}</th>
-                <th>the value belongs to</th>
-                <th>off by</th>
-                <th>row gap</th>
+                <th scope="col">province</th>
+                <th scope="col">{g.excluded_year - 1}</th>
+                <th scope="col">{g.excluded_year} in file</th>
+                <th scope="col">{g.excluded_year + 1}</th>
+                <th scope="col">the value belongs to</th>
+                <th scope="col">off by</th>
+                <th scope="col">row gap</th>
               </tr>
             </thead>
             <tbody>
@@ -930,28 +934,29 @@ export const piece03: Record<string, PaneDef> = {
     kind: "wide",
     node: (
       <>
+        <EvidenceBack parent="piece-03" title={k.title} />
         <p className="txt dim">
           Minimum wage divided by the poverty line for one person, both monthly rupiah, per
           province. {k.source.period.toLowerCase()} figures, town and countryside combined, which is
           the headline BPS series. {g.excluded_year} is absent for the reasons in{" "}
-          <button type="button" className="d d-go" data-pane="evidence-2021">
+          <a href={paneHref("evidence-2021")} className="d d-go" data-pane="evidence-2021">
             the column audit
-          </button>
+          </a>
           .
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: year, n, median, p10, min, max, CV, fewest, most">
           <table>
             <thead>
               <tr>
-                <th>year</th>
-                <th>n</th>
-                <th>median</th>
-                <th>p10</th>
-                <th>min</th>
-                <th>max</th>
-                <th>CV</th>
-                <th>fewest</th>
-                <th>most</th>
+                <th scope="col">year</th>
+                <th scope="col">n</th>
+                <th scope="col">median</th>
+                <th scope="col">p10</th>
+                <th scope="col">min</th>
+                <th scope="col">max</th>
+                <th scope="col">CV</th>
+                <th scope="col">fewest</th>
+                <th scope="col">most</th>
               </tr>
             </thead>
             <tbody>
@@ -998,14 +1003,14 @@ export const piece03: Record<string, PaneDef> = {
         <p className="kicker">
           {sub.province}, every clean year <i />
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: year, minimum wage, poverty line, per person, people">
           <table>
             <thead>
               <tr>
-                <th>year</th>
-                <th>minimum wage</th>
-                <th>poverty line, per person</th>
-                <th>people</th>
+                <th scope="col">year</th>
+                <th scope="col">minimum wage</th>
+                <th scope="col">poverty line, per person</th>
+                <th scope="col">people</th>
               </tr>
             </thead>
             <tbody>
@@ -1028,14 +1033,14 @@ export const piece03: Record<string, PaneDef> = {
         <p className="kicker">
           the choice this rests on <i />
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: period, area, median people, n">
           <table>
             <thead>
               <tr>
-                <th>period</th>
-                <th>area</th>
-                <th>median people</th>
-                <th>n</th>
+                <th scope="col">period</th>
+                <th scope="col">area</th>
+                <th scope="col">median people</th>
+                <th scope="col">n</th>
               </tr>
             </thead>
             <tbody>
@@ -1067,21 +1072,22 @@ export const piece03: Record<string, PaneDef> = {
     kind: "wide",
     node: (
       <>
+        <EvidenceBack parent="piece-03" title={k.title} />
         <p className="txt dim">
           Both variables in logs, so the coefficient reads as an elasticity: the percentage the
           minimum wage moves for each percent the poverty line moves. {two.n} province-years,{" "}
           {two.clusters} provinces, {k.source.years_used.length} years.
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: specification, β, se, se, clustered, t, 95% CI">
           <table>
             <thead>
               <tr>
-                <th>specification</th>
-                <th>β</th>
-                <th>se</th>
-                <th>se, clustered</th>
-                <th>t</th>
-                <th>95% CI</th>
+                <th scope="col">specification</th>
+                <th scope="col">β</th>
+                <th scope="col">se</th>
+                <th scope="col">se, clustered</th>
+                <th scope="col">t</th>
+                <th scope="col">95% CI</th>
               </tr>
             </thead>
             <tbody>
@@ -1117,16 +1123,16 @@ export const piece03: Record<string, PaneDef> = {
         <p className="kicker">
           the same question asked across provinces instead of within them <i />
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: year, n, r, ρ, elasticity, r²">
           <table>
             <thead>
               <tr>
-                <th>year</th>
-                <th>n</th>
-                <th>r</th>
-                <th>ρ</th>
-                <th>elasticity</th>
-                <th>r² </th>
+                <th scope="col">year</th>
+                <th scope="col">n</th>
+                <th scope="col">r</th>
+                <th scope="col">ρ</th>
+                <th scope="col">elasticity</th>
+                <th scope="col">r² </th>
               </tr>
             </thead>
             <tbody>
@@ -1158,21 +1164,22 @@ export const piece03: Record<string, PaneDef> = {
     kind: "wide",
     node: (
       <>
+        <EvidenceBack parent="piece-03" title={k.title} />
         <p className="txt dim">
           Theil&rsquo;s T on the {g.n_provinces} provincial minimum wages, year by year. It is an
           entropy measure and scale-free, which is what allows {disp[0].year} and{" "}
           {disp[disp.length - 1].year} to be compared without deflating anything.{" "}
           {g.excluded_year} is omitted.
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: year, n, Theil T, CV, highest ÷ lowest">
           <table>
             <thead>
               <tr>
-                <th>year</th>
-                <th>n</th>
-                <th>Theil T</th>
-                <th>CV</th>
-                <th>highest ÷ lowest</th>
+                <th scope="col">year</th>
+                <th scope="col">n</th>
+                <th scope="col">Theil T</th>
+                <th scope="col">CV</th>
+                <th scope="col">highest ÷ lowest</th>
               </tr>
             </thead>
             <tbody>
@@ -1217,14 +1224,14 @@ export const piece03: Record<string, PaneDef> = {
           </div>
         </dl>
 
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: province, change">
           <table>
             <thead>
               <tr>
-                <th>province</th>
-                <th>{rp.first_year}</th>
-                <th>{rp.last_year}</th>
-                <th>change</th>
+                <th scope="col">province</th>
+                <th scope="col">{rp.first_year}</th>
+                <th scope="col">{rp.last_year}</th>
+                <th scope="col">change</th>
               </tr>
             </thead>
             <tbody>
@@ -1252,21 +1259,22 @@ export const piece03: Record<string, PaneDef> = {
     kind: "wide",
     node: (
       <>
+        <EvidenceBack parent="piece-03" title={k.title} />
         <p className="txt dim">
           Engel&rsquo;s law: the poorer the household, the greater the share of spending that goes
           on food. The file carries food and non-food twice — once for what people actually spend,
           once inside the poverty line — so the same ratio can be taken of both.
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: year, area, food share of the line, food share of actual spending, gap, n">
           <table>
             <thead>
               <tr>
-                <th>year</th>
-                <th>area</th>
-                <th>food share of the line</th>
-                <th>food share of actual spending</th>
-                <th>gap</th>
-                <th>n</th>
+                <th scope="col">year</th>
+                <th scope="col">area</th>
+                <th scope="col">food share of the line</th>
+                <th scope="col">food share of actual spending</th>
+                <th scope="col">gap</th>
+                <th scope="col">n</th>
               </tr>
             </thead>
             <tbody>
@@ -1315,20 +1323,21 @@ export const piece03: Record<string, PaneDef> = {
     kind: "wide",
     node: (
       <>
+        <EvidenceBack parent="piece-03" title={k.title} />
         <p className="txt dim">
           The hourly wage employees receive, multiplied by the statutory {k.floor.hours}-hour month,
           divided by that province&rsquo;s legal minimum. A value of 1.00 means the average employee
           earns exactly the floor.
         </p>
-        <div className="scroller">
+        <div className="scroller" tabIndex={0} role="region" aria-label="Table: year, n, median province, provinces under the minimum, lowest three">
           <table>
             <thead>
               <tr>
-                <th>year</th>
-                <th>n</th>
-                <th>median province</th>
-                <th>provinces under the minimum</th>
-                <th>lowest three</th>
+                <th scope="col">year</th>
+                <th scope="col">n</th>
+                <th scope="col">median province</th>
+                <th scope="col">provinces under the minimum</th>
+                <th scope="col">lowest three</th>
               </tr>
             </thead>
             <tbody>

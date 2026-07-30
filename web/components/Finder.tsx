@@ -61,17 +61,23 @@ export function Finder() {
       )}
 
       {hits.length > 0 && (
-        <div className="scroller" style={{ marginBottom: 0 }}>
+        <div
+          className="scroller"
+          style={{ marginBottom: 0 }}
+          tabIndex={0}
+          role="region"
+          aria-label="Table: occupation, predicted, rated, moves, exposure, wage"
+        >
           <table>
             <thead>
               <tr>
                 <th />
-                <th>occupation</th>
-                <th>predicted</th>
-                <th>rated</th>
-                <th>moves</th>
-                <th>exposure</th>
-                <th>wage</th>
+                <th scope="col">occupation</th>
+                <th scope="col">predicted</th>
+                <th scope="col">rated</th>
+                <th scope="col">moves</th>
+                <th scope="col">exposure</th>
+                <th scope="col">wage</th>
               </tr>
             </thead>
             <tbody>

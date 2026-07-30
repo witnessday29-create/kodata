@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { wages as d, num } from "@/lib/works";
+import { ShareLink } from "./ShareLink";
+import { readParam, writeParams } from "@/lib/urlState";
 
 /**
  * The formula, operated by hand.
@@ -26,6 +28,25 @@ export function Household() {
   const [size, setSize] = useState(m.sizes.indexOf(m.default.size));
   const [earn, setEarn] = useState(m.earners.indexOf(m.default.earners));
 
+  // A household a reader assembled is the whole point of this piece being
+  // interactive — so it has to survive a reload, not just a scroll position.
+  // Read after mount rather than in useState, so the first paint still matches
+  // the statically exported default and hydration does not warn.
+  useEffect(() => {
+    const p = readParam("prov");
+    if (p && m.provinces.includes(p)) setProv(p);
+    const a = Number(readParam("area"));
+    if (Number.isInteger(a) && a >= 0 && a < m.area_labels.length) setArea(a);
+    const s = Number(readParam("size"));
+    if (Number.isInteger(s) && s >= 0 && s < m.sizes.length) setSize(s);
+    const e = Number(readParam("earn"));
+    if (Number.isInteger(e) && e >= 0 && e < m.earners.length) setEarn(e);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    writeParams({ prov, area: String(area), size: String(size), earn: String(earn) });
+  }, [prov, area, size, earn]);
+
   const cells = m.cells as Record<string, number[][][][]>;
   const ump = (m.ump as Record<string, number>)[prov];
   const line = (m.gk as Record<string, number[]>)[prov][area];
@@ -39,17 +60,18 @@ export function Household() {
 
   return (
     <div className="mach">
-      <p className="mach-out">
+      <p className="mach-out" aria-live="polite">
         A household of <b>{people}</b> in {prov} with <b>{earners}</b> earning the minimum wage lives
         on{" "}
         <b className="mach-rr">{rp(perPerson)}</b> per person per month — that is{" "}
         <b>{ratio.toFixed(2)}×</b> the poverty line where they are.
       </p>
       {below === 1 && (
-        <p className="mach-flag warn">
+        <p className="mach-flag warn" aria-live="polite">
           below the line, by the arithmetic of the law that set the wage
         </p>
       )}
+      <ShareLink label="copy this household's link" />
       <p className="mach-fine">
         …where the wage is {prov}&rsquo;s legal minimum for {m.year}, {rp(ump)} a month, and{" "}
         <em>the poverty line</em> is {rp(line)} per person per month for{" "}
@@ -84,7 +106,7 @@ export function Household() {
             max={m.sizes.length - 1}
             value={size}
             onChange={(e) => setSize(+e.target.value)}
-            aria-label="People in the household"
+            aria-valuetext={String(people)}
           />
           <span className="mach-ends">
             <span>{m.sizes[0]}</span>
@@ -103,7 +125,7 @@ export function Household() {
             max={m.earners.length - 1}
             value={earn}
             onChange={(e) => setEarn(+e.target.value)}
-            aria-label="Earners in the household"
+            aria-valuetext={String(earners)}
           />
           <span className="mach-ends">
             <span>{m.earners[0]}</span>

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { screenTime as d, num } from "@/lib/works";
 import { RatioCI } from "./Expert";
+import { ShareLink } from "./ShareLink";
+import { readParam, writeParams } from "@/lib/urlState";
 
 /**
  * The headline machine.
@@ -25,6 +27,23 @@ export function Headline() {
   // A third lever nobody reports. The correlations barely differ by sex, yet
   // the ratio does — which is the argument of this whole piece, one level down.
   const [who, setWho] = useState<"all" | "Boy" | "Girl">("all");
+
+  // A shared URL is what makes "any headline is available" land as a fact
+  // rather than a claim — so a reader's own pick has to survive a reload.
+  // Read once after mount, not in useState's initializer, so the first paint
+  // still matches the statically exported default and hydration does not warn.
+  useEffect(() => {
+    const c = g.cutoffs.indexOf(Number(readParam("cutoff")));
+    if (c !== -1) setCi(c);
+    const t = g.thresholds.indexOf(Number(readParam("threshold")));
+    if (t !== -1) setTi(t);
+    const w = readParam("who");
+    if (w === "Boy" || w === "Girl" || w === "all") setWho(w);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    writeParams({ cutoff: String(g.cutoffs[ci]), threshold: String(g.thresholds[ti]), who });
+  }, [ci, ti, who, g.cutoffs, g.thresholds]);
 
   const cutoff = g.cutoffs[ci];
   const cells = who === "all" ? g.cells : g.by_sex[who];
@@ -50,7 +69,7 @@ export function Headline() {
 
   return (
     <div className="mach">
-      <p className="mach-out">
+      <p className="mach-out" aria-live="polite">
         Teenagers with more than about <b>{hours} hours</b> of leisure screen time a day are{" "}
         <b className="mach-rr">{cell.rr?.toFixed(2)}×</b> more likely to be depressed.
       </p>
@@ -63,6 +82,7 @@ export function Headline() {
         {cell.ph?.toFixed(1)}% versus {cell.pl?.toFixed(1)}%.{" "}
         <RatioCI lo={cell.ci[0]} hi={cell.ci[1]} />
       </p>
+      <ShareLink label="copy this headline's link" />
 
       <div className="who">
         <span>measured on</span>
@@ -93,7 +113,7 @@ export function Headline() {
             max={g.cutoffs.length - 1}
             value={ci}
             onChange={(e) => setCi(+e.target.value)}
-            aria-label="Depression cutoff"
+            aria-valuetext={String(cutoff)}
           />
           <span className="mach-ends">
             <span>{g.cutoffs[0]}</span>
@@ -112,7 +132,7 @@ export function Headline() {
             max={g.thresholds.length - 1}
             value={ti}
             onChange={(e) => setTi(+e.target.value)}
-            aria-label="Heavy-user threshold"
+            aria-valuetext={String(band.threshold)}
           />
           <span className="mach-ends">
             <span>{g.thresholds[0]}</span>
@@ -185,6 +205,17 @@ export function Headline() {
  */
 export function Flatness() {
   const [k, setK] = useState(0);
+
+  useEffect(() => {
+    const removed = Number(readParam("removed"));
+    const found = d.drop_series.findIndex((s) => s.dropped === removed);
+    if (found !== -1) setK(found);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    writeParams({ removed: String(d.drop_series[k].dropped) });
+  }, [k]);
+
   const s = d.drop_series[k];
   const base = d.drop_series[0].r;
   const fl = d.item_flatness;
@@ -221,7 +252,7 @@ export function Flatness() {
             max={d.drop_series.length - 1}
             value={k}
             onChange={(e) => setK(+e.target.value)}
-            aria-label="Items removed"
+            aria-valuetext={`${s.dropped} removed, ${s.kept} kept`}
           />
           <span className="mach-ends">
             <span>0</span>
@@ -230,7 +261,7 @@ export function Flatness() {
         </label>
       </div>
 
-      <p className="mach-out sm">
+      <p className="mach-out sm" aria-live="polite">
         Rebuilt from the remaining {s.kept} items, the score still correlates with screen time at{" "}
         <b className="mach-rr">{s.r >= 0 ? "+" : "−"}{Math.abs(s.r).toFixed(4)}</b>
         {k > 0 && (
@@ -242,6 +273,7 @@ export function Flatness() {
           </>
         )}
       </p>
+      <ShareLink label="copy this link" />
       <p className="mach-fine">
         You cannot take the finding apart by removing symptoms, because it does not sit in any of
         them. Note what this does <em>not</em> establish: sleep quality, which explains eight times

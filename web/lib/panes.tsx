@@ -16,11 +16,13 @@ import { Finder } from "@/components/Finder";
 import { Notebook } from "@/components/Notebook";
 import type { PaneDef } from "@/components/Stack";
 import { Anno } from "@/components/Anno";
+import { EvidenceBack } from "@/components/EvidenceBack";
 import { AbilityBars } from "@/components/AbilityBars";
 import { SlopeGraph } from "@/components/SlopeGraph";
 // Piece 03 lives in its own module; this file had reached 2,400 lines and the
 // registry is the one part of it that has to stay scannable.
 import { piece03, piece03Blurbs, piece03Row } from "@/lib/piece03";
+import { PANE_LINKS, paneHref } from "@/lib/paneGraph";
 
 function Signature({ hist, mark }: { hist: number[]; mark: number }) {
   const max = Math.max(...hist);
@@ -126,7 +128,7 @@ export const panes: Record<string, PaneDef> = {
             work <i />
           </p>
           <div className="rows">
-            <button className="row" data-pane="piece-01" type="button" aria-label={w.title}>
+            <a className="row" href={paneHref("piece-01")} data-pane="piece-01">
               <span className="row-k">01</span>
               <span>
                 <span className="row-t">
@@ -139,7 +141,7 @@ export const panes: Record<string, PaneDef> = {
                   opposite directions, and the job they disagree about most, out of{" "}
                   {w.source.occupations}, is writing.
                 </span>
-                <span className="row-fig">
+                <span className="row-fig" aria-hidden>
                   <Signature hist={hist} mark={mark} />
                   <span className="axis">
                     <span>0.000</span>
@@ -151,9 +153,9 @@ export const panes: Record<string, PaneDef> = {
                   </span>
                 </span>
               </span>
-              <span className="row-go">→</span>
-            </button>
-            <button className="row" data-pane="piece-02" type="button" aria-label={t.title}>
+              <span className="row-go" aria-hidden>→</span>
+            </a>
+            <a className="row" href={paneHref("piece-02")} data-pane="piece-02">
               <span className="row-k">02</span>
               <span>
                 <span className="row-t">
@@ -166,7 +168,7 @@ export const panes: Record<string, PaneDef> = {
                   Move both yourself: the same {num(t.source.subjects)} teenagers will give you any
                   answer from {t.grid.rr_min.toFixed(2)}× to {t.grid.rr_max.toFixed(2)}×.
                 </span>
-                <span className="row-fig">
+                <span className="row-fig" aria-hidden>
                   <Signature hist={t.bdi_hist} mark={th.cutoff_in_file} />
                   <span className="axis">
                     <span>total 0</span>
@@ -178,9 +180,9 @@ export const panes: Record<string, PaneDef> = {
                   </span>
                 </span>
               </span>
-              <span className="row-go">→</span>
-            </button>
-            <button className="row" data-pane="piece-03" type="button" aria-label={piece03Row.title}>
+              <span className="row-go" aria-hidden>→</span>
+            </a>
+            <a className="row" href={paneHref("piece-03")} data-pane="piece-03">
               <span className="row-k">03</span>
               <span>
                 <span className="row-t">
@@ -188,7 +190,7 @@ export const panes: Record<string, PaneDef> = {
                   <span className="tag">{piece03Row.tag}</span>
                 </span>
                 <span className="row-s">{piece03Row.blurb}</span>
-                <span className="row-fig">
+                <span className="row-fig" aria-hidden>
                   {piece03Row.figure}
                   <span className="axis">
                     <span>{piece03Row.axisLeft}</span>
@@ -197,8 +199,8 @@ export const panes: Record<string, PaneDef> = {
                   </span>
                 </span>
               </span>
-              <span className="row-go">→</span>
-            </button>
+              <span className="row-go" aria-hidden>→</span>
+            </a>
           </div>
 
           <p className="kicker">
@@ -217,17 +219,22 @@ export const panes: Record<string, PaneDef> = {
                 "verify.py",
                 "Re-runs both pipelines and refuses to publish anything that drifted.",
               ],
+              [
+                "checks",
+                "every check",
+                "All 18 evidence panes, grouped by piece, in one list.",
+              ],
               ["contact", "Contact", "Email, github, colophon."],
               // `label` rather than `t`, which is the screen-time dataset above
             ].map(([id, label, sub]) => (
-              <button className="row" data-pane={id} key={id} type="button" aria-label={label}>
-                <span className="row-k">—</span>
+              <a className="row" href={paneHref(id)} data-pane={id} key={id}>
+                <span className="row-k" aria-hidden>—</span>
                 <span>
                   <span className="row-t">{label}</span>
                   <span className="row-s">{sub}</span>
                 </span>
-                <span className="row-go">→</span>
-              </button>
+                <span className="row-go" aria-hidden>→</span>
+              </a>
             ))}
           </div>
         </>
@@ -789,6 +796,7 @@ export const panes: Record<string, PaneDef> = {
       kind: "wide",
       node: (
         <>
+          <EvidenceBack parent="piece-01" title={w.title} />
           <p className="txt dim">
             Left: where each occupation ranks when its exposure is <em>predicted</em> from the{" "}
             {w.abilities.length} abilities it is built from. Right: where it ranks when the dataset{" "}
@@ -824,14 +832,14 @@ export const panes: Record<string, PaneDef> = {
           <p className="kicker">
             largest disagreements, both directions <i />
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: occupation, predicted, rated, gap">
             <table>
               <thead>
                 <tr>
-                  <th>occupation</th>
-                  <th>predicted</th>
-                  <th>rated</th>
-                  <th>gap</th>
+                  <th scope="col">occupation</th>
+                  <th scope="col">predicted</th>
+                  <th scope="col">rated</th>
+                  <th scope="col">gap</th>
                 </tr>
               </thead>
               <tbody>
@@ -873,6 +881,7 @@ export const panes: Record<string, PaneDef> = {
       kind: "wide",
       node: (
         <>
+          <EvidenceBack parent="piece-01" title={w.title} />
           <p className="txt dim">
             Both columns are per-occupation exposure ratings of the same{" "}
             {num(w.raters.n)} jobs — one by a human rater, one by GPT-4. They correlate{" "}
@@ -884,14 +893,14 @@ export const panes: Record<string, PaneDef> = {
           <p className="kicker">
             GPT-4 rates these far more exposed than the human did <i />
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: occupation, human, gpt-4, gap">
             <table>
               <thead>
                 <tr>
-                  <th>occupation</th>
-                  <th>human</th>
-                  <th>gpt-4</th>
-                  <th>gap</th>
+                  <th scope="col">occupation</th>
+                  <th scope="col">human</th>
+                  <th scope="col">gpt-4</th>
+                  <th scope="col">gap</th>
                 </tr>
               </thead>
               <tbody>
@@ -910,14 +919,14 @@ export const panes: Record<string, PaneDef> = {
           <p className="kicker">
             and these far less <i />
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: occupation, human, gpt-4, gap">
             <table>
               <thead>
                 <tr>
-                  <th>occupation</th>
-                  <th>human</th>
-                  <th>gpt-4</th>
-                  <th>gap</th>
+                  <th scope="col">occupation</th>
+                  <th scope="col">human</th>
+                  <th scope="col">gpt-4</th>
+                  <th scope="col">gap</th>
                 </tr>
               </thead>
               <tbody>
@@ -968,6 +977,7 @@ export const panes: Record<string, PaneDef> = {
       kind: "wide",
       node: (
         <>
+          <EvidenceBack parent="piece-01" title={w.title} />
           <p className="txt dim">
             AI-exposure score for each cognitive ability, sorted. The vertical line is zero; bars to
             its left mean AI does <em>worse</em> as that ability matters more. The right-hand column
@@ -975,9 +985,7 @@ export const panes: Record<string, PaneDef> = {
             occupations.
           </p>
           <div className="tile">
-            <div className="scroller" style={{ margin: 0 }}>
-              <AbilityBars rows={w.subject_profile} />
-            </div>
+            <AbilityBars rows={w.subject_profile} noMargin />
           </div>
           <p className="tile-cap">
             Writers are below the median on <b>all ten</b> of the most exposed abilities, and above
@@ -1005,6 +1013,7 @@ export const panes: Record<string, PaneDef> = {
       title: "evidence · writers and authors",
       node: (
         <>
+          <EvidenceBack parent="piece-01" title={w.title} />
           <p className="txt dim">
             Every value here comes from a single row, SOC {s.soc}, in the source file.
           </p>
@@ -1046,19 +1055,20 @@ export const panes: Record<string, PaneDef> = {
       title: "evidence · the 21-row profile",
       node: (
         <>
+          <EvidenceBack parent="piece-01" title={w.title} />
           <p className="txt dim">
             This is the instrument the fable is about: {w.abilities.length} abilities, in the order
             the source file lists them, with how much this occupation demands each one and where
             that puts it among all {w.source.occupations} jobs.
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: #, ability, level, percentile">
             <table>
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>ability</th>
-                  <th>level</th>
-                  <th>percentile</th>
+                  <th scope="col">#</th>
+                  <th scope="col">ability</th>
+                  <th scope="col">level</th>
+                  <th scope="col">percentile</th>
                 </tr>
               </thead>
               <tbody>
@@ -1085,6 +1095,7 @@ export const panes: Record<string, PaneDef> = {
       title: "evidence · exposure and pay",
       node: (
         <>
+          <EvidenceBack parent="piece-01" title={w.title} />
           <p className="txt dim">
             The familiar assumption is that automation threatens low-paid work first. In this
             dataset the relationship runs the other way.
@@ -1105,14 +1116,14 @@ export const panes: Record<string, PaneDef> = {
           <p className="kicker">
             median wage by exposure band <i />
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: band, n, workers, median wage">
             <table>
               <thead>
                 <tr>
-                  <th>band</th>
-                  <th>n</th>
-                  <th>workers</th>
-                  <th>median wage</th>
+                  <th scope="col">band</th>
+                  <th scope="col">n</th>
+                  <th scope="col">workers</th>
+                  <th scope="col">median wage</th>
                 </tr>
               </thead>
               <tbody>
@@ -1131,14 +1142,14 @@ export const panes: Record<string, PaneDef> = {
           <p className="kicker">
             by required education <i />
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: level, n, median exposure, median wage">
             <table>
               <thead>
                 <tr>
-                  <th>level</th>
-                  <th>n</th>
-                  <th>median exposure</th>
-                  <th>median wage</th>
+                  <th scope="col">level</th>
+                  <th scope="col">n</th>
+                  <th scope="col">median exposure</th>
+                  <th scope="col">median wage</th>
                 </tr>
               </thead>
               <tbody>
@@ -1161,16 +1172,17 @@ export const panes: Record<string, PaneDef> = {
       title: "evidence · both ends of the list",
       node: (
         <>
+          <EvidenceBack parent="piece-01" title={w.title} />
           <p className="kicker">
             most exposed <i />
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: occupation, exposure, wage">
             <table>
               <thead>
                 <tr>
-                  <th>occupation</th>
-                  <th>exposure</th>
-                  <th>wage</th>
+                  <th scope="col">occupation</th>
+                  <th scope="col">exposure</th>
+                  <th scope="col">wage</th>
                 </tr>
               </thead>
               <tbody>
@@ -1188,13 +1200,13 @@ export const panes: Record<string, PaneDef> = {
           <p className="kicker">
             least exposed <i />
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: occupation, exposure, wage">
             <table>
               <thead>
                 <tr>
-                  <th>occupation</th>
-                  <th>exposure</th>
-                  <th>wage</th>
+                  <th scope="col">occupation</th>
+                  <th scope="col">exposure</th>
+                  <th scope="col">wage</th>
                 </tr>
               </thead>
               <tbody>
@@ -1842,6 +1854,7 @@ export const panes: Record<string, PaneDef> = {
       title: "evidence · screens against sleep",
       node: (
         <>
+          <EvidenceBack parent="piece-02" title={t.title} />
           <p className="txt dim">
             Every correlation is with the {t.source.items}-item questionnaire total, on the same{" "}
             {num(t.source.subjects)} teenagers. r² is the share of the differences between them that
@@ -1868,14 +1881,14 @@ export const panes: Record<string, PaneDef> = {
           <p className="kicker">
             how much of the screen effect travels with sleep <i />
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: held constant, screen × it, partial r, absorbed">
             <table>
               <thead>
                 <tr>
-                  <th>held constant</th>
-                  <th>screen × it</th>
-                  <th>partial r</th>
-                  <th>absorbed</th>
+                  <th scope="col">held constant</th>
+                  <th scope="col">screen × it</th>
+                  <th scope="col">partial r</th>
+                  <th scope="col">absorbed</th>
                 </tr>
               </thead>
               <tbody>
@@ -1904,6 +1917,7 @@ export const panes: Record<string, PaneDef> = {
       kind: "wide",
       node: (
         <>
+          <EvidenceBack parent="piece-02" title={t.title} />
           <p className="txt dim">
             The distribution of questionnaire totals across all {num(t.source.subjects)}{" "}
             teenagers. It runs smoothly from {t.source.bdi_min} to {t.source.bdi_max} with no gap
@@ -1955,12 +1969,12 @@ export const panes: Record<string, PaneDef> = {
             build asserts it — if a future version of the dataset changed the line, the pipeline
             would fail rather than quietly publish a wrong claim.
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: cutoff, agreement with the file's own column">
             <table>
               <thead>
                 <tr>
-                  <th>cutoff</th>
-                  <th>agreement with the file&rsquo;s own column</th>
+                  <th scope="col">cutoff</th>
+                  <th scope="col">agreement with the file&rsquo;s own column</th>
                 </tr>
               </thead>
               <tbody>
@@ -1989,21 +2003,22 @@ export const panes: Record<string, PaneDef> = {
       kind: "wide",
       node: (
         <>
+          <EvidenceBack parent="piece-02" title={t.title} />
           <p className="txt dim">
             The same per-item breakdown, run for all five drivers in the file. If a flat profile were
             evidence against a mechanism, sleep — eight times stronger, with an obvious mechanism —
             ought to look different. It does not.
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: driver, mean r, sd, spread ÷ size, top-5 share, strongest item">
             <table>
               <thead>
                 <tr>
-                  <th>driver</th>
-                  <th>mean r</th>
-                  <th>sd</th>
-                  <th>spread ÷ size</th>
-                  <th>top-5 share</th>
-                  <th>strongest item</th>
+                  <th scope="col">driver</th>
+                  <th scope="col">mean r</th>
+                  <th scope="col">sd</th>
+                  <th scope="col">spread ÷ size</th>
+                  <th scope="col">top-5 share</th>
+                  <th scope="col">strongest item</th>
                 </tr>
               </thead>
               <tbody>
@@ -2045,14 +2060,14 @@ export const panes: Record<string, PaneDef> = {
             noisy column. The source ships the items unlabelled, so what it asks is not something I
             can tell you.
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: driver, strongest, its r, weakest">
             <table>
               <thead>
                 <tr>
-                  <th>driver</th>
-                  <th>strongest</th>
-                  <th>its r</th>
-                  <th>weakest</th>
+                  <th scope="col">driver</th>
+                  <th scope="col">strongest</th>
+                  <th scope="col">its r</th>
+                  <th scope="col">weakest</th>
                 </tr>
               </thead>
               <tbody>
@@ -2081,21 +2096,22 @@ export const panes: Record<string, PaneDef> = {
       kind: "wide",
       node: (
         <>
+          <EvidenceBack parent="piece-02" title={t.title} />
           <p className="txt dim">
             Every cell of the grid, at the source file&rsquo;s own heavy-user threshold of{" "}
             {t.grid.default_threshold}, with a 95% interval from the Katz log method. Rows in orange
             are the ones whose interval includes 1 — arithmetically correct, and indistinguishable
             from no difference at all.
           </p>
-          <div className="scroller">
+          <div className="scroller" tabIndex={0} role="region" aria-label="Table: cutoff, ratio, 95% interval, heavy flagged, others flagged">
             <table>
               <thead>
                 <tr>
-                  <th>cutoff</th>
-                  <th>ratio</th>
-                  <th>95% interval</th>
-                  <th>heavy flagged</th>
-                  <th>others flagged</th>
+                  <th scope="col">cutoff</th>
+                  <th scope="col">ratio</th>
+                  <th scope="col">95% interval</th>
+                  <th scope="col">heavy flagged</th>
+                  <th scope="col">others flagged</th>
                 </tr>
               </thead>
               <tbody>
@@ -2202,9 +2218,9 @@ export const panes: Record<string, PaneDef> = {
           </p>
           <p className="txt dim">
             Two guards, different jobs:{" "}
-            <button className="lnk" type="button" data-pane="verify">
+            <a className="lnk" href={paneHref("verify")} data-pane="verify">
               verify.py
-            </button>{" "}
+            </a>{" "}
             checks that the committed data still comes out of the pipelines; this checks that the
             sentences still match the data.
           </p>
@@ -2217,6 +2233,7 @@ export const panes: Record<string, PaneDef> = {
       kind: "wide",
       node: (
         <>
+          <EvidenceBack parent="notebook" title="audit.ipynb" />
           <p className="lede">
             The pipelines are never run automatically. This checks them instead.
           </p>
@@ -2267,6 +2284,92 @@ PASS  every committed data.json reproduces exactly.`}</pre>
             either. There is no backend and no database anywhere in this project: the data is
             computed ahead of time, committed as JSON, and served as static files.
           </p>
+        </>
+      ),
+    },
+
+    checks: {
+      title: "every check",
+      kind: "wide",
+      node: (
+        <>
+          <p className="lede">
+            {audit.passed} of {audit.checks} published figures, independently re-derived from the
+            raw source in {audit.stack} — not by re-running the pipeline, but by starting over.
+          </p>
+          <p className="txt dim">
+            <a href={paneHref("notebook")} data-pane="notebook">
+              Open the full notebook
+            </a>{" "}
+            to read every check with the output it actually produced. This page is the other
+            direction: every claim behind those checks, and the evidence pane it lives in.
+          </p>
+
+          {(
+            [
+              {
+                parent: "piece-01",
+                title: w.title,
+                items: [
+                  ["evidence-two-layers", "the two layers"],
+                  ["evidence-abilities", "21 abilities"],
+                  ["evidence-writers", "writers and authors"],
+                  ["evidence-profile", "the 21-row profile"],
+                  ["evidence-pay", "exposure and pay"],
+                  ["evidence-extremes", "both ends of the list"],
+                  ["evidence-raters", "two raters, same jobs"],
+                ] as [string, string][],
+              },
+              {
+                parent: "piece-02",
+                title: t.title,
+                items: [
+                  ["evidence-screen", "screens against sleep"],
+                  ["evidence-cutoff", "where the line falls"],
+                  ["evidence-intervals", "which ratios survive an interval"],
+                  ["evidence-flatness", "every driver, item by item"],
+                ] as [string, string][],
+              },
+              {
+                parent: "piece-03",
+                title: piece03Row.title,
+                items: [
+                  ["evidence-national", "the aggregate among the units"],
+                  ["evidence-2021", `the ${wages.integrity.excluded_year} column`],
+                  ["evidence-people", "the ratio, year by year"],
+                  ["evidence-tracking", "does the wage follow the cost"],
+                  ["evidence-spread", "twenty years without convergence"],
+                  ["evidence-engel", "food share, line against life"],
+                  ["evidence-floor", "the actual wage against the legal one"],
+                ] as [string, string][],
+              },
+            ] as const
+          ).map((group) => (
+            <div key={group.parent}>
+              <p className="kicker">
+                {group.parent} · {group.title} <i />
+              </p>
+              <div className="rows">
+                {group.items.map(([id, label]) => {
+                  const blurb = piece03Blurbs[id];
+                  return (
+                    <a className="row" href={paneHref(id)} data-pane={id} key={id}>
+                      <span className="row-k" aria-hidden>
+                        —
+                      </span>
+                      <span>
+                        <span className="row-t">evidence · {label}</span>
+                        {blurb && <span className="row-s">{blurb}</span>}
+                      </span>
+                      <span className="row-go" aria-hidden>
+                        →
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </>
       ),
     },
@@ -2351,34 +2454,12 @@ PASS  every committed data.json reproduces exactly.`}</pre>
  * with JavaScript off, finds the writing instead of an empty shell. Every edge
  * here becomes a two-segment static route; every pane becomes a one-segment
  * one. `assertGraph` fails the build if this drifts from `panes`.
+ *
+ * The graph itself lives in lib/paneGraph.ts, alongside `paneHref()`, so a
+ * link's target can be computed from the same source of truth without
+ * pulling panes.tsx (which imports Anno.tsx) into a cycle.
  */
-export const PANE_LINKS: Record<string, string[]> = {
-  "piece-01": [
-    "evidence-two-layers",
-    "evidence-abilities",
-    "evidence-writers",
-    "evidence-profile",
-    "evidence-pay",
-    "evidence-extremes",
-    "evidence-raters",
-  ],
-  "piece-02": [
-    "evidence-screen",
-    "evidence-cutoff",
-    "evidence-intervals",
-    "evidence-flatness",
-  ],
-  "piece-03": [
-    "evidence-national",
-    "evidence-2021",
-    "evidence-people",
-    "evidence-tracking",
-    "evidence-spread",
-    "evidence-engel",
-    "evidence-floor",
-  ],
-  notebook: ["verify"],
-};
+export { PANE_LINKS };
 
 /** Every trail worth its own HTML file: each pane, plus each real edge. */
 export function paneTrails(): string[][] {
@@ -2410,6 +2491,7 @@ export const PANE_BLURB: Record<string, string> = {
   notebook:
     "Every published figure re-derived from the raw source, in pandas, without the pipeline.",
   verify: "Re-runs both pipelines and refuses to publish anything that drifted.",
+  checks: "Every evidence pane on the site, grouped by piece, in one list.",
   method: "Four layers, in the same order every time.",
   contact: "A portfolio of data analysis and narrative writing.",
   ...piece03Blurbs,
