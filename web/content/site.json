@@ -18,6 +18,26 @@
 
   "email": "juanmaulana29@gmail.com",
 
+  "//feed": [
+    "The feed at /feed.xml. One entry per piece, newest first.",
+    "",
+    "`published` is the date a piece went up. It is written here rather than",
+    "derived from anything because no date for it exists in the data — the",
+    "`retrieved` field in each data.json is the day the dataset was fetched,",
+    "which is not the day the writing was published, and the two must not be",
+    "confused. These came from the commits that added each piece.",
+    "",
+    "A piece with no date here fails the build rather than going out of the",
+    "feed quietly. Add the line when you add the piece."
+  ],
+  "feed": {
+    "published": {
+      "piece-01": "2026-07-29",
+      "piece-02": "2026-07-29",
+      "piece-03": "2026-07-30"
+    }
+  },
+
   "availability": {
     "show": true,
     "label": "desktop for best experience"

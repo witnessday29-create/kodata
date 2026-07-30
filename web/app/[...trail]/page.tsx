@@ -5,6 +5,7 @@ import { panes, paneTrails, PANE_BLURB } from "@/lib/panes";
 import { site } from "@/lib/works";
 import { OG } from "@/lib/og";
 import { paneParent } from "@/lib/paneGraph";
+import { FEED } from "@/lib/feed";
 
 /**
  * A real page per trail.
@@ -51,7 +52,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: "/" + trail.join("/") },
+    // `types` has to be repeated here for the same reason `images` is below:
+    // naming alternates at all replaces the inherited object, so without it
+    // every deep link — which is most of the sitemap — drops the feed link
+    alternates: {
+      canonical: "/" + trail.join("/"),
+      types: { [FEED.type]: [{ url: FEED.url, title }] },
+    },
     // `images` has to be repeated here. Declaring openGraph at all opts this
     // route out of the inherited one, so without it every deep link — which is
     // 34 of the 35 pages, and the ones actually shared — previews with no card.

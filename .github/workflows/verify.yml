@@ -81,6 +81,21 @@ jobs:
             }
           done
 
+      # The feed link has exactly the failure mode og:image had: naming
+      # `alternates` in a route replaces the inherited object, so a deep link
+      # drops it silently and the build stays green. Checked on a deep page on
+      # purpose — the index would have passed the whole time it was broken.
+      - name: the feed parses and every page points at it
+        working-directory: web
+        run: |
+          test -f out/feed.xml
+          python3 -c "import xml.etree.ElementTree as ET; ET.parse('out/feed.xml')"
+          for f in out/index.html out/piece-03.html out/piece-01/evidence-writers.html; do
+            grep -q 'application/rss+xml' "$f" || {
+              echo "no feed link in $f"; exit 1;
+            }
+          done
+
   data:
     name: data reproduces
     runs-on: ubuntu-latest

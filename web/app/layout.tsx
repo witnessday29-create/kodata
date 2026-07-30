@@ -3,6 +3,7 @@ import { Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/works";
 import { OG } from "@/lib/og";
+import { FEED } from "@/lib/feed";
 import { Bracket } from "@/components/Bracket";
 import { ShareLink } from "@/components/ShareLink";
 
@@ -34,7 +35,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    // what a reader auto-discovers when it is pointed at a page rather than at
+    // the feed itself. Repeated in app/[...trail] for the reason in lib/feed.ts
+    types: { [FEED.type]: [{ url: FEED.url, title: TITLE }] },
+  },
   // A link to this site is nearly always pasted into a chat window rather than
   // typed, so the card is the first impression. app/og.png/route.tsx draws it.
   // The image is named here rather than left to Next's file convention because
