@@ -2469,13 +2469,40 @@ export function assertGraph() {
   }
 }
 
-/** One-line description per pane, for per-route metadata. */
+/**
+ * One-line description per pane, for per-route metadata.
+ *
+ * Every pane needs one. An evidence pane reached at its own one-segment route
+ * has no parent to borrow context from, so a missing entry fell all the way
+ * back to the index blurb — and eleven pages went out describing themselves as
+ * the site's front door. Since a shared link previews on this string, and deep
+ * links are most of the sitemap, that is the common case rather than the edge.
+ */
 export const PANE_BLURB: Record<string, string> = {
   index: "Open data, followed all the way down to one person inside it.",
-  "piece-01":
-    "One dataset scores AI exposure twice and the two answers point in opposite directions. The job they disagree about most, of 271, is writing.",
+  "piece-01": `One dataset scores AI exposure twice and the two answers point in opposite directions. The job they disagree about most, of ${w.source.occupations}, is writing.`,
   "piece-02":
     "Before anyone can say heavy screen users are N times more likely to be depressed, two lines have to be drawn — and published claims report neither.",
+
+  /* piece 01 */
+  "evidence-two-layers": `The same ${w.source.occupations} occupations ranked twice — predicted from the abilities each demands, and rated whole. The two orderings collide.`,
+  "evidence-abilities": `An AI-exposure score for each of the ${w.abilities.length} cognitive abilities, sorted, and where writing sits on every one of them.`,
+  "evidence-writers": `Every published figure for writing, traced back to the single row it comes from: SOC ${s.soc} in the source file.`,
+  "evidence-profile": `The ${w.abilities.length}-row ability profile the fable is about: what the occupation demands, and where that puts it among ${w.source.occupations} jobs.`,
+  "evidence-pay":
+    "Automation is assumed to reach low-paid work first. In this dataset exposure rises with pay instead.",
+  "evidence-extremes":
+    "Both ends of the list: the occupations this dataset calls most and least exposed, with what they pay.",
+  "evidence-raters": `A human rater and GPT-4 scoring the same ${w.source.occupations} jobs, and how far apart the two of them land.`,
+
+  /* piece 02 */
+  "evidence-screen": `Every correlation with the ${t.source.items}-item questionnaire total, on the same ${num(t.source.subjects)} teenagers. Sleep quality explains eight times what screen time does.`,
+  "evidence-cutoff": `Questionnaire totals across all ${num(t.source.subjects)} teenagers run smoothly, with no gap anywhere — there is no natural place in the distribution to draw a line.`,
+  "evidence-intervals":
+    "Every ratio the grid can produce, with a 95% interval. The ones set in orange include 1.",
+  "evidence-flatness":
+    "The per-item breakdown for all five drivers in the file. Sleep, eight times stronger, looks just as flat.",
+
   notebook:
     "Every published figure re-derived from the raw source, in pandas, without the pipeline.",
   verify: "Re-runs both pipelines and refuses to publish anything that drifted.",

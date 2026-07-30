@@ -49,3 +49,15 @@ export function paneHref(id: string): string {
   const parent = PARENT_OF[id];
   return parent ? `/${parent}/${id}` : `/${id}`;
 }
+
+/**
+ * The pane a pane is evidence for, if any.
+ *
+ * The route knows its parent when the URL carries one (`/piece-01/evidence-pay`)
+ * but not at the one-segment route for the same pane, where there is nothing in
+ * the path but the leaf. Reading it from the graph instead means the two shapes
+ * describe the page the same way.
+ */
+export function paneParent(id: string): string | undefined {
+  return PARENT_OF[id];
+}

@@ -4,6 +4,7 @@ import { Stack } from "@/components/Stack";
 import { panes, paneTrails, PANE_BLURB } from "@/lib/panes";
 import { site } from "@/lib/works";
 import { OG } from "@/lib/og";
+import { paneParent } from "@/lib/paneGraph";
 
 /**
  * A real page per trail.
@@ -32,8 +33,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pane = panes[leaf];
   if (!pane) return {};
 
-  // the deepest pane names the page; the one it opened from gives it context
-  const parent = trail.length > 1 ? panes[trail[0]]?.title : undefined;
+  // The deepest pane names the page; the one it opened from gives it context.
+  // Fall back to the graph so the one-segment route for an evidence pane —
+  // which has no parent in its path — is still described as evidence for
+  // something rather than as the site's front page.
+  const parent = panes[trail.length > 1 ? trail[0] : (paneParent(leaf) ?? "")]?.title;
   const title = parent
     ? `${pane.title} — ${parent} — ${site.wordmark}`
     : `${pane.title} — ${site.wordmark}`;
