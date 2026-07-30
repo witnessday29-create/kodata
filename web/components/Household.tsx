@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { wages as d, num } from "@/lib/works";
 import { ShareLink } from "./ShareLink";
 import { readParam, writeParams } from "@/lib/urlState";
@@ -43,7 +43,16 @@ export function Household() {
     if (Number.isInteger(e) && e >= 0 && e < m.earners.length) setEarn(e);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // Skip the write on the very first run: nothing has changed yet, and
+  // calling replaceState the instant the page mounts — right as a reader is
+  // likely already swiping to scroll — is exactly the kind of history-API
+  // call that can jog an in-progress touch gesture on some mobile browsers.
+  const wroteOnce = useRef(false);
   useEffect(() => {
+    if (!wroteOnce.current) {
+      wroteOnce.current = true;
+      return;
+    }
     writeParams({ prov, area: String(area), size: String(size), earn: String(earn) });
   }, [prov, area, size, earn]);
 

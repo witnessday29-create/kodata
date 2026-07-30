@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { screenTime as d, num } from "@/lib/works";
 import { RatioCI } from "./Expert";
 import { ShareLink } from "./ShareLink";
@@ -41,7 +41,15 @@ export function Headline() {
     if (w === "Boy" || w === "Girl" || w === "all") setWho(w);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // Skip the write on the first run — see the matching comment in
+  // Household.tsx for why calling replaceState the instant a pane mounts is
+  // worth avoiding.
+  const wroteOnce = useRef(false);
   useEffect(() => {
+    if (!wroteOnce.current) {
+      wroteOnce.current = true;
+      return;
+    }
     writeParams({ cutoff: String(g.cutoffs[ci]), threshold: String(g.thresholds[ti]), who });
   }, [ci, ti, who, g.cutoffs, g.thresholds]);
 
@@ -212,7 +220,12 @@ export function Flatness() {
     if (found !== -1) setK(found);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const wroteOnceFlat = useRef(false);
   useEffect(() => {
+    if (!wroteOnceFlat.current) {
+      wroteOnceFlat.current = true;
+      return;
+    }
     writeParams({ removed: String(d.drop_series[k].dropped) });
   }, [k]);
 
