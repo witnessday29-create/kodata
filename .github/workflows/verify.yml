@@ -14,7 +14,8 @@
 #          caught rather than shipped.
 #
 #   data   re-runs both pipelines against the live Kaggle datasets and diffs
-#          them against the committed data.json. That needs Kaggle credentials,
+#          them against the committed data.json. That needs Kaggle credentials
+#          — either KAGGLE_USERNAME with KAGGLE_KEY, or a KAGGLE_API_TOKEN —
 #          so it skips itself when they are absent instead of going red — a
 #          fork's pull request should not look broken for lacking a secret.
 #
@@ -95,16 +96,25 @@ jobs:
 
       # `secrets` is not available in a job-level `if`, so the skip is decided
       # here and read by the step below.
+      #
+      # Both shapes are accepted because Kaggle issues two: the older pair of
+      # KAGGLE_USERNAME and KAGGLE_KEY out of kaggle.json, and a newer single
+      # `KGAT_…` token in KAGGLE_API_TOKEN that carries the account with it.
+      # kagglehub reads either. Checking only for KAGGLE_KEY meant a repo
+      # holding a perfectly good token skipped the drift check — and because
+      # this step is designed to fail quiet, that skip reads as "checked" when
+      # it means "never ran", which is the one way this guard can mislead.
       - name: are there credentials
         id: creds
         env:
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
         run: |
-          if [ -n "$KAGGLE_KEY" ]; then
+          if [ -n "$KAGGLE_KEY" ] || [ -n "$KAGGLE_API_TOKEN" ]; then
             echo "have=true" >> "$GITHUB_OUTPUT"
           else
             echo "have=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::No KAGGLE_KEY, so the pipelines cannot be re-run. Skipping the drift check."
+            echo "::notice::No Kaggle credentials — set KAGGLE_USERNAME and KAGGLE_KEY, or KAGGLE_API_TOKEN. Skipping the drift check."
           fi
 
       - name: verify
@@ -112,6 +122,7 @@ jobs:
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
         run: python analysis/verify.py
 
       # verify.py leaves a drifted data.json on disk on purpose, so the diff is
