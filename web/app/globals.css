@@ -848,6 +848,23 @@ td.down { color: var(--fit); }
 }
 .mach-ends { display: flex; justify-content: space-between; font-size: 0.62rem; color: var(--faint); }
 
+/* Thirty-three provinces have no order to slide along, and alphabetical would
+   imply one, so the third lever of the wage machine is a select. Styled to sit
+   with the sliders rather than looking like a form control that wandered in. */
+.mach-sel {
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.42rem 0.6rem;
+  width: 100%;
+  min-height: 2.4rem; /* the same touch target as the slider thumbs */
+  cursor: pointer;
+}
+.mach-sel:hover { border-color: var(--faint); }
+
 .mach-flag {
   margin: 1.1rem 0 0;
   padding: 0.6rem 0.75rem;

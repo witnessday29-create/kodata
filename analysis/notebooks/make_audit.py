@@ -597,6 +597,70 @@ print("minimum in every province-year, which no other plausible unit does. The")
 print("downward trend survives being wrong about it — a fixed multiplier cannot")
 print("create a trend — but the count below 1.00 does not.")'''),
 
+    ("md", """### Claim 9. The interactive grid is arithmetic, not a promise
+
+The piece lets a reader move household size, earners, province and area, and
+every cell they can reach was computed in Python and committed — the controls
+index an array and divide nothing. That claim is only worth making if the
+committed array is right, so it is re-derived here in full: all 2,376 cells,
+not a sample.
+"""),
+
+    ("code", '''m = P3["machine"]
+gk_m = gk_l[(gk_l["jenis"] == "TOTAL") & (gk_l["periode"] == "MARET") &
+            (gk_l["tahun"] == m["year"])]
+# on the value, not the row: a province with no countryside still has a
+# PERDESAAN row in the source, carrying a blank
+line = {(r["provinsi"], r["daerah"]): r["gk"]
+        for _, r in gk_m.iterrows() if pd.notna(r["gk"])}
+u_m = ump_l[ump_l["tahun"] == m["year"]]
+wage = dict(zip(u_m["provinsi"], u_m["ump"]))
+
+bad = []
+for p in m["provinces"]:
+    for ai, area in enumerate(m["areas"]):
+        for ei, e in enumerate(m["earners"]):
+            for si, s in enumerate(m["sizes"]):
+                pp, ratio, below = m["cells"][p][ai][ei][si]
+                want_pp = wage[p] * e / s
+                want_r = want_pp / line[(p, area)]
+                if (abs(pp - round(want_pp)) > 0
+                        or abs(ratio - round(want_r, 3)) > 5e-4
+                        or below != int(want_r < 1)):
+                    bad.append((p, area, e, s))
+
+check("piece03 every machine cell re-derives", len(bad), 0)
+check("piece03 machine cells committed",
+      sum(len(m["cells"][p][a][e])
+          for p in m["cells"] for a in range(len(m["areas"]))
+          for e in range(len(m["earners"]))),
+      len(m["provinces"]) * len(m["areas"]) * len(m["earners"]) * len(m["sizes"]))
+
+# the default position is the piece's own sentence about one province
+dp = m["default"]
+pp0, r0, b0 = (m["cells"][dp["province"]][dp["area"]]
+                [m["earners"].index(dp["earners"])][m["sizes"].index(dp["size"])])
+check("piece03 the default household is below the line", b0, 1)
+check("piece03 how many provinces put 4 people on 1 wage under the line",
+      sum(1 for p in m["provinces"]
+          if m["cells"][p][0][m["earners"].index(1)][m["sizes"].index(4)][2]),
+      m["default_below"])
+
+# A province with no countryside has no rural poverty line, so it has no row.
+# Named rather than silently dropped, and the reason is checkable: the missing
+# provinces are exactly those with no PERDESAAN line in the source.
+no_rural = sorted(p for p in provs if (p, "PERDESAAN") not in line)
+check("piece03 provinces excluded from the machine", no_rural, m["excluded"])
+
+print()
+print(f"{len(m['provinces'])} provinces x {len(m['earners'])}x{len(m['sizes'])} household "
+      f"shapes x {len(m['areas'])} areas, all re-derived.")
+print(f"default ({dp['province']}, {dp['size']} people, {dp['earners']} earner, "
+      f"combined line): Rp {pp0:,} per person, {r0}x the line")
+print(f"a four-person single-earner household is under the line in "
+      f"{m['default_below']} of {len(m['provinces'])} provinces.")
+print(f"excluded: {', '.join(m['excluded'])} — {m['excluded_why']}.")'''),
+
     ("md", """---
 ## Result
 """),

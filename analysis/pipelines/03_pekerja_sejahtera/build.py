@@ -425,6 +425,75 @@ def main():
                           "below_minimum": sum(1 for _, x in v if x < 1),
                           "lowest": [{"province": p, "ratio": round(x, 3)} for p, x in lowest]})
 
+    # ── the machine: the 2021 formula, put in the reader's hands ──────────
+    #
+    # PP 36/2021 sets the minimum wage from average consumption per head times
+    # average household size, divided by the average number of household
+    # members who work. So the reader moving those three levers is not applying
+    # an outside standard to Indonesian wage policy — they are operating the
+    # policy's own arithmetic and watching where it lands.
+    #
+    # Every cell is computed here and committed. The sliders index the array;
+    # nothing divides in a browser. Area is a lever too, because the poverty
+    # line is lower in a village, so the same wage holds more people above it
+    # there without anybody being better off.
+    MACH_YEAR = years[-1]
+    SIZES = list(range(1, 9))
+    EARNERS = [1, 2, 3]
+    AREAS = [AREA, "PERKOTAAN", "PERDESAAN"]
+
+    mach_provs = sorted(p for p in provs if W[p].get(MACH_YEAR)
+                        and all(gk(p, MACH_YEAR, PERIOD, a) for a in AREAS))
+    assert SUBJECT in mach_provs, "the subject province has no machine row"
+    # Not a data defect: a province with no countryside has no rural poverty
+    # line. Named rather than dropped, so a missing row is explained on the page.
+    mach_missing = sorted(set(provs) - set(mach_provs))
+    assert mach_missing == ["DKI JAKARTA"], mach_missing
+
+    mach_cells, mach_below = {}, {}
+    for p in mach_provs:
+        u = W[p][MACH_YEAR]
+        by_area, below_by_area = [], []
+        for a in AREAS:
+            line = gk(p, MACH_YEAR, PERIOD, a)
+            by_earners, below = [], 0
+            for e in EARNERS:
+                row = []
+                for s in SIZES:
+                    pp = u * e / s
+                    r = pp / line
+                    row.append([round(pp), round(r, 3), 1 if r < 1 else 0])
+                    below += r < 1
+                by_earners.append(row)
+            by_area.append(by_earners)
+            below_by_area.append(below)
+        mach_cells[p] = by_area
+        mach_below[p] = below_by_area
+
+    machine = {
+        "year": MACH_YEAR,
+        "provinces": mach_provs,
+        "areas": AREAS,
+        "area_labels": ["town and village together", "town", "village"],
+        "sizes": SIZES,
+        "earners": EARNERS,
+        "combinations": len(SIZES) * len(EARNERS),
+        # a household of four on one wage, in the province that holds the fewest
+        "default": {"province": SUBJECT, "area": 0, "size": 4, "earners": 1},
+        "ump": {p: round(W[p][MACH_YEAR]) for p in mach_provs},
+        "gk": {p: [round(gk(p, MACH_YEAR, PERIOD, a)) for a in AREAS] for p in mach_provs},
+        "cells": mach_cells,
+        "below_count": mach_below,
+        "excluded": mach_missing,
+        "excluded_why": "has no rural poverty line, having no countryside",
+        # how many provinces put a four-person single-earner household under
+        # the line, on the combined line — the machine's default position
+        "default_below": sum(1 for p in mach_provs if mach_cells[p][0][0][3][2]),
+        "n_provinces": len(mach_provs),
+    }
+    dflt = mach_cells[SUBJECT][0][0][3]
+    assert dflt[2] == 1, f"the default household is no longer below the line: {dflt}"
+
     # ── the signature: every clean province-year, the subject marked ──────
     BINS, TOP = 48, 9.6
     hist = [0] * BINS
@@ -498,6 +567,7 @@ def main():
         "dispersion": {"series": dispersion, "persistence": persistence},
         "engel": engel,
         "floor": {"hours": HOURS, "series": floor},
+        "machine": machine,
         "hist": {"bins": BINS, "top": TOP, "counts": hist,
                  "mark": min(BINS - 1, int(subject_latest_exact / TOP * BINS))},
         "robustness": {
@@ -559,6 +629,16 @@ def main():
     print(f"  FLOOR      upah x {HOURS} / ump: median {h['floor_median_first']:.3f} -> "
           f"{h['floor_median_last']:.3f}; provinces under the legal minimum "
           f"{h['below_minimum_first']} -> {h['below_minimum_last']}")
+    tot = len(SIZES) * len(EARNERS)
+    worst = min(mach_provs, key=lambda p: mach_cells[p][0][0][3][1])
+    print(f"  MACHINE    {MACH_YEAR}: {len(mach_provs)} provinces x {tot} household "
+          f"combinations x {len(AREAS)} areas = "
+          f"{len(mach_provs) * tot * len(AREAS)} committed cells")
+    print(f"             default ({SUBJECT}, 4 people, 1 earner, combined): "
+          f"Rp {dflt[0]:,} per person, {dflt[1]:.3f}x the line")
+    print(f"             a four-person one-earner household is under the line in "
+          f"{sum(1 for p in mach_provs if mach_cells[p][0][0][3][2])}/{len(mach_provs)} "
+          f"provinces; worst is {worst}")
 
 
 if __name__ == "__main__":

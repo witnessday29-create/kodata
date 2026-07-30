@@ -2,6 +2,7 @@ import { wages, num, sign } from "@/lib/works";
 import { Intro } from "@/components/Intro";
 import { Expert, CI, Check } from "@/components/Expert";
 import { Anno } from "@/components/Anno";
+import { Household } from "@/components/Household";
 import type { PaneDef } from "@/components/Stack";
 
 /**
@@ -328,6 +329,33 @@ export const piece03: Record<string, PaneDef> = {
         </p>
 
         <p className="kicker">
+          move it yourself <i />
+        </p>
+
+        <p className="txt">
+          The formula Indonesia adopted in 2021 sets the minimum wage from consumption per head,
+          multiplied by household size, divided by how many people in the household work. Those are
+          three levers, and the law pulls them using national averages. Pull them yourself and see
+          where they land — the province, the number of mouths, the number of wages, and whether the
+          line being cleared is the town line or the village one.
+        </p>
+
+        <Household />
+
+        <p className="txt">
+          Two things tend to come out of playing with it. The first is that a single wage almost
+          never clears a household on its own by much: a four-person household with one earner falls
+          under the line in{" "}
+          <Anno src="[machine.default_below]" pane="evidence-people">
+            {k.machine.default_below} of {k.machine.n_provinces} provinces
+          </Anno>{" "}
+          and clears it narrowly in most of the rest. The second is stranger. Switch the line from
+          town to village and the same wage suddenly holds more people above it — not because
+          anything improved, but because the line itself is lower there. The measure moves under the
+          thing it is measuring.
+        </p>
+
+        <p className="kicker">
           the floor, and what is happening to it <i />
         </p>
 
@@ -404,6 +432,234 @@ export const piece03: Record<string, PaneDef> = {
           none of the above is a standard imported from outside — it is the state&rsquo;s own
           arithmetic, handed back.
         </p>
+
+        <p className="kicker">
+          the story <i />
+        </p>
+        <div className="tale">
+          <h3 className="tale-h">The Measure of Mouths</h3>
+          <p className="tale-note">
+            A fable. It contains no figures at all — the numbers have had their say already, and
+            what is left of them here is only their shape.
+          </p>
+
+          <p className="txt">
+            On an archipelago of many islands there were two instruments, and they were built to
+            speak to one another.
+          </p>
+
+          <p className="txt">
+            The first was kept by the surveyors. Every spring and every autumn they went out to the
+            islands and asked what a month of staying alive costs, and they came back and wrote a
+            number for each island, and the number was different on each one, because the islands
+            were not alike.
+          </p>
+
+          <p className="txt">
+            The second was kept in the capital, in a bureau with a good view. It said what a month of
+            work was worth. It also gave a number for each island.
+          </p>
+
+          <p className="txt">
+            The arrangement was supposed to be simple. The surveyors would say what living cost, and
+            the bureau would make sure work paid more than that. One instrument listened; the other
+            answered.
+          </p>
+
+          <p className="tale-break" aria-hidden>
+            ⁂
+          </p>
+
+          <p className="txt">
+            What happened was that the bureau found a rule.
+          </p>
+
+          <p className="txt">
+            The rule was elegant and it saved a great deal of argument. Take last year&rsquo;s
+            number, it said, and add to it the amount by which the whole archipelago had grown, and
+            the amount by which everything had got dearer across all the islands together. Do this
+            for every island. The rule was fair in the way that giving everybody the same size of
+            shoe is fair.
+          </p>
+
+          <p className="txt">
+            And so the bureau stopped needing the surveyors. Not by decree — nobody ever announced
+            it — but arithmetically, which is quieter. Every island&rsquo;s wage still rose every
+            year, and rose by about the same proportion, and if you laid the wages against the costs
+            you would see them climbing together and conclude that the two instruments were still
+            in conversation. They were not. They were both simply going up.
+          </p>
+
+          <p className="txt">
+            The wage on each island was no longer an answer to a question about that island. It was
+            an answer to a question about last year.
+          </p>
+
+          <p className="tale-break" aria-hidden>
+            ⁂
+          </p>
+
+          <p className="txt">
+            There was a woman in a small inland city, in a house with four mouths in it and one wage
+            coming in.
+          </p>
+
+          <p className="txt">
+            Her city was famous. It had a palace and a great many students and a way of speaking
+            that people elsewhere found beautiful, and the rent was accordingly not cheap. Her
+            island&rsquo;s wage, though, was among the smallest in the archipelago, and had been for
+            as long as anyone had been counting. Not because of any decision anyone could point to.
+            Because of last year, and the year before that, all the way back to a first number
+            nobody now remembered choosing.
+          </p>
+
+          <p className="txt">
+            She went to the bureau and asked a reasonable question. Her wage was meant to cover a
+            month of living. Whose month? Because there were four of them in the house and only one
+            wage, and if the wage was one person&rsquo;s month of living then three of them were
+            living on nothing.
+          </p>
+
+          <p className="txt">
+            The clerk was kind about it. The wage is for a worker, he said. The cost is for a person.
+          </p>
+
+          <p className="txt">
+            Yes, she said. I know. That is what I am asking about.
+          </p>
+
+          <p className="tale-break" aria-hidden>
+            ⁂
+          </p>
+
+          <p className="txt">
+            Here is the part about the surveyors&rsquo; instrument, which was not innocent either.
+          </p>
+
+          <p className="txt">
+            To say what a month of staying alive cost, they had first to decide what staying alive
+            consisted of. So long ago they had written down a basket. So much rice, so much oil, so
+            much salt and fish and sugar, enough to keep a body upright. Then a smaller allowance for
+            everything that is not eaten — a roof, a lamp, a bus, a school shoe.
+          </p>
+
+          <p className="txt">
+            The basket was mostly food. Overwhelmingly food. And no household on any island in the
+            archipelago spent its money like that. Even the poorest spent something under half on
+            what it ate, because a roof cannot be declined and a bus fare cannot be haggled down to
+            rice.
+          </p>
+
+          <p className="txt">
+            So the line marked the cost of surviving as a person who did not exist: someone who ate
+            like the poor and paid rent like nobody. It was not a measurement. It was a decision,
+            costed. And every count of how many people were poor was a count of people standing on
+            one side or the other of that decision.
+          </p>
+
+          <p className="txt">
+            The surveyors knew this. It was written in their own notes, for anyone who read that far.
+            Almost nobody read that far, because the number at the front was so much easier to
+            quote than the note at the back.
+          </p>
+
+          <p className="tale-break" aria-hidden>
+            ⁂
+          </p>
+
+          <p className="txt">
+            One year — and this is the part of the story that is hardest to believe, and the easiest
+            to prove — the column went wrong.
+          </p>
+
+          <p className="txt">
+            It was the plague year, when almost every island had held its wage exactly where it was,
+            which was itself a decision worth a great deal of argument and got none. Somewhere
+            between the bureau and the ledger the figures for that year came apart from the islands
+            they belonged to. A third of the islands ended up holding a neighbour&rsquo;s number.
+            The great port in the west was given the wage of a small inland city and became, on
+            paper, one of the poorest places in the archipelago. A quiet island in the east was
+            handed the port&rsquo;s wage and became, on paper, the richest place anyone had ever
+            recorded.
+          </p>
+
+          <p className="txt">
+            Nobody noticed for a long time. This is the crucial thing, and it is not because the
+            clerks were careless.
+          </p>
+
+          <p className="txt">
+            They did not notice because the middle of the column was still right. The islands had
+            swapped numbers with each other, so the numbers were all still there, and if you asked
+            the ledger what a typical island paid that year it gave very nearly the correct answer.
+            Every summary was fine. Every average was fine. The error was invisible to anyone who
+            asked the ledger a question about all the islands at once, and visible immediately to
+            anyone who asked it a question about one island in particular.
+          </p>
+
+          <p className="txt">
+            Which is to say the error was invisible to everyone who used the ledger the way the
+            ledger was usually used.
+          </p>
+
+          <p className="tale-break" aria-hidden>
+            ⁂
+          </p>
+
+          <p className="txt">
+            It was found, in the end, the dull way. Someone laid the year against the year before it
+            and the year after it and saw that those two agreed with each other more closely than
+            either agreed with the year in between — and a year cannot do that. A year that sits
+            between two years which match must match them too. That is not a discovery about wages.
+            It is a property of sitting between things.
+          </p>
+
+          <p className="txt">
+            And once you knew to look, the rest was almost embarrassing. Wages on the archipelago
+            never fell. So a year lower than the year before it and lower than the year after it was
+            not a surprising wage. It was an impossible one, and there were a great many of them.
+          </p>
+
+          <p className="txt">
+            Some of the displaced numbers were even traceable, sitting one rupiah away from the
+            island they had come from — a rupiah being far too small a sum for a person to have
+            chosen, and exactly the size of the dust a number picks up passing through a machine.
+          </p>
+
+          <p className="tale-break" aria-hidden>
+            ⁂
+          </p>
+
+          <p className="txt">
+            The woman with four mouths and one wage never heard about the column. It made no
+            difference to her; her own island&rsquo;s figure that year happened to be one of the
+            correct ones, and it was too small either way.
+          </p>
+
+          <p className="txt">
+            But the two things are the same thing, and it took me a long while to see it.
+          </p>
+
+          <p className="txt">
+            An instrument that is only ever asked about everyone at once will go wrong about any
+            particular person and give no sign. The bureau&rsquo;s rule was of that kind: it was
+            built out of quantities that describe an archipelago — how much it had grown, how much
+            dearer it had become — and it produced, faithfully, a number for each island that was
+            about none of them. The surveyors&rsquo; basket was of that kind too: a costing of an
+            average that no household anywhere actually is.
+          </p>
+
+          <p className="txt">
+            The scrambled column was not a different sort of failure from the rule and the basket. It
+            was the same failure, briefly made obvious, because for once the thing that had gone
+            wrong was small enough and local enough to be caught.
+          </p>
+
+          <p className="txt">
+            The instruments were built to speak to one another about places. They had been left
+            speaking to one another about the archipelago. And an archipelago has no mouths to feed.
+          </p>
+        </div>
 
         <p className="kicker">
           what the file is called <i />
@@ -1116,7 +1372,7 @@ export const piece03Row = {
       Indonesia sets a minimum wage province by province and publishes, separately, the monthly cost
       of keeping one person out of poverty. Dividing the first by the second answers in people: in
       the median province, one legal minimum wage holds {last.median.toFixed(2)} of them above the
-      line.
+      line. Move the household yourself and watch the verdict change.
     </>
   ),
   figure: <Spread />,

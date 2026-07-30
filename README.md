@@ -82,8 +82,10 @@ than going red. Neither job is on a schedule, for the reason above; use
 Kaggle files and asserts it matches the committed `data.json`. It deliberately
 does not import `build.py`: the pipelines are stdlib, the notebook is pandas and
 numpy, so where the two agree the number is not an artefact of either
-implementation. **73 of 73 claims check out**, including the places the site
-admits a weakness.
+implementation. **78 of 78 claims check out**, including the places the site
+admits a weakness, and including all 2,376 cells behind piece 03's interactive —
+re-derived in full rather than sampled, because "the browser divides nothing" is
+only worth claiming if the committed array is right.
 
 It has already earned its keep. Piece 03 published a threshold count computed
 from ratios that had been rounded to three decimals first, which put a
