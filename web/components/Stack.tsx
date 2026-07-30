@@ -49,7 +49,11 @@ export function Stack({
    * counter changes on every open — even a re-open of what is already there,
    * which should still take you to it.
    */
-  const [reveal, setReveal] = useState<{ n: number; at: number } | null>(null);
+  // resetScroll is false when the reveal is a close/back — returning to a pane
+  // the reader already had scrolled into, which should stay where they left it
+  const [reveal, setReveal] = useState<{ n: number; at: number; resetScroll: boolean } | null>(
+    null
+  );
 
   /** The container also holds the heading, so `children[i]` is off by one. */
   const paneAt = useCallback(
@@ -95,7 +99,8 @@ export function Stack({
         if (j !== -1) return cur.slice(0, j + 1);
         return cur[i + 1] === id ? cur : [...cur.slice(0, i + 1), id];
       });
-      setReveal((r) => ({ n: (r?.n ?? 0) + 1, at }));
+      // going back to a pane already in the trail: leave its scroll alone
+      setReveal((r) => ({ n: (r?.n ?? 0) + 1, at, resetScroll: existing === -1 }));
     };
 
     document.addEventListener("click", onClick);
@@ -137,12 +142,16 @@ export function Stack({
     const frame = requestAnimationFrame(() => {
       const at = Math.min(reveal.at, trail.length - 1);
       scrollTo(at);
+      const pane = paneAt(at);
       // A pane that just opened must start at its own beginning — including
       // when it replaced a pane at the same depth, which is why this cannot
-      // key off the trail's length.
-      const pane = paneAt(at);
-      const body = pane?.querySelector(".pane-body") as HTMLElement | null;
-      if (body) body.scrollTop = 0;
+      // key off the trail's length. But a close/back reveals a pane the
+      // reader was already scrolled into, and resetting that to the top on
+      // every close read as the pane starting over each time.
+      if (reveal.resetScroll) {
+        const body = pane?.querySelector(".pane-body") as HTMLElement | null;
+        if (body) body.scrollTop = 0;
+      }
 
       // Focus used to stay on the figure that was clicked, so a pane appeared
       // off to the right and nothing announced it. Moving focus to the new
@@ -165,8 +174,9 @@ export function Stack({
   const close = (i: number) => {
     if (i === 0) return;
     setTrail((cur) => cur.slice(0, i));
-    // bring the pane that is now last back into view
-    setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: i - 1 }));
+    // bring the pane that is now last back into view, exactly as the reader
+    // left it
+    setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: i - 1, resetScroll: false }));
   };
 
   // Escape closes the last pane like it would a dialog; Home returns to the
@@ -179,13 +189,13 @@ export function Stack({
       if (e.key === "Escape" && !inField) {
         setTrail((cur) => {
           if (cur.length <= 1) return cur;
-          setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: cur.length - 2 }));
+          setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: cur.length - 2, resetScroll: false }));
           return cur.slice(0, -1);
         });
       } else if (e.key === "Home" && !inField) {
         setTrail((cur) => {
           if (cur.length <= 1) return cur;
-          setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: 0 }));
+          setReveal((r) => ({ n: (r?.n ?? 0) + 1, at: 0, resetScroll: false }));
           return [cur[0]];
         });
       }

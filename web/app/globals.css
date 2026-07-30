@@ -307,7 +307,11 @@ a { color: inherit; }
 @media (max-width: 720px) {
   :root { --spine: 2.1rem; }
   .spine-no { display: none; }
-  .stack { scroll-snap-type: x mandatory; }
+  /* mandatory fought the JS-driven scrollTo() that runs on open/close: closing
+     a pane shrinks the stack's total width, and a forced snap mid-transition
+     could leave the view stuck between positions until scrolled by hand.
+     proximity — what desktop already uses — never forces that correction. */
+  .stack { scroll-snap-type: x proximity; }
 }
 
 /* ── prose ────────────────────────────────────────────────────────────── */
