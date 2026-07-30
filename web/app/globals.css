@@ -31,6 +31,8 @@
 
   --bar: 3.5rem;
   --spine: 2.75rem;
+  /* the phone trail's own row, under the bar — see the end of this file */
+  --trail: 2.3rem;
   --colw: 41rem;
 
   --eo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -1249,3 +1251,89 @@ td.down { color: var(--fit); }
 .vs-empty { background: var(--sunk); }
 .vs-empty p { margin: 0; font-size: 0.72rem; line-height: 1.6; color: var(--mid); }
 .vs-empty b { color: #c23811; }
+
+/* ── the trail, on a phone ────────────────────────────────────────────────
+   A spine is the trail drawn vertically, and vertical costs width. On a phone
+   that is the one thing there is none of: three panes deep the spines took
+   67px of a 390px screen and dropped the reading measure from 40 characters
+   to 32, which is four words a line for the serif the whole site is for.
+
+   And they were buying nothing there. The note on the snap above already
+   settles it — a phone reads one pane at a time, so the collapsed columns to
+   the left are never seen beside the one being read. They are a gutter paying
+   for a side-by-side view the phone does not get.
+
+   So the trail keeps its job and changes its axis: one horizontal strip under
+   the bar, where a phone has height to spare, and every pane goes full-bleed
+   at any depth. Same trail, same targets, same in-page navigation — it stops
+   being charged to the measure. Desktop is untouched: there the spines are
+   worth their width, because there you really can see the column they belong
+   to standing open beside this one. */
+.trail { display: none; }
+
+@media (max-width: 720px) {
+  .trail {
+    position: fixed;
+    top: var(--bar);
+    left: 0;
+    right: 0;
+    z-index: 45;
+    display: flex;
+    align-items: stretch;
+    gap: 0.25rem;
+    height: var(--trail);
+    padding: 0 0.6rem;
+    background: var(--card);
+    border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* horizontal, nested under the fixed bar — same axis hint as .stack */
+    touch-action: pan-x pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+  }
+  .trail::-webkit-scrollbar { display: none; }
+
+  .trail-c {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    max-width: 13rem;
+    padding: 0 0.5rem;
+    border-radius: 5px;
+    color: var(--faint);
+    transition: color 0.25s, background 0.25s;
+  }
+  /* the crumb between two crumbs, drawn rather than typed so it never lands
+     in an accessible name */
+  .trail-c + .trail-c::before {
+    content: "›";
+    margin-left: -0.5rem;
+    padding-right: 0.35rem;
+    color: var(--rule);
+  }
+  .trail-n { font-size: 0.6rem; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
+  .trail-t {
+    font-size: 0.72rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .trail-c.on { color: var(--ink); background: var(--hair); }
+  .trail-c.on .trail-n { color: var(--act); }
+
+  /* the strip is a second fixed row, so the columns start below it */
+  .stack.has-trail { top: calc(var(--bar) + var(--trail)); }
+
+  /* No spine to leave behind, so nothing to stick to: the panes become plain
+     full-width pages in a horizontal scroller. scrollTo() needs no change —
+     it already subtracts the spine's measured width, and a hidden spine
+     measures zero. */
+  .pane {
+    position: relative;
+    left: auto;
+    flex-basis: 100vw;
+  }
+  .pane-wide { flex-basis: 100vw; }
+  .spine { display: none; }
+}

@@ -61,6 +61,40 @@ export function Stack({
     []
   );
 
+  /**
+   * Which pane the reader is actually looking at.
+   *
+   * The phone trail has to answer that, not just name the deepest pane: a
+   * reader who swipes back two columns and still sees the last one lit up is
+   * being told something untrue about where they are. On a phone the panes
+   * are one viewport wide, so the leftmost one that has reached the scroll
+   * position is the one on screen.
+   */
+  const bar = useRef<HTMLElement>(null);
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const read = () => {
+      const list = el.querySelectorAll<HTMLElement>(".pane");
+      let i = 0;
+      for (let k = 0; k < list.length; k++) if (list[k].offsetLeft <= el.scrollLeft + 8) i = k;
+      setActive((cur) => (cur === i ? cur : i));
+    };
+    read();
+    el.addEventListener("scroll", read, { passive: true });
+    return () => el.removeEventListener("scroll", read);
+  }, [trail.length]);
+
+  // a trail longer than the screen scrolls; the crumb for where you are has to
+  // be the one you can see
+  useEffect(() => {
+    (bar.current?.children[active] as HTMLElement | undefined)?.scrollIntoView({
+      inline: "nearest",
+      block: "nearest",
+    });
+  }, [active]);
+
   const scrollTo = useCallback((i: number, smooth = true) => {
     const el = box.current;
     if (!el) return;
@@ -260,9 +294,49 @@ export function Stack({
   }, []);
 
   const leaf = panes[trail[trail.length - 1]];
+  const deep = trail.length > 1;
 
   return (
-    <main className="stack" id="stack" ref={box} aria-label="Reading columns">
+    <>
+      {/* The trail, for a phone.
+          A spine is the trail drawn *vertically*, which costs width — and on a
+          phone the stack already reads one pane at a time, so those spines buy
+          a side-by-side view that never happens there. Three panes deep they
+          were taking 67px of a 390px screen and cutting the reading measure to
+          32 characters. This is the same trail on the axis a phone can afford:
+          height. CSS decides which of the two is showing; both are always in
+          the document, so nothing here depends on measuring the viewport. */}
+      {deep && (
+        <nav className="trail" ref={bar} aria-label="Trail">
+          {trail.map((id, i) => {
+            const p = panes[id];
+            if (!p) return null;
+            return (
+              <button
+                key={id + i}
+                type="button"
+                className={"trail-c" + (i === active ? " on" : "")}
+                onClick={() => scrollTo(i)}
+                // named explicitly, exactly as the spine is: the separator
+                // between crumbs is CSS generated content, and an explicit
+                // label keeps it out of what a screen reader announces
+                aria-label={`Back to ${p.title}`}
+                aria-current={i === active ? "true" : undefined}
+              >
+                <span className="trail-n">{String(i + 1).padStart(2, "0")}</span>
+                <span className="trail-t">{p.title}</span>
+              </button>
+            );
+          })}
+        </nav>
+      )}
+
+      <main
+        className={"stack" + (deep ? " has-trail" : "")}
+        id="stack"
+        ref={box}
+        aria-label="Reading columns"
+      >
       {/* The page had no h1 at all: pane titles are h2 and there was nothing
           above them. This names the current trail for anyone navigating by
           heading, and follows it as the trail changes. */}
@@ -327,6 +401,7 @@ export function Stack({
           </article>
         );
       })}
-    </main>
+      </main>
+    </>
   );
 }
