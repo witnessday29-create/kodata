@@ -208,6 +208,8 @@ a { color: inherit; }
 .pane {
   position: sticky;
   left: calc(var(--i) * var(--spine));
+  /* a pane sticks over the ones behind it, so later panes stack on top */
+  z-index: calc(var(--i) + 1);
   /* Every pane to the left has collapsed to a spine, and those spines still
      take room — so the available width shrinks as the trail grows. The floor
      stops a long trail (or a phone) from squeezing a pane down to nothing;
@@ -1333,6 +1335,14 @@ td.down { color: var(--fit); }
     position: relative;
     left: auto;
     flex-basis: 100vw;
+    /* Nothing sticks and nothing overlaps here, so the per-pane z-index has
+       no ordering left to express — and it is not free: a positioned element
+       with a z-index is a stacking context, which is a candidate for its own
+       composited layer. Closing a pane then asks a phone to throw one of
+       those away and re-raster the full-viewport pane behind it, which is the
+       moment the content came back blank until a small scroll forced it to
+       draw. Plain in-flow blocks give the browser nothing to lose track of. */
+    z-index: auto;
   }
   .pane-wide { flex-basis: 100vw; }
   .spine { display: none; }

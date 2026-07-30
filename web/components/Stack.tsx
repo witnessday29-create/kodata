@@ -1,8 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type PaneDef = { title: string; kind?: string; node: React.ReactNode };
+
+/** Every pane is pre-rendered, so this component does run on the server, where
+ *  a layout effect cannot and React says so out loud. Same thing in the
+ *  browser, silent during the export. */
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /**
  * The stack.
@@ -224,6 +229,31 @@ export function Stack({
     scrollTo(trail.length - 1, false);
   }, [trail.length, reveal, scrollTo]);
 
+  /**
+   * Settle the scroll before paint, when a pane was removed.
+   *
+   * Closing takes away the pane the reader is looking at, which shrinks the
+   * container past its own scroll position. The browser does clamp that back
+   * to the right place on its own — measured, and without waiting for a frame
+   * — so this is not what puts the pane where it belongs. What it does is put
+   * it there *explicitly*, in a layout effect that runs before paint, instead
+   * of leaving the position to a clamp and then re-issuing it a frame later
+   * from the effect below. One statement of intent, ahead of the first frame.
+   *
+   * Instant, not smooth: a close is a return to where the reader already was,
+   * and animating back to a position the clamp has already reached only gives
+   * the browser a second chance to disagree with itself.
+   *
+   * Only for `resetScroll: false`, which is exactly the set of moves that
+   * remove panes — close, Escape, Home, and clicking back to a pane already
+   * open further left. Opening a new pane grows the container instead, clamps
+   * nothing, and keeps its animation below.
+   */
+  useIsoLayoutEffect(() => {
+    if (!reveal || reveal.resetScroll) return;
+    scrollTo(Math.min(reveal.at, trail.length - 1), false);
+  }, [reveal, trail.length, scrollTo]);
+
   // reveal whatever just opened
   useEffect(() => {
     if (!reveal) return;
@@ -363,7 +393,10 @@ export function Stack({
             key={id + i}
             className={"pane" + (p.kind ? " pane-" + p.kind : "")}
             data-i={i}
-            style={{ ["--i" as string]: i, zIndex: i + 1 }}
+            // z-index is derived from --i in CSS rather than set here, so the
+            // phone rules can drop it: an inline style cannot be overridden by
+            // a media query without !important
+            style={{ ["--i" as string]: i }}
             aria-labelledby={`pane-h-${i}`}
           >
             <button
