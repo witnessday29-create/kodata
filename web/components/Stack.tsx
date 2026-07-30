@@ -107,33 +107,66 @@ export function Stack({
     return () => document.removeEventListener("click", onClick);
   }, [panes]);
 
-  // The path is the trail, so a checked number can be linked to — and every one
-  // of these paths is a pre-rendered HTML file, not a fragment.
-  const asPath = useCallback(
-    (ids: string[]) => "/" + ids.slice(1).join("/"),
-    []
-  );
+  /**
+   * The URL for a trail: the leaf names the page, the rest rides in `?via=`.
+   *
+   * One pre-rendered file per *path* worked while a trail was at most two
+   * panes deep, which is all `paneTrails()` generates. But the stack goes as
+   * deep as the reader clicks, so /a/b/c was a URL the site could produce and
+   * not serve — a deep trail 404'd the moment it was reloaded or shared. One
+   * route per pane covers any depth instead, because the path is now always a
+   * single pane id.
+   *
+   * Other query keys are left alone: the interactive pieces keep their own
+   * state there, and a shared link has to carry both.
+   */
+  const trailUrl = useCallback((ids: string[]) => {
+    const rest = ids.slice(1);
+    const params = new URLSearchParams(location.search);
+    if (rest.length > 1) params.set("via", rest.slice(0, -1).join(","));
+    else params.delete("via");
+    const q = params.toString();
+    return (rest.length ? "/" + rest[rest.length - 1] : "/") + (q ? "?" + q : "");
+  }, []);
+
+  /** The trail a URL describes, in either shape: /a/b, or /b?via=a. */
+  const trailFromLocation = useCallback(() => {
+    const segs = decodeURIComponent(location.pathname).split("/").filter(Boolean);
+    const via = new URLSearchParams(location.search).get("via");
+    const ids = [...(via ? via.split(",") : []), ...segs].filter(
+      (id) => panes[id] && id !== root
+    );
+    return [root, ...ids.filter((id, i) => ids.indexOf(id) === i)];
+  }, [panes, root]);
 
   useEffect(() => {
-    const read = () => {
-      const ids = decodeURIComponent(location.pathname)
-        .split("/")
-        .filter(Boolean)
-        .filter((id) => panes[id]);
-      setTrail([root, ...ids.filter((id) => id !== root)]);
-    };
+    const read = () => setTrail(trailFromLocation());
+    // A static export serves the same HTML whatever the query string is, so
+    // `?via=` can only be applied once the client is running. The leaf — the
+    // pane actually being read — is server-rendered either way.
+    read();
     // back and forward have to work: the reader's trail is in the history
     addEventListener("popstate", read);
     return () => removeEventListener("popstate", read);
-  }, [panes, root, asPath]);
+  }, [trailFromLocation]);
 
+  // First write normalises whatever shape the reader arrived on (a legacy
+  // two-segment link, or a deep one) without adding a history entry they did
+  // not create; after that, opening a pane is a step to walk back out of.
+  const urlSynced = useRef(false);
   useEffect(() => {
-    const next = asPath(trail);
-    if (location.pathname.replace(/\/$/, "") === next.replace(/\/$/, "")) return;
-    // pushState, not replaceState: opening evidence is a step the reader should
-    // be able to walk back out of
+    const next = trailUrl(trail);
+    if (location.pathname + location.search === next) {
+      urlSynced.current = true;
+      return;
+    }
+    if (!urlSynced.current) {
+      urlSynced.current = true;
+      history.replaceState(null, "", next);
+      return;
+    }
     history.pushState(null, "", next);
-  }, [trail, asPath]);
+  }, [trail, trailUrl]);
 
   // reveal whatever just opened
   useEffect(() => {
