@@ -457,7 +457,10 @@ a { color: inherit; }
   transition: background 0.25s;
 }
 .rows .row:last-child { border-bottom: 1px solid var(--hair); }
-.row:hover { background: var(--sunk); }
+/* only a row that goes somewhere reacts — the method pane lists its four
+   layers as plain rows, and highlighting those on hover promises a link
+   that is not there */
+a.row:hover { background: var(--sunk); }
 .row-k { font-size: 0.72rem; color: var(--faint); font-variant-numeric: tabular-nums; }
 .row-t {
   font-family: var(--f-read);
@@ -468,7 +471,7 @@ a { color: inherit; }
 }
 .row-s { display: block; font-size: 0.76rem; color: var(--mid); margin-top: 0.32rem; line-height: 1.6; }
 .row-go { font-size: 0.78rem; color: var(--faint); transition: transform 0.3s var(--eo), color 0.3s; }
-.row:hover .row-go { color: var(--act); transform: translateX(3px); }
+a.row:hover .row-go { color: var(--act); transform: translateX(3px); }
 .row.off { opacity: 0.45; }
 
 /* each piece carries the shape of its own data, in its own row — a single chart
@@ -477,8 +480,8 @@ a { color: inherit; }
 .row-fig .sig { height: 44px; }
 .row-fig .axis { font-size: 0.58rem; }
 .row-fig .axis span:nth-child(2) { text-align: center; }
-.row:hover .sig i { background: #b9bec4; }
-.row:hover .sig i.mark { background: var(--act); }
+a.row:hover .sig i { background: #b9bec4; }
+a.row:hover .sig i.mark { background: var(--act); }
 @media (max-width: 620px) { .row-fig .axis span:nth-child(2) { display: none; } }
 .row .tag {
   display: inline-block;

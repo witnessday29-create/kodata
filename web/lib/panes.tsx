@@ -23,6 +23,7 @@ import { SlopeGraph } from "@/components/SlopeGraph";
 // registry is the one part of it that has to stay scannable.
 import { piece03, piece03Blurbs, piece03Row } from "@/lib/piece03";
 import { PANE_LINKS, paneHref } from "@/lib/paneGraph";
+import MethodNote, { meta as methodMeta } from "@/content/notes/method.mdx";
 
 function Signature({ hist, mark }: { hist: number[]; mark: number }) {
   const max = Math.max(...hist);
@@ -2374,53 +2375,12 @@ PASS  every committed data.json reproduces exactly.`}</pre>
       ),
     },
 
+    // The first note that is a file rather than a node in this registry. Its
+    // title and maturity are declared in its own frontmatter, so the registry
+    // stops being the place those are kept.
     method: {
-      title: "method",
-      node: (
-        <>
-          <p className="txt dim">
-            The same four layers in every piece, always in this order. Only the data changes — and
-            the shape of the opening, which is chosen by the shape of the data rather than by taste.
-          </p>
-          <div className="rows">
-            {[
-              [
-                "Findings",
-                "Real analysis of public data. The pipeline is linked, the source is named, and every calculation can be re-run from zero.",
-              ],
-              [
-                "The bridge",
-                "A plain table: which finding forced which narrative decision. This is the layer that separates data as a foundation from data as decoration.",
-              ],
-              [
-                "The story",
-                "Stands on its own as fiction. No charts, no explanation, no moral stapled to the end.",
-              ],
-              [
-                "Evidence",
-                "Any figure set in mono opens its own column to the right — the underlying value, the table, the file — without leaving the sentence.",
-              ],
-            ].map(([t, d], i) => (
-              <div className="row" key={t}>
-                <span className="row-k">{String(i + 1).padStart(2, "0")}</span>
-                <span>
-                  <span className="row-t">{t}</span>
-                  <span className="row-s">{d}</span>
-                </span>
-                <span className="row-go" />
-              </div>
-            ))}
-          </div>
-          <p className="kicker">
-            one typographic rule <i />
-          </p>
-          <p className="txt">
-            Everywhere on this site, <code>a figure set in mono</code> is traceable to a source
-            file. Text set in serif was written. There are no exceptions, including inside the
-            fiction — so a sentence can be read at once as literature and as a checkable claim.
-          </p>
-        </>
-      ),
+      title: methodMeta.title,
+      node: <MethodNote />,
     },
 
     contact: {
